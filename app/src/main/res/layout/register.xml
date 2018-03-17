@@ -17,13 +17,21 @@
         android:id="@+id/logo_register"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_above="@+id/register_edit_name"
+        android:layout_above="@+id/register_edit_fullName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="28dp" />
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/register_btn_sure"
+        android:layout_alignLeft="@+id/register_check_pwd"
+        android:layout_alignStart="@+id/register_check_pwd"
+        android:layout_marginBottom="11dp" />
 
     <EditText
-        android:id="@+id/register_edit_name"
+        android:id="@+id/register_edit_email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_above="@+id/register_edit_pwd"
@@ -34,21 +42,30 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:background="@drawable/edit_bg"
-        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:drawableLeft="@android:drawable/ic_dialog_email"
         android:ems="10"
         android:hapticFeedbackEnabled="false"
-        android:hint="请输入您的用户名"
+        android:hint="请输入您的邮箱"
         android:inputType="textPersonName" />
 
-    <!--
+    <EditText
+        android:id="@+id/register_edit_fullName"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/register_edit_email"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/edit_bg"
+        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:ems="10"
+        android:hint="请输入您的用户名"
+        android:inputType="textPassword" />
 
-    <EditText android:id="@+id/edt_operator_name" style="@style/syncEditText"
-        android:hint="@string/hint_operator_name" />
-    <ImageView android:id="@+id/syncOperatorImg" style="@style/syncImageView"
-        android:layout_alignLeft="@+id/edt_operator_name"
-        android:layout_alignTop="@+id/edt_operator_name"
-        android:layout_alignBottom="@+id/edt_operator_name" android:src="@drawable/sync_operator" />
--->
 
     <EditText
         android:id="@+id/register_edit_pwd"
