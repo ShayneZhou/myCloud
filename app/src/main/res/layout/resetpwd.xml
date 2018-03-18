@@ -23,7 +23,7 @@
         android:layout_marginTop="23dp" />
 
     <EditText
-        android:id="@+id/resetpwd_edit_name"
+        android:id="@+id/resetpwd_edit_email"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
@@ -39,7 +39,7 @@
         android:background="@drawable/edit_bg"
         android:drawableLeft="@android:drawable/ic_menu_myplaces"
         android:ems="10"
-        android:hint="请输入您的用户名"
+        android:hint="请输入您的邮箱"
         android:inputType="textPersonName" />
 
     <EditText
@@ -52,7 +52,7 @@
         android:layout_marginRight="16dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/resetpwd_edit_name"
+        android:layout_below="@+id/resetpwd_edit_email"
         android:background="@drawable/edit_bg"
         android:drawableLeft="@android:drawable/ic_lock_idle_lock"
         android:ems="10"

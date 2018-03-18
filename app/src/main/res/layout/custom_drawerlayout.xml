@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="退出"
-                android:id="@+id/returnback"
+                android:id="@+id/logOut"
                 android:layout_below="@+id/textView"
                 android:layout_marginTop="36dp"
                 android:onClick="back_to_login"
@@ -54,7 +54,7 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/returnback"/>
+                android:layout_below="@id/logOut"/>
 
         </RelativeLayout>
 

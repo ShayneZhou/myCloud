@@ -39,7 +39,6 @@
             android:layout_below="@+id/Login_Remember"
             android:layout_marginTop="48dp"
             android:background="@drawable/shape"
-            android:onClick="finish_login"
             android:text="登录"
             android:textColor="#ffffff"
             android:textSize="20dp" />
@@ -75,7 +74,7 @@
             android:inputType="textPersonName"
             android:id="@+id/login_edit_account"
             android:drawableLeft="@android:drawable/ic_menu_myplaces"
-            android:hint="请输入您的用户名"
+            android:hint="请输入您的邮箱"
             android:layout_below="@+id/logo_login"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"

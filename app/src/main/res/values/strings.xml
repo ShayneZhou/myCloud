@@ -1,32 +1,4 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">>
-    <string name="hint_operator_name">你好</string>
-    <string name="hello">Hello World, Date!</string>
-    <string name="app_name">PM2.5_V1.2</string>
-    <string name="strInputAccHint">输入帐号</string>
-    <string name="strAccInputLabel">帐号</string>
-    <string name="strPswInputLabel">密码</string>
-    <string name="login">登 录</string>
-    <string name="register">注 册</string>
-    <string name="cancel">取 消</string>
-    <string name="close">关 闭</string>
-    <string name="account_empty">用户名为空，请重新输入！</string>
-    <string name="pwd_empty">密码为空，请重新输入！</string>
-    <string name="pwd_not_fit_user">密码不正确，请重新输入！</string>
-    <string name="pwd_new_empty">新密码为空，请重新输入！</string>
-    <string name="pwd_check_empty">密码确认为空，请重新输入！</string>
-    <string name="pwd_not_the_same">密码确认不正确，请重新输入密码！</string>
-    <string name="register_fail">注册用户失败，请重新尝试！</string>
-    <string name="register_success">注册成功！</string>
-    <string name="resetpwd_fail">密码修改失败，请重新尝试！</string>
-    <string name="resetpwd_success">密码修改成功！</string>
-    <string name="login_success">登录成功！</string>
-    <string name="cancel_success">注销成功！</string>
-    <string name="login_fail">登录失败！请输入正确的用户名与密码！</string>
-    <string name="cancel_fail">注销失败！请输入正确的用户名与密码！</string>
-    <string name="name_already_exist">用户名【<xliff:g example="tom" id="id1">%1$s</xliff:g>】已存在，请重新输入！</string>
-    <string name="name_not_exist">用户名【<xliff:g example="tom" id="id1">%1$s</xliff:g>】不存在，请重新输入！</string>
-    <string name="user_login_success">用户：<xliff:g example="tom" id="id2">%1$s</xliff:g>登录，欢迎光临！</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -117,5 +89,25 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_question">QuestionActivity</string>
+    <string name="title_activity_question">待办任务</string>
+    <string name="app_name">myCloud</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_name">Fullname</string>
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_register">REGISTER</string>
+    <string name="btn_link_to_register">Not a member? Sign up now.</string>
+    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="welcome">Welcome</string>
+    <string name="btn_logout">LOGOUT</string>
+    <string name="name">Fullname</string>
+    <string name="name_empty">用户名空，请重新输入！</string>
+    <string name="email_empty">邮箱为空，请重新输入！</string>
+    <string name="pwd_empty">密码为空，请重新输入！</string>
+    <string name="pwdCheck_empty">确认密码为空，请重新输入！</string>
+    <string name="pwdOld_empty">旧密码为空，请重新输入！</string>
+    <string name="pwdNew_empty">新密码为空，请重新输入！</string>
+    <string name="authority_wrong">身份选择有误，请重新选择！</string>
+    <string name="hello">您好！</string>
+    <string name="close">关闭导航栏！</string>
 </resources>

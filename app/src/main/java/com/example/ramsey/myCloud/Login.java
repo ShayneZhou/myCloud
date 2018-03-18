@@ -1,37 +1,47 @@
 package com.example.ramsey.myCloud;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
+
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends Activity {                 //登录界面活动
 
-    public int pwdresetFlag=0;
-    private EditText mAccount;                        //用户名编辑
-    private EditText mPwd;                            //密码编辑
+    private static final String TAG = Register.class.getSimpleName();
+    private EditText inputEmail;                        //用户名编辑
+    private EditText inputPassword;                            //密码编辑
     private TextView mRegisterText;                   //注册按钮
     private Button mLoginButton;                      //登录按钮
-    //private Button mCancleButton;                     //注销按钮
     private CheckBox mRememberCheck;
+    private ProgressDialog pDialog;
     private CheckBox mAutoCheck;
-
-    private SharedPreferences login_sp;
-    private String userNameValue,passwordValue;
 
     private View loginView;                           //登录
     private View loginSuccessView;
     private TextView loginSuccessShow;
     private TextView mChangepwdText;
-    private UserDataManager mUserDataManager;         //用户数据管理类
+    private SessionManager session;
+    private SQLiteHandler db;        //用户数据管理类
 
 
     @Override
@@ -39,149 +49,184 @@ public class Login extends Activity {                 //登录界面活动
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         //通过id找到相应的控件
-        mAccount = (EditText) findViewById(R.id.login_edit_account);
-        mPwd = (EditText) findViewById(R.id.login_edit_pwd);
+        inputEmail = (EditText) findViewById(R.id.login_edit_account);
+        inputPassword = (EditText) findViewById(R.id.login_edit_pwd);
         mRegisterText = (TextView) findViewById(R.id.login_register);
         mLoginButton = (Button) findViewById(R.id.login_btn_login);
-        //mCancleButton = (Button) findViewById(R.id.login_btn_cancle);
-        loginView=findViewById(R.id.login_view);
-        loginSuccessView=findViewById(R.id.login_success_view);
-        loginSuccessShow=(TextView) findViewById(R.id.login_success_show);
+        loginView = findViewById(R.id.login_view);
+        loginSuccessView = findViewById(R.id.login_success_view);
+        loginSuccessShow = (TextView) findViewById(R.id.login_success_show);
 
         mChangepwdText = (TextView) findViewById(R.id.login_text_change_pwd);
 
         mRememberCheck = (CheckBox) findViewById(R.id.Login_Remember);
-        mAutoCheck=(CheckBox) findViewById(R.id.Login_Auto);  //需要添加功能代码
-
-        login_sp = getSharedPreferences("userInfo", 0);
-        String name=login_sp.getString("USER_NAME", "");
-        String pwd =login_sp.getString("PASSWORD", "");
-        boolean choseRemember =login_sp.getBoolean("mRememberCheck", false);
-        boolean choseAutoLogin =login_sp.getBoolean("mAutologinCheck", false);
-        //如果上次选了记住密码，那进入登录页面也自动勾选记住密码，并填上用户名和密码
-        if(choseRemember){
-            mAccount.setText(name);
-            mPwd.setText(pwd);
-            mRememberCheck.setChecked(true);
-        }
-
-        mRegisterText.setOnClickListener(mListener);                      //采用OnClickListener方法设置不同按钮按下之后的监听事件
-        mLoginButton.setOnClickListener(mListener);
-        //mCancleButton.setOnClickListener(mListener);
-        mChangepwdText.setOnClickListener(mListener);
+        mAutoCheck = (CheckBox) findViewById(R.id.Login_Auto);
 
         ImageView image = (ImageView) findViewById(R.id.logo_login);             //使用ImageView显示logo
         image.setImageResource(R.drawable.login_logo);
 
-        if (mUserDataManager == null) {
-            mUserDataManager = new UserDataManager(this);
-            mUserDataManager.openDataBase();                              //建立本地数据库
-        }
-    }
-    OnClickListener mListener = new OnClickListener() {                  //不同按钮按下的监听事件选择
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.login_register:                            //登录界面的注册按钮
-                    Intent intent_Login_to_Register = new Intent(Login.this,Register.class) ;    //切换Login Activity至User Activity
-                    startActivity(intent_Login_to_Register);
-                    finish();
-                    break;
-                case R.id.login_btn_login:                              //登录界面的登录按钮
-                    login();
-                    break;
-//                case R.id.login_btn_cancle:                             //登录界面的注销按钮
-//                    cancel();
-//                    break;
-                case R.id.login_text_change_pwd:                             //登录界面的修改密码按钮
-                    Intent intent_Login_to_reset = new Intent(Login.this,Resetpwd.class) ;    //切换Login Activity至User Activity
-                    startActivity(intent_Login_to_reset);
-                    finish();
-                    break;
-            }
-        }
-    };
+        // SQLite database handler
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
 
-    public void login() {                                              //登录按钮监听事件
-        if (isUserNameAndPwdValid()) {
-            String userName = mAccount.getText().toString().trim();    //获取当前输入的用户名和密码信息
-            String userPwd = mPwd.getText().toString().trim();
-            SharedPreferences.Editor editor =login_sp.edit();
-            int result=mUserDataManager.findUserByNameAndPwd(userName, userPwd);
-            if(result==1){                                             //返回1说明用户名和密码均正确
-                //保存用户名和密码
-                editor.putString("USER_NAME", userName);
-                editor.putString("PASSWORD", userPwd);
+        // Session manager
+        session = new SessionManager(getApplicationContext());
 
-                //是否记住密码
-                if(mRememberCheck.isChecked()){
-                    editor.putBoolean("mRememberCheck", true);
-                }else{
-                    editor.putBoolean("mRememberCheck", false);
+        // Check if user is already logged in or not
+        if (session.isLoggedIn()) {
+            // User is already logged in. Take him to main activity
+            Intent intent = new Intent(Login.this, User.class);
+            startActivity(intent);
+            finish();
+        }
+
+        // Login button Click Event
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                String email = inputEmail.getText().toString().trim();
+                String password = inputPassword.getText().toString().trim();
+
+                // Check for empty data in the form
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    // login user
+                    checkLogin(email, password);
+                } else {
+                    // Prompt user to enter credentials
+                    Toast.makeText(getApplicationContext(),
+                            "Please enter the credentials!", Toast.LENGTH_LONG)
+                            .show();
                 }
-                editor.commit();
-
-                Intent intent = new Intent(Login.this,User.class) ;    //切换Login Activity至User Activity
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, getString(R.string.login_success),Toast.LENGTH_SHORT).show();//登录成功提示
-            }else if(result==0){
-                Toast.makeText(this, getString(R.string.login_fail),Toast.LENGTH_SHORT).show();  //登录失败提示
             }
-        }
-    }
-//    public void cancel() {           //注销
-//        if (isUserNameAndPwdValid()) {
-//            String userName = mAccount.getText().toString().trim();    //获取当前输入的用户名和密码信息
-//            String userPwd = mPwd.getText().toString().trim();
-//            int result=mUserDataManager.findUserByNameAndPwd(userName, userPwd);
-//            if(result==1){                                             //返回1说明用户名和密码均正确
-////                Intent intent = new Intent(Login.this,User.class) ;    //切换Login Activity至User Activity
-////                startActivity(intent);
-//                Toast.makeText(this, getString(R.string.cancel_success),Toast.LENGTH_SHORT).show();//登录成功提示
-//                mPwd.setText("");
-//                mAccount.setText("");
-//                mUserDataManager.deleteUserDatabyname(userName);
-//            }else if(result==0){
-//                Toast.makeText(this, getString(R.string.cancel_fail),Toast.LENGTH_SHORT).show();  //登录失败提示
-//            }
+        });
+
+        // Link to Register Screen
+        mRegisterText.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),
+                        Register.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        mChangepwdText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent j = new Intent(getApplicationContext(),
+                        Resetpwd.class);
+                startActivity(j);
+                finish();
+            }
+        });
+
+//        private SharedPreferences login_sp;
+//        login_sp = getSharedPreferences("userInfo", 0);
+//        String name = login_sp.getString("USER_NAME", "");
+//        String pwd = login_sp.getString("PASSWORD", "");
+//        boolean choseRemember = login_sp.getBoolean("mRememberCheck", false);
+//        //如果上次选了记住密码，那进入登录页面也自动勾选记住密码，并填上用户名和密码
+//        if (choseRemember) {
+//            inputEmail.setText(name);
+//            inputPassword.setText(pwd);
+//            mRememberCheck.setChecked(true);
 //        }
-//
-//    }
 
-    public boolean isUserNameAndPwdValid() {
-        if (mAccount.getText().toString().trim().equals("")) {
-            Toast.makeText(this, getString(R.string.account_empty),
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        } else if (mPwd.getText().toString().trim().equals("")) {
-            Toast.makeText(this, getString(R.string.pwd_empty),
-                    Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
-    @Override
-    protected void onResume() {
-        if (mUserDataManager == null) {
-            mUserDataManager = new UserDataManager(this);
-            mUserDataManager.openDataBase();
-        }
-        super.onResume();
+    private void checkLogin(final String email, final String password) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+        pDialog.setMessage("Logging in ...");
+        showDialog();
+
+        db = new SQLiteHandler(getApplicationContext());
+
+        StringRequest strReq = new StringRequest(Method.POST,
+                AppConfig.URL_LOGIN, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Login Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+
+                    // Check for error node in json
+                    if (!error) {
+                        // user successfully logged in
+                        // Create login session
+                        session.setLogin(true);
+
+                        // Now store the user in SQLite
+                        String uid = jObj.getString("uid");
+
+                        JSONObject user = jObj.getJSONObject("user");
+                        String name = user.getString("name");
+                        String email = user.getString("email");
+                        String created_at = user
+                                .getString("created_at");
+                        String authority = user.getString("authority");
+
+                        // Inserting row in users table
+                        db.addUser(name, email, uid, created_at, authority);
+
+                        // Launch main activity
+                        Intent intent = new Intent(Login.this,
+                                User.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        // Error in login. Get the error message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    // JSON error
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Login Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", email);
+                params.put("password", password);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
     }
 
-    @Override
-    protected void onPause() {
-        if (mUserDataManager != null) {
-            mUserDataManager.closeDataBase();
-            mUserDataManager = null;
-        }
-        super.onPause();
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 
 }
