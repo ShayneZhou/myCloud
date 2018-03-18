@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.view.GravityCompat;
@@ -21,15 +23,24 @@ import android.support.v7.app.ActionBar;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.FloatingActionButton;
 
+import java.util.HashMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class User extends AppCompatActivity {
+    private static final String TAG = "User";
     //全局控件
-    private Button mReturnButton;
+    private TextView mName;
+    private TextView mEmail;
+    private Button mLogOutButton;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private SQLiteHandler db;
+    private SessionManager session;
+
 
     private Question[] questions={new Question("车头有问题"),new Question("车门有问题"),new Question("车尾有问题"),new Question("到处有问题")};
 
@@ -57,12 +68,44 @@ public class User extends AppCompatActivity {
                 return true;
             }
         });
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setHomeButtonEnabled(true); //设置返回键可用
-//        }
-        mReturnButton = (Button)findViewById(R.id.returnback);
+
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        mLogOutButton = (Button)findViewById(R.id.logOut);        // session manager
+        mEmail = (TextView) findViewById(R.id.email);
+        mName=(TextView) findViewById(R.id.username);
+
+        session = new SessionManager(getApplicationContext());
+        if (!session.isLoggedIn()) {
+            logoutUser();
+        }
+//
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        String name = user.get("name");
+        String email = user.get("email");
+        String authority = user.get("authority");
+        String uid = user.get("uid");
+        String created_at = user.get("created_at");
+        Log.d(TAG, "onCreate: authority "+authority);
+        Log.d(TAG, "onCreate: uid "+uid);
+        Log.d(TAG, "onCreate: created_at "+created_at);
+
+//        //在导航栏显示用户名与邮箱
+//        mEmail.setText(email);
+//        mName.setText(name);
+
+        // Logout button click event
+        mLogOutButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                logoutUser();
+            }
+        });
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
         //以下是实现抽屉菜单栏的代码
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.hello, R.string.close) {
@@ -91,12 +134,15 @@ public class User extends AppCompatActivity {
             }
         });
 
+
+
         initQuestions();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new QuestionAdapter(questionList);
         recyclerView.setAdapter(adapter);
+
     }
 
     private void initQuestions() {
@@ -137,5 +183,16 @@ public class User extends AppCompatActivity {
             default:
         }
         return true;
+    }
+
+    private void logoutUser() {
+        session.setLogin(false);
+
+        db.deleteUsers();
+
+        // Launching the login activity
+        Intent intent = new Intent(User.this, Login.class);
+        startActivity(intent);
+        finish();
     }
 }
