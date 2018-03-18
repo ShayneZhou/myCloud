@@ -156,10 +156,6 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.authority_wrong), Toast.LENGTH_LONG)
                             .show();
                 }
-//                else {
-//                    Toast.makeText(getApplicationContext(), "请检查其他细节!", Toast.LENGTH_LONG)
-//                            .show();
-//                }
             }
         });
 
