@@ -4,7 +4,7 @@
 ---
 + 登录、注册、修改密码、注销功能已完成
 
-+ 自动登录已经完成，通过sharedPreference
++ 自动登录已经完成，通过sharedPreference完成
 
 + 已与本地的wamp server对接，可以在安卓模拟器上正常运行
 
