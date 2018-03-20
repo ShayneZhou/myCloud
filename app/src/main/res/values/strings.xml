@@ -108,6 +108,7 @@
     <string name="pwdOld_empty">旧密码为空，请重新输入！</string>
     <string name="pwdNew_empty">新密码为空，请重新输入！</string>
     <string name="authority_wrong">身份选择有误，请重新选择！</string>
+    <string name="process_wrong">条线选择有误，请重新选择！</string>
     <string name="hello">您好！</string>
     <string name="close">关闭导航栏！</string>
 </resources>

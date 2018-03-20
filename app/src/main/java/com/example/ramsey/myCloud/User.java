@@ -89,9 +89,13 @@ public class User extends AppCompatActivity {
         String authority = user.get("authority");
         String uid = user.get("uid");
         String created_at = user.get("created_at");
+        String process = user.get("process");
+        Log.d(TAG, "onCreate: name "+name);
+        Log.d(TAG, "onCreate: email "+email);
         Log.d(TAG, "onCreate: authority "+authority);
         Log.d(TAG, "onCreate: uid "+uid);
         Log.d(TAG, "onCreate: created_at "+created_at);
+        Log.d(TAG, "onCreate: process "+process);
 
 //        //在导航栏显示用户名与邮箱
 //        mEmail.setText(email);

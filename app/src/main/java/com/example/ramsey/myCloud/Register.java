@@ -44,7 +44,9 @@ public class Register extends AppCompatActivity {
     private SessionManager session;
     private SQLiteHandler db;
     private Spinner authoritySpinner;
-    private String spSelected;
+    private Spinner authoritySpinner2;
+    private String spSelected_authority;
+    private String spSelected_process;
 
 
     @Override
@@ -88,12 +90,39 @@ public class Register extends AppCompatActivity {
         authoritySpinner.setAdapter(adapter);
         authoritySpinner.setSelection(objects.size() - 1, true);
 
-        spSelected = (String) authoritySpinner.getSelectedItem();
+        authoritySpinner2= (Spinner) findViewById(R.id.spinner2);
+        List<String> objects2 = new ArrayList<>();
+        objects2.add("0");
+        objects2.add("1");
+        objects2.add("2");
+        // add hint as last item
+        objects2.add("请选择您的条线：");
+        //设置样式
+        simpleArrayAdapter adapter2 = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,objects2);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        authoritySpinner2.setAdapter(adapter2);
+        authoritySpinner2.setSelection(objects2.size() - 1, true);
+
+        spSelected_authority = (String) authoritySpinner.getSelectedItem();
+        spSelected_process = (String) authoritySpinner2.getSelectedItem();
+
 
         authoritySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spSelected = (String) authoritySpinner.getSelectedItem();
+                spSelected_authority = (String) authoritySpinner.getSelectedItem();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        authoritySpinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                spSelected_process = (String) authoritySpinner2.getSelectedItem();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -126,12 +155,13 @@ public class Register extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
                 String passwordCheck = inputPasswordCheck.getText().toString().trim();
-                String authority= spSelected.trim();
+                String authority = spSelected_authority.trim();
+                String process = spSelected_process.trim();
 
-                if ((authority=="1" || authority=="0") && !name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !passwordCheck.isEmpty() &&(password.equals(passwordCheck))) {
-                    registerUser(name, email, password, authority);
+                if ((authority=="1" || authority=="0") && !process.isEmpty() && !name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !passwordCheck.isEmpty() &&(password.equals(passwordCheck))) {
+                    registerUser(name, email, password, authority, process);
                 }
-                if ((authority=="1" || authority=="0") && !name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !passwordCheck.isEmpty() && !(password.equals(passwordCheck))) {
+                if ((authority=="1" || authority=="0") && !process.isEmpty() && !name.isEmpty() && !email.isEmpty() && !password.isEmpty() && !passwordCheck.isEmpty() && !(password.equals(passwordCheck))) {
                     Toast.makeText(getApplicationContext(),
                             "两次密码不一致，请重新输入！", Toast.LENGTH_LONG)
                             .show();
@@ -156,6 +186,10 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.authority_wrong), Toast.LENGTH_LONG)
                             .show();
                 }
+                if (process.equals("")) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.process_wrong), Toast.LENGTH_LONG)
+                            .show();
+                }
             }
         });
 
@@ -177,7 +211,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void registerUser(final String name, final String email,
-                              final String password, final String authority) {
+                              final String password, final String authority, final String process) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
@@ -206,9 +240,10 @@ public class Register extends AppCompatActivity {
                         String created_at = user
                                 .getString("created_at");
                         String authority = user.getString("authority");
+                        String process = user.getString("process");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, authority);
+                        db.addUser(name, email, uid, created_at, authority, process);
 
                         Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
 
@@ -250,6 +285,7 @@ public class Register extends AppCompatActivity {
                 params.put("email", email);
                 params.put("password", password);
                 params.put("authority", authority);
+                params.put("process", process);
 
                 return params;
             }
