@@ -32,9 +32,7 @@ import java.util.Random;
 public class User extends AppCompatActivity {
     private static final String TAG = "User";
     //全局控件
-    private TextView mName;
-    private TextView mEmail;
-    private Button mLogOutButton;
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -69,13 +67,12 @@ public class User extends AppCompatActivity {
             }
         });
 
+
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
-        mLogOutButton = (Button)findViewById(R.id.logOut);        // session manager
-        mEmail = (TextView) findViewById(R.id.email);
-        mName=(TextView) findViewById(R.id.username);
 
+        // session manager
         session = new SessionManager(getApplicationContext());
         if (!session.isLoggedIn()) {
             logoutUser();
@@ -97,18 +94,14 @@ public class User extends AppCompatActivity {
         Log.d(TAG, "onCreate: created_at "+created_at);
         Log.d(TAG, "onCreate: process "+process);
 
+        View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
+        TextView mEmail = (TextView) headerLayout.findViewById(R.id.email);
+        TextView mName=(TextView) headerLayout.findViewById(R.id.username);
+
 //        //在导航栏显示用户名与邮箱
-//        mEmail.setText(email);
-//        mName.setText(name);
+        mEmail.setText(email);
+        mName.setText(name);
 
-        // Logout button click event
-        mLogOutButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                logoutUser();
-            }
-        });
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.dl_left);
         //以下是实现抽屉菜单栏的代码
@@ -127,14 +120,9 @@ public class User extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Data deleted", Snackbar.LENGTH_SHORT)
-                        .setAction("Undo", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(User.this, "Data restored", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .show();
+            Intent intent_cr =new Intent(User.this,CreateActivity.class);
+                startActivity(intent_cr);
+                finish();
             }
         });
 
@@ -142,7 +130,7 @@ public class User extends AppCompatActivity {
 
         initQuestions();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new QuestionAdapter(questionList);
         recyclerView.setAdapter(adapter);
@@ -175,11 +163,12 @@ public class User extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
+            case R.id.logout:
+                logoutUser();
+                Toast.makeText(this, "logout", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.backup:
                 Toast.makeText(this, "You clicked Backup", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.delete:
-                Toast.makeText(this, "You clicked Delete", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings:
                 Toast.makeText(this, "You clicked Settings", Toast.LENGTH_SHORT).show();

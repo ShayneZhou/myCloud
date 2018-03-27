@@ -111,4 +111,17 @@
     <string name="process_wrong">条线选择有误，请重新选择！</string>
     <string name="hello">您好！</string>
     <string name="close">关闭导航栏！</string>
+    <string name="hint_title">问题单名称</string>
+    <string name="hint_source">问题单来源</string>
+    <string name="hint_description">描述</string>
+    <string name="hint_finder">汇报人</string>
+    <string name="hint_position">车身部位</string>
+    <string name="button_upload">上传</string>
+    <string name="err_msg_title">未输入问题单名称</string>
+    <string name="err_msg_source">未输入问题单来源</string>
+    <string name="err_msg_finder">未输入问题单汇报人</string>
+    <string name="err_msg_position">未输入问题单部位</string>
+    <string name="err_msg_description">未输入问题单描述</string>
+    <string name="hint_photo">上传照片：</string>
+    <string name="btnUploadToServer">Upload to Server</string>
 </resources>

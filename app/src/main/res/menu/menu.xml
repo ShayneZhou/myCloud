@@ -7,10 +7,10 @@
         android:title="Backup"
         app:showAsAction="never" />
     <item
-        android:id="@+id/delete"
+        android:id="@+id/logout"
         android:icon="@drawable/ic_delete"
-        android:title="Delete"
-        app:showAsAction="ifRoom" />
+        android:title="Logout"
+        app:showAsAction="never" />
     <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"

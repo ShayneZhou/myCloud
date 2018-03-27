@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class Login extends Activity {                 //登录界面活动
 
+
     private static final String TAG = Register.class.getSimpleName();
     private EditText inputEmail;                        //用户名编辑
     private EditText inputPassword;                            //密码编辑

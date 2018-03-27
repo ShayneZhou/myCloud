@@ -43,6 +43,22 @@
         android:layout_marginTop="39dp" />
 
     <EditText
+        android:id="@+id/register_edit_fullName"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/register_btn_sure"
+        android:layout_alignLeft="@+id/register_edit_email"
+        android:layout_alignRight="@+id/register_btn_sure"
+        android:layout_alignStart="@+id/register_edit_email"
+        android:layout_below="@+id/logo_register"
+        android:background="@drawable/edit_bg"
+        android:drawableLeft="@android:drawable/ic_menu_myplaces"
+        android:singleLine="true"
+        android:ems="10"
+        android:hint="请输入您的用户名"
+        android:inputType="textPersonName" />
+
+    <EditText
         android:id="@+id/register_edit_email"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -58,19 +74,6 @@
         android:hint="请输入您的邮箱"
         android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/register_edit_fullName"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:layout_alignEnd="@+id/register_btn_sure"
-        android:layout_alignLeft="@+id/register_edit_email"
-        android:layout_alignRight="@+id/register_btn_sure"
-        android:layout_alignStart="@+id/register_edit_email"
-        android:layout_below="@+id/logo_register"
-        android:background="@drawable/edit_bg"
-        android:drawableLeft="@android:drawable/ic_menu_myplaces"
-        android:ems="10"
-        android:hint="请输入您的用户名" />
 
 
     <EditText
