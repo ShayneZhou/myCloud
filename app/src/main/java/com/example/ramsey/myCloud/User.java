@@ -86,13 +86,13 @@ public class User extends AppCompatActivity {
         String authority = user.get("authority");
         String uid = user.get("uid");
         String created_at = user.get("created_at");
-        String process = user.get("process");
+        String section = user.get("section");
         Log.d(TAG, "onCreate: name "+name);
         Log.d(TAG, "onCreate: email "+email);
         Log.d(TAG, "onCreate: authority "+authority);
         Log.d(TAG, "onCreate: uid "+uid);
         Log.d(TAG, "onCreate: created_at "+created_at);
-        Log.d(TAG, "onCreate: process "+process);
+        Log.d(TAG, "onCreate: section "+section);
 
         View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
         TextView mEmail = (TextView) headerLayout.findViewById(R.id.email);

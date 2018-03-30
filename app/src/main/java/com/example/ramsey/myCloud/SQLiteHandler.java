@@ -18,7 +18,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // Database Name
     private static final String DATABASE_NAME = "mycloud";
@@ -33,7 +33,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_AUTHORITY = "authority";
     private static final String KEY_UID = "uid";
     private static final String KEY_CREATED_AT = "created_at";
-    private static final String KEY_PROCESS = "process";
+    private static final String KEY_SECTION = "section";
 
     public SQLiteHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,7 +44,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_USER + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EMAIL + " TEXT," + KEY_AUTHORITY + " TEXT," + KEY_PROCESS + " TEXT," + KEY_UID + " TEXT,"
+                + KEY_EMAIL + " TEXT," + KEY_AUTHORITY + " TEXT," + KEY_SECTION + " TEXT," + KEY_UID + " TEXT,"
                 + KEY_CREATED_AT + " TEXT" + ")";
         db.execSQL(CREATE_LOGIN_TABLE);
 
@@ -64,7 +64,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * Storing user details in database
      * */
-    public void addUser(String name, String email, String uid, String created_at, String authority, String process) {
+    public void addUser(String name, String email, String uid, String created_at, String authority, String section) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -73,7 +73,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_UID, uid); // Uid
         values.put(KEY_CREATED_AT, created_at); // Created At
         values.put(KEY_AUTHORITY, authority); //Authority
-        values.put(KEY_PROCESS, process); //Process
+        values.put(KEY_SECTION, section); //Process
 
         // Inserting Row
         Long id = db.insert(TABLE_USER, null, values);
@@ -100,7 +100,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             user.put("uid", cursor.getString(5));
             user.put("created_at", cursor.getString(6));
             user.put("authority", cursor.getString(3));
-            user.put("process", cursor.getString(4));
+            user.put("section", cursor.getString(4));
         }
         cursor.close();
         db.close();

@@ -1,5 +1,6 @@
 package com.example.ramsey.myCloud;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +13,16 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
@@ -31,8 +36,11 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -44,6 +52,13 @@ public class CreateActivity extends AppCompatActivity {
     private SQLiteHandler db;
     private ProgressDialog pDialog;
     private String image_uid;
+    private Spinner carTypeSpinner, defectTypeSpinner, defectAssemblySpinner, positionNumberSpinner;
+    private String[] str_ct = {"1", "2", "3", };
+    private String[] str_dt = {"4", "5", "6", };
+    private String[] str_da = {"7", "8", "9", };
+    private String[] str_pn = {"7", "8", "9", };
+    private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn;
+
 
     private static final String TAG = CreateActivity.class.getSimpleName();
 
@@ -57,6 +72,7 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_create);
         Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar2);
@@ -66,16 +82,121 @@ public class CreateActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 
+        carTypeSpinner = (Spinner) findViewById(R.id.spinner_ct);
+        defectTypeSpinner = (Spinner) findViewById(R.id.spinner_dt);
+        defectAssemblySpinner = (Spinner) findViewById(R.id.spinner_da);
+        positionNumberSpinner = (Spinner) findViewById(R.id.spinner_pn);
+
+        List<String> array_ct = new ArrayList<String>();
+        array_ct.addAll(Arrays.asList(str_ct));
+        // add hint as last item
+        array_ct.add("请选择车型：");
+        //设置样式
+        simpleArrayAdapter adapter_ct = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_ct);
+        adapter_ct.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        carTypeSpinner.setAdapter(adapter_ct);
+        carTypeSpinner.setSelection(array_ct.size() - 1, true);
+
+        List<String> array_dt = new ArrayList<String>();
+        array_dt.addAll(Arrays.asList(str_dt));
+        // add hint as last item
+        array_dt.add("请选择缺陷类型：");
+        //设置样式
+        simpleArrayAdapter adapter_dt = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_dt);
+        adapter_dt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        defectTypeSpinner.setAdapter(adapter_dt);
+        defectTypeSpinner.setSelection(array_dt.size() - 1, true);
+
+        List<String> array_da = new ArrayList<String>();
+        array_da.addAll(Arrays.asList(str_da));
+        // add hint as last item
+        array_da.add("请选择缺陷总成：");
+        //设置样式
+        simpleArrayAdapter adapter_da = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_da);
+        adapter_da.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        defectAssemblySpinner.setAdapter(adapter_da);
+        defectAssemblySpinner.setSelection(array_da.size() - 1, true);
+
+        List<String> array_pn = new ArrayList<String>();
+        array_pn.addAll(Arrays.asList(str_pn));
+        // add hint as last item
+        array_pn.add("请选择工号：");
+        //设置样式
+        simpleArrayAdapter adapter_pn = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_pn);
+        adapter_pn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        positionNumberSpinner.setAdapter(adapter_pn);
+        positionNumberSpinner.setSelection(array_pn.size() - 1, true);
+
+//        spSelected_ct = (String) carTypeSpinner.getSelectedItem();
+//        spSelected_dt = (String) defectTypeSpinner.getSelectedItem();
+//        spSelected_da = (String) defectAssemblySpinner.getSelectedItem();
+//        spSelected_pn = (String) positionNumberSpinner.getSelectedItem();
+
+        spSelected_dt = "null";
+        spSelected_ct = "null";
+        spSelected_pn = "null";
+        spSelected_da = "null";
+
+
+        carTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                spSelected_ct = (String) carTypeSpinner.getSelectedItem();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        defectTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                spSelected_dt = (String) defectTypeSpinner.getSelectedItem();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        defectAssemblySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spSelected_da = (String) defectAssemblySpinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        positionNumberSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spSelected_pn = (String) positionNumberSpinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         inputLayoutTitle = (TextInputLayout) findViewById(R.id.create_layout_title);
-        inputLayoutSource = (TextInputLayout) findViewById(R.id.create_layout_source);
-        inputLayoutPosition = (TextInputLayout) findViewById(R.id.create_layout_position);
-        inputLayoutDescription = (TextInputLayout) findViewById(R.id.create_layout_description);
-
+//        inputLayoutSource = (TextInputLayout) findViewById(R.id.create_layout_source);
+//        inputLayoutPosition = (TextInputLayout) findViewById(R.id.create_layout_position);
+//        inputLayoutDescription = (TextInputLayout) findViewById(R.id.create_layout_description);
+//
         inputTitle = (EditText) findViewById(R.id.create_title);
-        inputSource = (EditText) findViewById(R.id.create_source);
-        inputPosition = (EditText) findViewById(R.id.create_position);
-        inputDescription = (EditText) findViewById(R.id.create_description);
+//        inputSource = (EditText) findViewById(R.id.create_source);
+//        inputPosition = (EditText) findViewById(R.id.create_position);
+//        inputDescription = (EditText) findViewById(R.id.create_description);
 
         fab_delete = (FloatingActionButton) findViewById(R.id.btn_delete);
         fab_upload = (FloatingActionButton) findViewById(R.id.btn_upload);
@@ -97,26 +218,40 @@ public class CreateActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: "+image_uid );
 
         final String finder = user.get("uid");
-        final String process = user.get("process");
-        Log.d(TAG, "onCreate: "+finder+"   "+process);
+        final String section = user.get("section");
+        Log.d(TAG, "onCreate: "+finder+"   "+ section);
         fab_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String title = inputTitle.getText().toString().trim();
-                String prob_describe = inputDescription.getText().toString().trim();
-                String prob_source = inputSource.getText().toString().trim();
-                String position = inputPosition.getText().toString().trim();
-
-                if (submitForm()) {
-                    uploadProblem(title, prob_source, prob_describe, position, process, finder, image_uid);
+                if(spinnerValidate(spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn)){
+                    String title = inputTitle.getText().toString().trim();
+                    String carType = spSelected_ct.trim();
+                    String defectType = spSelected_dt.trim();
+                    String defectAssembly = spSelected_da.trim();
+                    String positionNumber = spSelected_pn.trim();
+//                    String prob_describe = inputDescription.getText().toString().trim();
+//                    String prob_source = inputSource.getText().toString().trim();
+//                    String position = inputPosition.getText().toString().trim();
+                    if (submitForm()) {
+//                    uploadProblem(title, prob_source, prob_describe, position, section, finder, image_uid);
+                        uploadProblem(title, carType, defectType, defectAssembly, positionNumber, section, finder, image_uid);
+                    }
+                    else{
+                        Toast.makeText(CreateActivity.this, "出现错误！", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 else{
-                    Toast.makeText(CreateActivity.this, "出现错误！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateActivity.this, "请确认已全部选择上述信息", Toast.LENGTH_SHORT).show();
                 }
+
+
+
+
             }
         });
+
         fab_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,16 +265,21 @@ public class CreateActivity extends AppCompatActivity {
                 }).show();
             }
         });
-        b_photo.setOnClickListener(new View.OnClickListener()
-        {
+
+        b_photo.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                // capture picture
-                captureImage();
-                Toast.makeText(CreateActivity.this,"拍照",Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                if (ContextCompat.checkSelfPermission(CreateActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    // capture picture
+                    captureImage();
+//                Toast.makeText(CreateActivity.this,"拍照",Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
 
         // Checking camera availability
         if (!isDeviceSupportCamera()) {
@@ -164,6 +304,19 @@ public class CreateActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    captureImage();
+                } else {
+                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+        }
+    }
 
     private void captureImage() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -172,8 +325,17 @@ public class CreateActivity extends AppCompatActivity {
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
+
         // start the image capture Intent
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+    }
+
+    private boolean spinnerValidate(String spSelected_ct,String spSelected_dt, String spSelected_da, String spSelected_pn){
+        if(!spSelected_pn.equals("null") && !spSelected_da.equals("null") && !spSelected_ct.equals("null") && !spSelected_dt.equals("null"))
+        {
+            return true;
+        }else
+            return false;
     }
 
     private boolean submitForm() {
@@ -191,33 +353,35 @@ public class CreateActivity extends AppCompatActivity {
             inputLayoutTitle.setError(getString(R.string.err_msg_title));
             return false;
         } else {
-            inputLayoutTitle.setErrorEnabled(false);
-            if (inputSource.getText().toString().trim().isEmpty()) {
-                inputLayoutSource.setError(getString(R.string.err_msg_source));
-                return false;
-            } else {
-                inputLayoutSource.setErrorEnabled(false);
-                if (inputDescription.getText().toString().trim().isEmpty()) {
-                    inputLayoutDescription.setError(getString(R.string.err_msg_description));
-                    return false;
-                } else {
-                    inputLayoutDescription.setErrorEnabled(false);
-                    {
-                        if (inputPosition.getText().toString().trim().isEmpty()) {
-                            inputLayoutPosition.setError(getString(R.string.err_msg_position));
-                            return false;
-                        } else {
-                            inputLayoutPosition.setErrorEnabled(false);
-                            return true;
-                        }
-                    }
-                }
-            }
+//            inputLayoutTitle.setErrorEnabled(false);
+//            if (inputSource.getText().toString().trim().isEmpty()) {
+//                inputLayoutSource.setError(getString(R.string.err_msg_source));
+//                return false;
+//            } else {
+//                inputLayoutSource.setErrorEnabled(false);
+//                if (inputDescription.getText().toString().trim().isEmpty()) {
+//                    inputLayoutDescription.setError(getString(R.string.err_msg_description));
+//                    return false;
+//                } else {
+//                    inputLayoutDescription.setErrorEnabled(false);
+//                    {
+//                        if (inputPosition.getText().toString().trim().isEmpty()) {
+//                            inputLayoutPosition.setError(getString(R.string.err_msg_position));
+//                            return false;
+//                        } else {
+//                            inputLayoutPosition.setErrorEnabled(false);
+//                            return true;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+            return true;
         }
     }
 
-    private void uploadProblem(final String title, final String prob_source,
-                               final String prob_describe, final String position, final String process,
+    private void uploadProblem(final String title, final String carType,
+                               final String defectType, final String defectAssembly, final String positionNumber, final String section,
                                final String finder, final String image_uid){
         // Tag used to cancel the request
         String tag_string_req = "req_upload";
@@ -276,12 +440,13 @@ public class CreateActivity extends AppCompatActivity {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
                 params.put("title", title);
-                params.put("prob_source", prob_source);
-                params.put("prob_describe", prob_describe);
+                params.put("car_type", carType);
+                params.put("defect_type", defectType);
                 params.put("finder", finder);
-                params.put("process", process);
-                params.put("image_uid", image_uid);
-                params.put("position", position);
+                params.put("section", section);
+                params.put("prob_image_uid", image_uid);
+                params.put("position_number", positionNumber);
+                params.put("defect_assembly", defectAssembly);
                 return params;
             }
 
@@ -303,15 +468,15 @@ public class CreateActivity extends AppCompatActivity {
 
 
     private void delete() {
-        inputDescription.setText(null);
-        inputSource.setText(null);
+//        inputDescription.setText(null);
+//        inputSource.setText(null);
         inputTitle.setText(null);
-        inputPosition.setText(null);
+//        inputPosition.setText(null);
     }
 
 
     /**
-     * Here we store the file url as it will be null after returning from camera
+     * Here we store the file uri as it will be null after returning from camera
      * app
      */
     @Override
@@ -376,6 +541,7 @@ public class CreateActivity extends AppCompatActivity {
     private void launchUploadActivity(boolean isImage){
         Intent i = new Intent(CreateActivity.this, UploadActivity.class);
         i.putExtra("filePath", fileUri.getPath());
+        i.setData(fileUri);
         i.putExtra("isImage", isImage);
         startActivityForResult(i,10);
         Log.d(TAG, "launchUploadActivity: "+fileUri.getPath());
@@ -431,8 +597,8 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     public void onBackPressed(){
-        Intent reg_to_login=new Intent(CreateActivity.this,User.class);
-        startActivity(reg_to_login);
+        Intent cre_to_user=new Intent(CreateActivity.this,User.class);
+        startActivity(cre_to_user);
         finish();
     }
 }

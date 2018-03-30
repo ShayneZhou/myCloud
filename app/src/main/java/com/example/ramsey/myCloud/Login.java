@@ -171,10 +171,10 @@ public class Login extends Activity {                 //登录界面活动
                         String created_at = user
                                 .getString("created_at");
                         String authority = user.getString("authority");
-                        String process = user.getString("process");
+                        String section = user.getString("section");
 
                         // Inserting row in users table
-                        db.addUser(name, email, uid, created_at, authority, process);
+                        db.addUser(name, email, uid, created_at, authority, section);
 
                         // Launch main activity
                         Intent intent = new Intent(Login.this,
