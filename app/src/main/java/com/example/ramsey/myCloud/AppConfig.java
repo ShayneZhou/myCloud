@@ -22,6 +22,8 @@ public class AppConfig {
 
     // Server create url
     public static final String URL_CREATE = "http://10.0.2.2/myCloud/CreateProblemList.php";
+    //Server CheckProblemList url
+    public static final String URL_CheckProblemList="http://192.168.1.105/myCloud/CheckProblemList.php";
 }
 
 //10.0.2.2

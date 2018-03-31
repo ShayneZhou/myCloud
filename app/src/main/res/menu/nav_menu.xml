@@ -2,24 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_call"
-            android:icon="@drawable/nav_call"
-            android:title="Call" />
+            android:id="@+id/nav_create"
+            android:icon="@drawable/ic_add"
+            android:title="新建问题单" />
         <item
-            android:id="@+id/nav_friends"
-            android:icon="@drawable/nav_friends"
-            android:title="Friends" />
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search"
+            android:title="搜索问题单" />
         <item
-            android:id="@+id/nav_location"
-            android:icon="@drawable/nav_location"
-            android:title="Location" />
+            android:id="@+id/nav_void3"
+            android:title="      " />
         <item
-            android:id="@+id/nav_mail"
-            android:icon="@drawable/nav_mail"
-            android:title="Mail" />
+            android:id="@+id/nav_void1"
+            android:title="      " />
         <item
-            android:id="@+id/nav_task"
-            android:icon="@drawable/nav_task"
-            android:title="Tasks" />
+            android:id="@+id/nav_void2"
+            android:title="      " />
+
+
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout"
+            android:title="注销登录" />
+
+        <item
+            android:id="@+id/nav_close"
+            android:title="关闭程序"
+            android:icon="@drawable/ic_close"/>
     </group>
 </menu>
