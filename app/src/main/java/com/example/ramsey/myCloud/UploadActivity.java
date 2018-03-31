@@ -42,10 +42,6 @@ public class UploadActivity extends AppCompatActivity {
     private Uri fileUri;
     private ImageView imgPreview;
     private Button btnUpload;
-    long totalSize = 0;
-    private SQLiteHandler db;
-    JSONObject js_response;
-    private String image_uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +56,6 @@ public class UploadActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         imgPreview = (ImageView) findViewById(R.id.imgPreview);
 
-
-        db = new SQLiteHandler(getApplicationContext());
 
         // Receiving the data from previous activity
         Intent i = getIntent();
@@ -91,22 +85,11 @@ public class UploadActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                new UploadFileToServer().execute();
                 if (filePath != null) {
-                    imageUpload(filePath,fileUri,new VolleyCallback(){
-                        @Override
-                        public void onSuccess(String result){
-                        image_uid = result;
-                        }
-                    });
+                    imageUpload(filePath,fileUri);
 
-                    Log.d(TAG, "onClick: "+image_uid);
                 } else {
                     Toast.makeText(getApplicationContext(), "Image not selected!", Toast.LENGTH_LONG).show();
                 }
-                Intent j = new Intent(UploadActivity.this,CreateActivity.class);
-                Log.d(TAG, "onClick: "+image_uid);
-                j.putExtra("image_uid",image_uid);
-                setResult(200,j);
-                finish();
             }
         });
 
@@ -140,14 +123,12 @@ public class UploadActivity extends AppCompatActivity {
             imgPreview.setImageBitmap(bitmap);
         }
     }
-    
 
-    public interface VolleyCallback{
-        void onSuccess(String result);
-    }
 
-//    private void imageUpload(final String imagePath,final Uri imageUri) {
-    private void imageUpload(final String imagePath, final Uri imageUri,final VolleyCallback callback) {
+
+
+    private void imageUpload(final String imagePath,final Uri imageUri) {
+
         // loading or check internet connection or something...
         // ... then
 //        String prob_image_uid = null;
@@ -172,7 +153,13 @@ public class UploadActivity extends AppCompatActivity {
                         String prob_image_uid = jObj.getString("prob_image_uid");
                         Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onResponse: "+prob_image_uid);
-                        callback.onSuccess(prob_image_uid);
+
+
+                        Intent j = new Intent(UploadActivity.this,CreateActivity.class);
+                        Log.d(TAG, "onClick: "+ prob_image_uid);
+                        j.putExtra("image_uid",prob_image_uid);
+                        startActivity(j);
+                        finish();
 
                     }else {
 
@@ -212,153 +199,6 @@ public class UploadActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
-
-
-
-
-
-
-
-//    /**
-//     * Uploading the file to server
-//     * */
-//    private class UploadFileToServer extends AsyncTask<Void, Integer, String> {
-//
-//        @Override
-//        protected void onPreExecute() {
-//            // setting progress bar to zero
-//            progressBar.setProgress(0);
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onProgressUpdate(Integer... progress) {
-//            // Making progress bar visible
-//            progressBar.setVisibility(View.VISIBLE);
-//
-//            // updating progress bar value
-//            progressBar.setProgress(progress[0]);
-//
-//            // updating percentage value
-//            txtPercentage.setText(String.valueOf(progress[0]) + "%");
-//        }
-//
-//        @Override
-//        protected String doInBackground(Void... params) {
-//            return uploadFile();
-//        }
-//
-//        @SuppressWarnings("deprecation")
-//        private String uploadFile() {
-//            String responseString = null;
-//
-//            HttpClient httpclient = new DefaultHttpClient();
-//            HttpPost httppost = new HttpPost(AppConfig.FILE_UPLOAD_URL);
-//
-//            try {
-//                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
-//                        new AndroidMultiPartEntity.ProgressListener() {
-//
-//                            @Override
-//                            public void transferred(long num) {
-//                                publishProgress((int) ((num / (float) totalSize) * 100));
-//                            }
-//                        });
-//
-//                File sourceFile = new File(filePath);
-//
-//                // Adding file data to http body
-//                entity.addPart("image", new FileBody(sourceFile));
-//
-//                // Extra parameters if you want to pass to server
-//                HashMap<String, String> user = db.getUserDetails();
-//
-//                String email = user.get("email");
-//                entity.addPart("email", new StringBody(email));
-//
-//                totalSize = entity.getContentLength();
-//                httppost.setEntity(entity);
-//
-//                // Making server call
-//                HttpResponse response = httpclient.execute(httppost);
-//                HttpEntity r_entity = response.getEntity();
-//
-//                int statusCode = response.getStatusLine().getStatusCode();
-//                Log.d(TAG, "uploadFile: "+statusCode);
-//                if (statusCode == 200) {
-//                    // Server response
-//                    responseString = EntityUtils.toString(r_entity);
-//                    try {
-//                        js_response = new JSONObject(responseString);
-//                        boolean error = js_response.getBoolean("error");
-//
-//                        if (!error) {
-//                            image_uid = js_response.getString("image_uid");
-//                            String message = js_response.getString("message");
-//                            Looper.prepare();
-//                            Toast.makeText(getApplicationContext(),
-//                                    message, Toast.LENGTH_LONG).show();
-//                            Looper.loop();
-//                            Log.d(TAG, "uploadFile: "+message);
-//                            Log.d(TAG, "uploadFile: image_uid"+image_uid);
-//
-//                        }else{
-//                            // Error occurred in uploading. Get the error
-//                            // message
-//                            Looper.prepare();
-//                            String errorMsg = js_response.getString("error_msg");
-//                            Toast.makeText(getApplicationContext(),
-//                                    errorMsg, Toast.LENGTH_LONG).show();
-//                            Looper.loop();
-//                            Log.d(TAG, "uploadFile: "+errorMsg);
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    responseString = "Error occurred! Http Status Code: "
-//                            + statusCode;
-//                }
-//
-//            } catch (ClientProtocolException e) {
-//                responseString = e.toString();
-//            } catch (IOException e) {
-//                responseString = e.toString();
-//            }
-//
-//            return responseString;
-//
-//        }
-//
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//
-//            // showing the server response in an alert dialog
-//            showAlert(result);
-//            super.onPostExecute(result);
-//
-//            Log.e(TAG, "Response from server: " + result);
-//        }
-//
-//    }
-//
-//    /**
-//     * Method to show alert dialog
-//     * */
-//    private void showAlert(String message) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMessage(message).setTitle("Response from Servers")
-//                .setCancelable(false)
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int id) {
-//                        // do nothing
-//                    }
-//                });
-//        AlertDialog alert = builder.create();
-//        alert.show();
-//    }
 
 
 }

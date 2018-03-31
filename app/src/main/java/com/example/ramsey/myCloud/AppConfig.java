@@ -37,6 +37,8 @@ public class AppConfig {
     // Server create url
     public static final String URL_CREATE = "http://10.0.2.2/myCloud/CreateProblemList.php";
 
+    public static final String URL_CheckProblemList = "http://10.0.2.2/myCloud/CheckProblemList.php";
+
     /**
      * Turn drawable resource into byte array.
      *

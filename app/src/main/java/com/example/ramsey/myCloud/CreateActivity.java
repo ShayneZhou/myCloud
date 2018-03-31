@@ -51,7 +51,6 @@ public class CreateActivity extends AppCompatActivity {
     private Button b_photo;
     private SQLiteHandler db;
     private ProgressDialog pDialog;
-    private String image_uid;
     private Spinner carTypeSpinner, defectTypeSpinner, defectAssemblySpinner, positionNumberSpinner;
     private String[] str_ct = {"1", "2", "3", };
     private String[] str_dt = {"4", "5", "6", };
@@ -131,10 +130,6 @@ public class CreateActivity extends AppCompatActivity {
         positionNumberSpinner.setAdapter(adapter_pn);
         positionNumberSpinner.setSelection(array_pn.size() - 1, true);
 
-//        spSelected_ct = (String) carTypeSpinner.getSelectedItem();
-//        spSelected_dt = (String) defectTypeSpinner.getSelectedItem();
-//        spSelected_da = (String) defectAssemblySpinner.getSelectedItem();
-//        spSelected_pn = (String) positionNumberSpinner.getSelectedItem();
 
         spSelected_dt = "null";
         spSelected_ct = "null";
@@ -236,7 +231,9 @@ public class CreateActivity extends AppCompatActivity {
 //                    String prob_source = inputSource.getText().toString().trim();
 //                    String position = inputPosition.getText().toString().trim();
                     if (submitForm()) {
-//                    uploadProblem(title, prob_source, prob_describe, position, section, finder, image_uid);
+                        Log.d(TAG, "onClick: carType"+carType);
+                        Log.d(TAG, "onClick: 发送"+image_uid);
+                        Log.d(TAG, "onClick: title"+title);
                         uploadProblem(title, carType, defectType, defectAssembly, positionNumber, section, finder, image_uid);
                     }
                     else{
@@ -446,7 +443,7 @@ public class CreateActivity extends AppCompatActivity {
                 params.put("finder", finder);
                 params.put("section", section);
                 params.put("prob_image_uid", image_uid);
-                params.put("position_number", positionNumber);
+                params.put("position_num", positionNumber);
                 params.put("defect_assembly", defectAssembly);
                 return params;
             }
@@ -532,11 +529,11 @@ public class CreateActivity extends AppCompatActivity {
                 }
 
 //            接收上传成功界面传过来的image_uid;
-            case 10:
-                if (resultCode ==200) {
-                    image_uid = data.getStringExtra("image_uid");
-                    Log.d(TAG, "onActivityResult: "+image_uid);
-                }
+//            case 10:
+//                if (resultCode ==200) {
+//                    image_uid = data.getStringExtra("image_uid");
+//                    Log.d(TAG, "onActivityResult: "+image_uid);
+//                }
 
         }
     }

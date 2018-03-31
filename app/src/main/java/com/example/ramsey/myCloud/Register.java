@@ -179,30 +179,6 @@ public class Register extends AppCompatActivity {
                                 "请确认已经输入全部信息！", Toast.LENGTH_LONG)
                                 .show();
                     }
-//                    if (email.equals("")) {
-//                        Toast.makeText(getApplicationContext(), getString(R.string.email_empty), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                    if (name.equals("")) {
-//                        Toast.makeText(getApplicationContext(), getString(R.string.name_empty), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                    if (password.equals("")) {
-//                        Toast.makeText(getApplicationContext(), getString(R.string.pwd_empty), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                    if (passwordCheck.equals("")) {
-//                        Toast.makeText(getApplicationContext(), getString(R.string.pwdCheck_empty), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                    if (!(authority == "1" || authority == "0")) {
-//                        Toast.makeText(getApplicationContext(), getString(R.string.authority_wrong), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
-//                    if (section.equals("")) {
-//                        Toast.makeText(getApplicationContext(), getString(R.string.section_wrong), Toast.LENGTH_LONG)
-//                                .show();
-//                    }
                 }
                 else{
                     Toast.makeText(Register.this, "请确认身份以及条线已经选择", Toast.LENGTH_SHORT).show();

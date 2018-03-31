@@ -117,7 +117,7 @@
     <string name="hint_finder">汇报人</string>
     <string name="hint_position">车身部位</string>
     <string name="button_upload">上传</string>
-    <string name="err_msg_title">未输入问题单名称</string>
+    <string name="err_msg_title">未输入问题单描述</string>
     <string name="err_msg_source">未输入问题单来源</string>
     <string name="err_msg_finder">未输入问题单汇报人</string>
     <string name="err_msg_position">未输入问题单部位</string>

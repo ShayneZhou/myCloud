@@ -141,7 +141,6 @@ public class Resetpwd extends AppCompatActivity {
                 AppConfig.URL_RESET, new Response.Listener<String>() {
 
             @Override
-            //返回的response字串，发送的到底是什么字段？
             public void onResponse(String response) {
                 Log.d(TAG, "Reset Response: " + response.toString());
                 hideDialog();
@@ -150,19 +149,7 @@ public class Resetpwd extends AppCompatActivity {
                     JSONObject jObj = new JSONObject(response);//解析为json obj
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-//                        String uid = jObj.getString("uid");
-//
-//                        JSONObject user = jObj.getJSONObject("user");
-//                        String name = user.getString("name");
-//                        String email = user.getString("email");
-//                        String created_at = user
-//                                .getString("created_at");
-//                        String authority = user.getString("authority");
-//
-//                        // Inserting row in users table
-//                        db.addUser(name, email, uid, created_at, authority);
+
 
                         Toast.makeText(getApplicationContext(), "UserPassword successfully Changed. Try login now!", Toast.LENGTH_LONG).show();
 

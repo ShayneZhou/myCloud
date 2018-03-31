@@ -89,11 +89,11 @@ public class User extends AppCompatActivity {
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_close:
-                        logoutUser();
+                        finish();
                         mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_logout:
-                        back_to_login();
+                        logoutUser();
                         mDrawerLayout.closeDrawers();
                         break;
                 }
@@ -180,7 +180,7 @@ public class User extends AppCompatActivity {
                     new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                Log.d(TAG, "Login Response: " + response.toString());
+                                Log.d(TAG, "question Response: " + response.toString());
                                 pDiaglog.dismiss();
                                 try {
                                     JSONObject obj = new JSONObject(response);
@@ -219,17 +219,15 @@ public class User extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("user_uid", "1");
+
+                HashMap<String, String> user = db.getUserDetails();
+                String uid = user.get("uid");
+                params.put("user_uid", uid);
                 return params;
             }
                 },tag_squestion_request);
     }
-    public void back_to_login() {
-        //setContentView(R.layout.login);
-        Intent intent_login = new Intent(User.this,Login.class) ;
-        startActivity(intent_login);
-        finish();
-    }
+
 
 
     private void logoutUser() {
