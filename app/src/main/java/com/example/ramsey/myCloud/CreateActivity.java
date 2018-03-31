@@ -58,7 +58,7 @@ public class CreateActivity extends AppCompatActivity {
     private String[] str_da = {"7", "8", "9", };
     private String[] str_pn = {"7", "8", "9", };
     private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn;
-
+    private List<String> image_uid_list = new ArrayList<String>();
 
     private static final String TAG = CreateActivity.class.getSimpleName();
 
@@ -215,7 +215,9 @@ public class CreateActivity extends AppCompatActivity {
 
         Intent intent =getIntent();
         final String image_uid=intent.getStringExtra("image_uid");
+        image_uid_list.add(image_uid);
         Log.d(TAG, "onCreate: "+image_uid );
+        Log.d(TAG, "onCreate: "+image_uid_list);
 
         final String finder = user.get("uid");
         final String section = user.get("section");
@@ -324,7 +326,6 @@ public class CreateActivity extends AppCompatActivity {
         fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
 
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
 
         // start the image capture Intent
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
@@ -486,6 +487,7 @@ public class CreateActivity extends AppCompatActivity {
         // save file url in bundle as it will be null on screen orientation
         // changes
         outState.putParcelable("file_uri", fileUri);
+        outState.putStringArrayList("image_uid_list", (ArrayList<String>) image_uid_list);
     }
 
     @Override
@@ -494,6 +496,7 @@ public class CreateActivity extends AppCompatActivity {
 
         // get the file url
         fileUri = savedInstanceState.getParcelable("file_uri");
+        image_uid_list = savedInstanceState.getStringArrayList("image_uid_list");
     }
 
 

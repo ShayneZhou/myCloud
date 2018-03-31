@@ -1,17 +1,12 @@
 package com.example.ramsey.myCloud;
 
-import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Looper;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -23,35 +18,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.NoConnectionError;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UploadActivity extends AppCompatActivity {
@@ -67,7 +45,7 @@ public class UploadActivity extends AppCompatActivity {
     long totalSize = 0;
     private SQLiteHandler db;
     JSONObject js_response;
-    public String image_uid;
+    private String image_uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +91,13 @@ public class UploadActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                new UploadFileToServer().execute();
                 if (filePath != null) {
-                    image_uid= imageUpload(filePath,fileUri);
+                    imageUpload(filePath,fileUri,new VolleyCallback(){
+                        @Override
+                        public void onSuccess(String result){
+                        image_uid = result;
+                        }
+                    });
+
                     Log.d(TAG, "onClick: "+image_uid);
                 } else {
                     Toast.makeText(getApplicationContext(), "Image not selected!", Toast.LENGTH_LONG).show();
@@ -156,12 +140,17 @@ public class UploadActivity extends AppCompatActivity {
             imgPreview.setImageBitmap(bitmap);
         }
     }
+    
+
+    public interface VolleyCallback{
+        void onSuccess(String result);
+    }
 
 //    private void imageUpload(final String imagePath,final Uri imageUri) {
-    private String imageUpload(final String imagePath, final Uri imageUri) {
+    private void imageUpload(final String imagePath, final Uri imageUri,final VolleyCallback callback) {
         // loading or check internet connection or something...
         // ... then
-        String prob_image_uid = null;
+//        String prob_image_uid = null;
 
         // Tag used to cancel the request
         String tag_string_req = "req_register";
@@ -183,6 +172,7 @@ public class UploadActivity extends AppCompatActivity {
                         String prob_image_uid = jObj.getString("prob_image_uid");
                         Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "onResponse: "+prob_image_uid);
+                        callback.onSuccess(prob_image_uid);
 
                     }else {
 
@@ -221,7 +211,6 @@ public class UploadActivity extends AppCompatActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
-        return prob_image_uid;
     }
 
 

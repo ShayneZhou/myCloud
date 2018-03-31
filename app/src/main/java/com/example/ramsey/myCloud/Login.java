@@ -121,18 +121,6 @@ public class Login extends Activity {                 //登录界面活动
             }
         });
 
-//        private SharedPreferences login_sp;
-//        login_sp = getSharedPreferences("userInfo", 0);
-//        String name = login_sp.getString("USER_NAME", "");
-//        String pwd = login_sp.getString("PASSWORD", "");
-//        boolean choseRemember = login_sp.getBoolean("mRememberCheck", false);
-//        //如果上次选了记住密码，那进入登录页面也自动勾选记住密码，并填上用户名和密码
-//        if (choseRemember) {
-//            inputEmail.setText(name);
-//            inputPassword.setText(pwd);
-//            mRememberCheck.setChecked(true);
-//        }
-
     }
 
     private void checkLogin(final String email, final String password) {
