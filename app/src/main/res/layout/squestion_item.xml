@@ -16,6 +16,7 @@
     android:padding="8dp">
 
     <ImageView
+        android:id="@+id/example_image_url"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="left|center_vertical"
@@ -29,7 +30,19 @@
         android:orientation="vertical"
         android:gravity="center">
         <TextView
-            android:id="@+id/squestion_id"
+            android:id="@+id/squestion_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="5dp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"/>
+        <TextView
+            android:id="@+id/squestion_position_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -37,11 +50,8 @@
             android:layout_margin="5dp"
             android:textSize="16sp"
             android:textStyle="bold"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="8dp"/>
         <TextView
-            android:id="@+id/squestion_title"
+            android:id="@+id/squestion_created_at"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
