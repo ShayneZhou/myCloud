@@ -11,6 +11,7 @@ public class sQuestion {
     private String Level;
     private String CreatedAt;
     private String ExampleImageUrl;
+    private String ProbUid;
 
     public String getLevel() {
         return Level;
@@ -33,13 +34,18 @@ public class sQuestion {
         return Title;
     }
 
-    public sQuestion(String title, String positionNumber, String level, String createdAt, String example_image_url)
+    public String getProbUid() {
+        return ProbUid;
+    }
+
+    public sQuestion(String title, String positionNumber, String level, String createdAt, String example_image_url, String probUid)
     {
         Title = title;
         PositionNumber = positionNumber;
         Level = level;
         CreatedAt = createdAt;
         ExampleImageUrl = example_image_url;
+        ProbUid = probUid;
     }
 }
 

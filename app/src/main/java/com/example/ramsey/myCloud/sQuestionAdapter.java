@@ -82,8 +82,8 @@ public class sQuestionAdapter extends RecyclerView.Adapter<sQuestionAdapter.View
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 sQuestion squestion = mQuestionList.get(position);
-                Intent intent = new Intent(mContext, QuestionActivity.class);
-                intent.putExtra(QuestionActivity.Question_Summary, squestion.getTitle());
+                Intent intent = new Intent(mContext, ProblemDetail.class);
+                intent.putExtra("prob_uid",squestion.getProbUid());
                 mContext.startActivity(intent);
             }
         });

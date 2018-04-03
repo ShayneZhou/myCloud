@@ -124,4 +124,5 @@
     <string name="err_msg_description">未输入问题单描述</string>
     <string name="hint_photo">上传照片：</string>
     <string name="btnUploadToServer">Upload to Server</string>
+    <string name="title_activity_problem_detail">ProblemDetail</string>
 </resources>

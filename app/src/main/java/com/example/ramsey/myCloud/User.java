@@ -191,7 +191,7 @@ public class User extends AppCompatActivity {
                                             for (int i = 0; i < obj2.length(); i++) {
                                                 JSONObject obj3 = obj2.getJSONObject(i);
                                                 sQuestion squestion = new sQuestion(obj3.getString("title"), obj3.getString("position_num"),
-                                                        obj3.getString("prob_level"), obj3.getString("created_at"), obj3.getString("example_image_url"));
+                                                        obj3.getString("prob_level"), obj3.getString("created_at"), obj3.getString("example_image_url"), obj3.getString("prob_uid"));
                                                 squestionList.add(squestion);
                                                 Log.d(TAG, "onResponse: "+obj3.getString("example_image_url"));
                                             }

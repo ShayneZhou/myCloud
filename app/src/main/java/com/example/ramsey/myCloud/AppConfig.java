@@ -39,6 +39,12 @@ public class AppConfig {
 
     public static final String URL_CheckProblemList = "http://10.0.2.2/myCloud/CheckProblemList.php";
 
+    // Problem list detail create url
+    public static String URL_ProblemDetail = "http://10.0.2.2/myCloud/ProblemListDetail.php";
+
+    // Problem list detail create url
+    public static String URL_EditProblemList = "http://10.0.2.2/myCloud/EditProblemList.php";
+
     /**
      * Turn drawable resource into byte array.
      *
