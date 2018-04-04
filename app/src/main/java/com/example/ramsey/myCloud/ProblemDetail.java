@@ -287,7 +287,7 @@ public class ProblemDetail extends AppCompatActivity {
                         Log.d(TAG, "onClick: 发送" + prob_uid);
                         Log.d(TAG, "onClick: title" + title);
                         confirmProblem(date, title, finder, section, temp, carType, defectAssembly,
-                                defectType, positionNum, engineer);
+                                defectType, positionNum, engineer,prob_uid);
                     } else {
                         Toast.makeText(ProblemDetail.this, "出现错误！", Toast.LENGTH_SHORT).show();
                     }
@@ -347,6 +347,7 @@ public class ProblemDetail extends AppCompatActivity {
                     if (!error) {
                         //显示图片
                         Glide.with(getApplicationContext()).load(jObj.getString("prob_image_url")).into(problemImage);
+                        Log.d(TAG, "onResponse: "+jObj.getString("prob_image_url"));
 
                         //三个文本框显示在下面，settext方法把取回来的值放入edittext里
                         String created_at = jObj.getString("created_at");
@@ -463,7 +464,7 @@ public class ProblemDetail extends AppCompatActivity {
 
     private void confirmProblem(final String date,final String title,final String finder,final String section, final String temp,
                                 final String carType, final String defectAssembly, final String defectType, final String positionNum,
-                                final String engineer
+                                final String engineer, final String prob_uid
     ) {
         // Tag used to cancel the request
         String tag_string_req = "req_confirm";
@@ -516,6 +517,7 @@ public class ProblemDetail extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
+                params.put("prob_uid", prob_uid);
                 params.put("title", title);
                 params.put("car_type", carType);
                 params.put("defect_type", defectType);
@@ -525,7 +527,7 @@ public class ProblemDetail extends AppCompatActivity {
                 params.put("engineer", engineer);
                 params.put("temp", temp);
                 params.put("date", date);
-                params.put("defectAssembly", defectAssembly);
+                params.put("defect_assembly", defectAssembly);
 
                 return params;
             }

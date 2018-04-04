@@ -25,12 +25,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="10dp">
+
+
             <TextView
                 android:id="@id/problemDetail_text_CarType"
                 android:layout_width="100dp"
@@ -114,7 +117,9 @@
                 android:id="@+id/content_layout_created_at"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner_PositionNum">
+                android:layout_below="@+id/spinner_PositionNum"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
 
                 <EditText
                     android:id="@+id/problemDetail_edit_CreatedAt"
@@ -192,12 +197,19 @@
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
+            <ImageView
+                android:id="@+id/problemDetail_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/content_layout_temp"/>
+
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_below="@+id/problemDetail_btn_sure"
+                android:paddingBottom="10dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -252,11 +264,6 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/problemDetail_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/content_layout_temp"/>
 
             <Button
                 android:id="@+id/problemDetail_btn_sure"

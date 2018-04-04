@@ -19,7 +19,9 @@
         android:layout_height="120dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/register_tb" />
+        android:layout_below="@+id/register_tb"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
     <Spinner
         android:id="@+id/spinner1"
