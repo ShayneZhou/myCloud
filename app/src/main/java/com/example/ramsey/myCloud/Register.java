@@ -233,7 +233,7 @@ public class Register extends AppCompatActivity {
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at, authority, section);
 
-                        Toast.makeText(getApplicationContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "成功注册，尝试登录吧！", Toast.LENGTH_LONG).show();
 
                         // Launch login activity
                         Intent intent = new Intent(

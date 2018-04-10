@@ -314,7 +314,7 @@ public class CreateActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     captureImage();
                 } else {
-                    Toast.makeText(this, "You denied the permission", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "您拒绝了请求", Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:
@@ -522,13 +522,13 @@ public class CreateActivity extends AppCompatActivity {
 
                     // user cancelled Image capture
                     Toast.makeText(getApplicationContext(),
-                            "User cancelled image capture", Toast.LENGTH_SHORT)
+                            "您取消了拍照操作", Toast.LENGTH_SHORT)
                             .show();
 
                 } else {
                     // failed to capture image
                     Toast.makeText(getApplicationContext(),
-                            "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+                            "拍照失败", Toast.LENGTH_SHORT)
                             .show();
                 }
 

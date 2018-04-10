@@ -151,7 +151,7 @@ public class Resetpwd extends AppCompatActivity {
                     if (!error) {
 
 
-                        Toast.makeText(getApplicationContext(), "UserPassword successfully Changed. Try login now!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "成功修改密码，尝试登录吧！", Toast.LENGTH_LONG).show();
 
                         // Launch login activity
                         Intent intent = new Intent(

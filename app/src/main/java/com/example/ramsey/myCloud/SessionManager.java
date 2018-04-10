@@ -13,7 +13,7 @@ public class SessionManager {
     // LogCat tag
     private static String TAG = SessionManager.class.getSimpleName();
 
-    // Shared Preferences
+    // Shared PreferencesSs
     SharedPreferences pref;
 
     Editor editor;
