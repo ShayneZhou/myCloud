@@ -41,34 +41,34 @@ public class AppConfig {
     public static final String URL_CheckProblemList = "http://10.0.2.2/myCloud/CheckProblemList.php";
     
     //Server Upload Reason url
-    public static final String URL_ReportCause="http://192.168.1.105/myCloud/ReportCause.php";
+    public static final String URL_ReportCause="http://10.0.2.2/myCloud/ReportCause.php";
     
     //Server Upload Action url
-    public static  final String URL_ReportAction="http://192.168.1.105/myCloud/ReportSolution.php";
+    public static  final String URL_ReportAction="http://10.0.2.2/myCloud/ReportSolution.php";
     
     //Server Check CauseList url
-    public static final String URL_CheckCauseList="http://192.168.1.105/myCloud/CheckCause.php";
+    public static final String URL_CheckCauseList="http://10.0.2.2/myCloud/CheckCause.php";
     
     //Server Check ActionList url
-    public static final String URL_CheckSolutionList="http://192.168.1.105/myCloud/CheckSolution.php";
+    public static final String URL_CheckSolutionList="http://10.0.2.2/myCloud/CheckSolution.php";
     
     //Server Get Cause Detail url
-    public static final String URL_CauseDetail="http://192.168.1.105/myCloud/CauseDetail.php";
+    public static final String URL_CauseDetail="http://10.0.2.2/myCloud/CauseDetail.php";
     
     //Server Get Solution Detail url
-    public static final String URL_SolutionDetail="http://192.168.1.105/myCloud/SolutionDetail.php";
+    public static final String URL_SolutionDetail="http://10.0.2.2/myCloud/SolutionDetail.php";
     
     //Server Edit Cause Detail url
-    public static final String URL_EditCause="http://192.168.1.105/myCloud/EditCause.php";
+    public static final String URL_EditCause="http://10.0.2.2/myCloud/EditCause.php";
     
     //Server Edit Action Detail url
-    public static final String URL_EditAction="http://192.168.1.105/myCloud/EditSolution.php";
+    public static final String URL_EditAction="http://10.0.2.2/myCloud/EditSolution.php";
     
     //Server Delete Cause url
-    public static final String URL_DeleteCause="http://192.168.1.105/myCloud/DeleteCause.php";
+    public static final String URL_DeleteCause="http://10.0.2.2/myCloud/DeleteCause.php";
     
     //Server Delete Action url
-    public static final String URL_DeleteAction="http://192.168.1.105/myCloud/DeleteSolution.php";
+    public static final String URL_DeleteAction="http://10.0.2.2/myCloud/DeleteSolution.php";
 
     // Problem list detail create url
     public static String URL_ProblemDetail = "http://10.0.2.2/myCloud/ProblemListDetail.php";

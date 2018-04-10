@@ -44,12 +44,12 @@ public class ViewCauseActivity extends AppCompatActivity {
         toolbar.setTitle("查看原因");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
-        getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
+//        getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
 
-//        Intent intent=getIntent();
-//        prob_uid=intent.getStringExtra("prob_uid");
-        prob_uid="1";
+        Intent intent=getIntent();
+        prob_uid=intent.getStringExtra("prob_uid");
+
 
         fab=(FloatingActionButton)findViewById(R.id.fab_view_cause_create);
         fab.setOnClickListener(new View.OnClickListener()
@@ -68,6 +68,8 @@ public class ViewCauseActivity extends AppCompatActivity {
         adapter = new sCauseAdapter(scauseList);
         recyclerView.setAdapter(adapter);
     }
+
+
     private void initsCauses() {
         final ProgressDialog pDiaglog=new ProgressDialog(this);
         pDiaglog.setMessage("请稍等");
@@ -117,9 +119,8 @@ public class ViewCauseActivity extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Intent intent2=getIntent();
-                prob_uid="1";
+
+                Log.d(TAG, "getParams: "+prob_uid);
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("prob_uid",prob_uid);
                 return params;

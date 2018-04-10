@@ -16,6 +16,7 @@
         android:padding="8dp">
 
         <ImageView
+            android:id="@+id/saction_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="left|center_vertical"

@@ -166,7 +166,8 @@ public class ProblemDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {                //后期完善
                 Intent i = new Intent(getApplicationContext(),
-                        Login.class);
+                        ViewCauseActivity.class);
+                i.putExtra("prob_uid",prob_uid);
                 startActivity(i);
                 finish();
             }

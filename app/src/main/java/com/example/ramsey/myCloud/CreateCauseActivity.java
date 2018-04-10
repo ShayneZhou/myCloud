@@ -61,12 +61,15 @@ public class CreateCauseActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(validate())
                 {
-                    createcause();
+                    Intent intent=getIntent();
+                    String prob_uid=intent.getStringExtra("prob_uid");
+                    createcause(prob_uid);
                 }
             }
         });
     }
-    private void createcause()
+
+    private void createcause(final String prob_uid)
     {
         final ProgressDialog pDiaglog=new ProgressDialog(this);
         pDiaglog.setMessage("正在上传");
@@ -88,8 +91,6 @@ public class CreateCauseActivity extends AppCompatActivity {
                             }
                             else
                             {
-                                Intent intent=getIntent();
-                                String prob_uid=intent.getStringExtra("prob_uid");
                                 ViewCauseActivity.ViewCauseActivityStart(CreateCauseActivity.this,prob_uid);
                                 finish();
                             }
@@ -107,9 +108,7 @@ public class CreateCauseActivity extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
                 Map<String, String> params = new HashMap<String, String>();
-                String prob_uid ="1";
                 params.put("prob_uid", prob_uid);
                 params.put("cause",createcausecause.getText().toString().trim());
                 params.put("analysis",createcauseanalysis.getText().toString().trim());

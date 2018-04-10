@@ -34,6 +34,7 @@ public class sActionAdapter extends RecyclerView.Adapter<sActionAdapter.ViewHold
             cardView = (CardView) view;
             sActionAction = (TextView) view.findViewById(R.id.saction_action);
             sActionSection = (TextView) view.findViewById(R.id.saction_section);
+            sFeedbackImage = (ImageView) view.findViewById(R.id.saction_image);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
