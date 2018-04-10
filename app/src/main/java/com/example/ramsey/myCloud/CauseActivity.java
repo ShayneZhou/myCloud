@@ -2,8 +2,10 @@ package com.example.ramsey.myCloud;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -66,7 +68,25 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.cause_delete_button_1:
-                deletecause();
+                final AlertDialog.Builder normalDialog =new AlertDialog.Builder(CauseActivity.this);
+                normalDialog.setIcon(R.drawable.logo);
+                normalDialog.setTitle("确认删除？");
+                normalDialog.setMessage("是否确认删除该条原因?");
+                normalDialog.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deletecause();
+                            }
+                        });
+                normalDialog.setNegativeButton("关闭",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                // 显示
+                normalDialog.show();
                 break;
             default:
                 break;

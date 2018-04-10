@@ -2,10 +2,12 @@ package com.example.ramsey.myCloud;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -90,13 +92,30 @@ public class ActionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                deleteaction();
-                finish();
+                final AlertDialog.Builder normalDialog =new AlertDialog.Builder(ActionActivity.this);
+                normalDialog.setIcon(R.drawable.logo);
+                normalDialog.setTitle("确认删除？");
+                normalDialog.setMessage("是否确认删除该条原因?");
+                normalDialog.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deleteaction();
+                                finish();
+                            }
+                        });
+                normalDialog.setNegativeButton("关闭",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                // 显示
+                normalDialog.show();
             }
         });
 
         imageView=(ImageView)findViewById(R.id.feedback_image);
-
         getactiondetail();
 
     }
@@ -182,7 +201,7 @@ public class ActionActivity extends AppCompatActivity {
                                         load(obj.getString("feedback_image_url"))
                                         .placeholder(R.drawable.ic_loading)
                                         .error(R.drawable.ic_error_black_24dp)
-                                        .override(160,100)
+                                        .override(100,75)
                                         .into(imageView);
                                 misdone=obj.getString("isdone").trim();
                             }
