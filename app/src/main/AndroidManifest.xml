@@ -16,18 +16,17 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Login">
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
 
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".User"
             android:label="个人中心"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop" />
         <activity
             android:name=".Register"
             android:label="用户注册"
@@ -48,6 +47,29 @@
             android:name=".UploadActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+        <activity android:name=".CauseActivity" >
+
+        </activity>
+        <activity android:name=".ActionActivity" >
+
+        </activity>
+        <activity android:name=".ViewCauseActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".ViewActionActivity">
+
+        </activity>
+        <activity android:name=".CreateCauseActivity">
+
+        </activity>
+        <activity android:name=".CreateActionActivity">
+
+        </activity>
     </application>
 
 </manifest>
