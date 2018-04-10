@@ -60,8 +60,9 @@ public class ActionActivity extends AppCompatActivity {
         toolbar.setTitle("编辑措施");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
+
         locationspinner=(Spinner)findViewById(R.id.action_location_spinner);
-//定义Spinner
+        //定义Spinner
         //定义工段数组
         List<String>location=new ArrayList<>();
         location.add("车身");
@@ -73,12 +74,12 @@ public class ActionActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationspinner.setAdapter(adapter);
         locationspinner.setSelection(location.size()-1,true);
-//实例化EditText
+        //实例化EditText
         edittext_action_action=(EditText)findViewById(R.id.action_action_1);
         edittext_action_performence=(EditText)findViewById(R.id.action_performence_1);
         edittext_action_response=(EditText)findViewById(R.id.action_response_1);
 
-//实例化Button
+        //实例化Button
         button_action_edit=(Button)findViewById(R.id.action_button_1);
         button_action_edit.setOnClickListener(new View.OnClickListener() {
             @Override

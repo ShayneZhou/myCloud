@@ -80,8 +80,8 @@ public class Register extends AppCompatActivity {
 
         authoritySpinner = (Spinner) findViewById(R.id.spinner1);
         List<String> objects = new ArrayList<>();
-        objects.add("0");
-        objects.add("1");
+        objects.add("操作员");
+        objects.add("技术工");
         // add hint as last item
         objects.add("请选择您的身份：");
         //设置样式
@@ -93,11 +93,11 @@ public class Register extends AppCompatActivity {
 
         sectionSpinner = (Spinner) findViewById(R.id.spinner2);
         List<String> objects2 = new ArrayList<>();
-        objects2.add("0");
-        objects2.add("1");
-        objects2.add("2");
+        objects2.add("车头");
+        objects2.add("车身");
+        objects2.add("车尾");
         // add hint as last item
-        objects2.add("请选择您的条线：");
+        objects2.add("请选择您的工段：");
         //设置样式
         simpleArrayAdapter adapter2 = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item, objects2);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

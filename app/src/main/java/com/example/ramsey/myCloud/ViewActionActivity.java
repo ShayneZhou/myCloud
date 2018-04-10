@@ -45,8 +45,8 @@ public class ViewActionActivity extends AppCompatActivity {
         toolbar.setTitle("查看措施");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
-        getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
+//        getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
         Intent intent1=getIntent();
         prob_uid=intent1.getStringExtra("prob_uid");
         cause_uid=intent1.getStringExtra("cause_uid");
@@ -88,7 +88,9 @@ public class ViewActionActivity extends AppCompatActivity {
                                     JSONArray obj2 = obj.getJSONArray("solution");
                                     for (int i = 0; i < obj2.length(); i++) {
                                         JSONObject obj3 = obj2.getJSONObject(i);
-                                        sAction saction = new sAction(obj3.getString("solution_uid"), obj3.getString("solution"),obj3.getString("section"),"1","1","1","1");
+                                        sAction saction = new sAction(obj3.getString("solution_uid"),
+                                                obj3.getString("solution"),obj3.getString("section"),
+                                                "1","1",obj3.getString("feedback_image_url"),"1");
                                         sactionList.add(saction);
                                     }
                                     adapter.notifyDataSetChanged();

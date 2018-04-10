@@ -52,10 +52,10 @@ public class CreateActivity extends AppCompatActivity {
     private SQLiteHandler db;
     private ProgressDialog pDialog;
     private Spinner carTypeSpinner, defectTypeSpinner, defectAssemblySpinner, positionNumberSpinner;
-    private String[] str_ct = {"1", "2", "3", };
-    private String[] str_dt = {"4", "5", "6", };
-    private String[] str_da = {"7", "8", "9", };
-    private String[] str_pn = {"7", "8", "9", };
+    private String[] str_ct = {"LNF", "GNF", };
+    private String[] str_dt = {"表面", "点焊", "匹配", };
+    private String[] str_da = {"UBI", "SIH", "LTV", };
+    private String[] str_pn = {"A1", "A2", "A3", };
     private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn;
     private List<String> image_uid_list = new ArrayList<String>();
 

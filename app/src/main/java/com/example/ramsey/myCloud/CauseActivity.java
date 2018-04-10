@@ -44,6 +44,7 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setTitle("编辑原因");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
+
         Button button1 = (Button) findViewById(R.id.cause_button_1);
         button1.setOnClickListener(this);
         Button button2=(Button)findViewById(R.id.cause_action_button_1);

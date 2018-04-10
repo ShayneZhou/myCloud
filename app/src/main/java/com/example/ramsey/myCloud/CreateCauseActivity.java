@@ -45,8 +45,8 @@ public class CreateCauseActivity extends AppCompatActivity {
         toolbar.setTitle("新建原因");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
-        getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
+//        getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
 
         createcausecause = (EditText) findViewById(R.id.cause_create_cause_1);
         createcauseanalysis = (EditText) findViewById(R.id.cause_create_analysis_1);

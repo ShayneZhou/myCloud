@@ -93,7 +93,8 @@ public class sQuestionAdapter extends RecyclerView.Adapter<sQuestionAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         sQuestion squestion = mQuestionList.get(position);
-        Glide.with(mContext).load(squestion.getExampleImageUrl()).into(holder.sQuestionImage);
+        Glide.with(mContext).load(squestion.getExampleImageUrl()).error(R.drawable.ic_error_black_24dp)
+                .placeholder(R.drawable.ic_loading).into(holder.sQuestionImage);
         holder.sQuestionCreatedAt.setText("创建日期： " + squestion.getCreatedAt());
         holder.sQuestionTitle.setText(squestion.getTitle());
         holder.sQuestionPositionNumber.setText("工位： " + squestion.getPositionNumber());

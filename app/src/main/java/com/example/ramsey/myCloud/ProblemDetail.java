@@ -56,10 +56,10 @@ public class ProblemDetail extends AppCompatActivity {
     private Spinner DefectAssemblySpinner;
     private Spinner DefectTypeSpinner;
     private Spinner PositionNumSpinner;
-    private String[] str_ct = {"1", "2", "3", };
-    private String[] str_da = {"4", "5", "6", };
-    private String[] str_dt = {"7", "8", "9", };
-    private String[] str_pn = {"7", "8", "9", };
+    private String[] str_ct = {"LNF", "GNF", };
+    private String[] str_dt = {"表面", "点焊", "匹配", };
+    private String[] str_da = {"UBI", "SIH", "LTV", };
+    private String[] str_pn = {"A1", "A2", "A3", };
     private String spSelected_CarType;
     private String spSelected_DefectAssembly;
     private String spSelected_DefectType;
@@ -347,7 +347,8 @@ public class ProblemDetail extends AppCompatActivity {
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         //显示图片
-                        Glide.with(getApplicationContext()).load(jObj.getString("prob_image_url")).into(problemImage);
+                        Glide.with(getApplicationContext()).load(jObj.getString("prob_image_url")).error(R.drawable.ic_error_black_24dp)
+                                .placeholder(R.drawable.ic_loading).into(problemImage);
                         Log.d(TAG, "onResponse: "+jObj.getString("prob_image_url"));
 
                         //三个文本框显示在下面，settext方法把取回来的值放入edittext里
