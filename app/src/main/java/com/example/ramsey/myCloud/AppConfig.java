@@ -36,26 +36,37 @@ public class AppConfig {
 
     // Server create url
     public static final String URL_CREATE = "http://10.0.2.2/myCloud/CreateProblemList.php";
+    
     //Server Check ProblemList url
     public static final String URL_CheckProblemList = "http://10.0.2.2/myCloud/CheckProblemList.php";
+    
     //Server Upload Reason url
     public static final String URL_ReportCause="http://192.168.1.105/myCloud/ReportCause.php";
+    
     //Server Upload Action url
     public static  final String URL_ReportAction="http://192.168.1.105/myCloud/ReportSolution.php";
+    
     //Server Check CauseList url
     public static final String URL_CheckCauseList="http://192.168.1.105/myCloud/CheckCause.php";
+    
     //Server Check ActionList url
     public static final String URL_CheckSolutionList="http://192.168.1.105/myCloud/CheckSolution.php";
+    
     //Server Get Cause Detail url
     public static final String URL_CauseDetail="http://192.168.1.105/myCloud/CauseDetail.php";
+    
     //Server Get Solution Detail url
     public static final String URL_SolutionDetail="http://192.168.1.105/myCloud/SolutionDetail.php";
+    
     //Server Edit Cause Detail url
     public static final String URL_EditCause="http://192.168.1.105/myCloud/EditCause.php";
+    
     //Server Edit Action Detail url
     public static final String URL_EditAction="http://192.168.1.105/myCloud/EditSolution.php";
+    
     //Server Delete Cause url
     public static final String URL_DeleteCause="http://192.168.1.105/myCloud/DeleteCause.php";
+    
     //Server Delete Action url
     public static final String URL_DeleteAction="http://192.168.1.105/myCloud/DeleteSolution.php";
     /**
