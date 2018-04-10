@@ -7,25 +7,45 @@ package com.example.ramsey.myCloud;
 
 public class sQuestion {
     private String Title;
-    private String Unique_Id;
+    private String PositionNumber;
     private String Level;
+    private String CreatedAt;
+    private String ExampleImageUrl;
+    private String ProbUid;
 
     public String getLevel() {
         return Level;
     }
 
-    public String getUnique_Id() {
-        return Unique_Id;
+
+    public String getPositionNumber() {
+        return PositionNumber;
+    }
+
+    public String getCreatedAt() {
+        return CreatedAt;
+    }
+
+    public String getExampleImageUrl() {
+        return ExampleImageUrl;
     }
 
     public String getTitle() {
         return Title;
     }
-    public sQuestion(String title, String unique_id, String level)
+
+    public String getProbUid() {
+        return ProbUid;
+    }
+
+    public sQuestion(String title, String positionNumber, String level, String createdAt, String example_image_url, String probUid)
     {
-        Title=title;
-        Unique_Id=unique_id;
-        Level=level;
+        Title = title;
+        PositionNumber = positionNumber;
+        Level = level;
+        CreatedAt = createdAt;
+        ExampleImageUrl = example_image_url;
+        ProbUid = probUid;
     }
 }
 

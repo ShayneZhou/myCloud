@@ -75,6 +75,7 @@ public class CreateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create);
         Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar2);
+        toolbar2.setTitle("新建问题单");
 
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -100,6 +101,7 @@ public class CreateActivity extends AppCompatActivity {
         List<String> array_dt = new ArrayList<String>();
         array_dt.addAll(Arrays.asList(str_dt));
         // add hint as last item
+
         array_dt.add("请选择缺陷类型：");
         //设置样式
         simpleArrayAdapter adapter_dt = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_dt);
@@ -208,11 +210,13 @@ public class CreateActivity extends AppCompatActivity {
         // Fetching user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
 
-        Intent intent =getIntent();
+        Intent intent = getIntent();
         final String image_uid=intent.getStringExtra("image_uid");
         image_uid_list.add(image_uid);
         Log.d(TAG, "onCreate: "+image_uid );
         Log.d(TAG, "onCreate: "+image_uid_list);
+
+
 
         final String finder = user.get("uid");
         final String section = user.get("section");
@@ -529,11 +533,11 @@ public class CreateActivity extends AppCompatActivity {
                 }
 
 //            接收上传成功界面传过来的image_uid;
-//            case 10:
-//                if (resultCode ==200) {
-//                    image_uid = data.getStringExtra("image_uid");
-//                    Log.d(TAG, "onActivityResult: "+image_uid);
-//                }
+            case 10:
+                if (resultCode ==200) {
+                    String image_uid = data.getStringExtra("image_uid");
+                    Log.d(TAG, "onActivityResult: "+image_uid);
+                }
 
         }
     }
@@ -543,8 +547,10 @@ public class CreateActivity extends AppCompatActivity {
         i.putExtra("filePath", fileUri.getPath());
         i.setData(fileUri);
         i.putExtra("isImage", isImage);
-        startActivityForResult(i,10);
+//        startActivityForResult(i,10);
+        startActivity(i);
         Log.d(TAG, "launchUploadActivity: "+fileUri.getPath());
+        finish();
     }
 
 

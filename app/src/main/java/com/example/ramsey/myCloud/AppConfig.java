@@ -69,6 +69,13 @@ public class AppConfig {
     
     //Server Delete Action url
     public static final String URL_DeleteAction="http://192.168.1.105/myCloud/DeleteSolution.php";
+
+    // Problem list detail create url
+    public static String URL_ProblemDetail = "http://10.0.2.2/myCloud/ProblemListDetail.php";
+
+    // Problem list detail create url
+    public static String URL_EditProblemList = "http://10.0.2.2/myCloud/EditProblemList.php";
+
     /**
      * Turn drawable resource into byte array.
      *

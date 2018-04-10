@@ -159,6 +159,7 @@ public class UploadActivity extends AppCompatActivity {
                         Log.d(TAG, "onClick: "+ prob_image_uid);
                         j.putExtra("image_uid",prob_image_uid);
                         startActivity(j);
+//                        setResult(200,j);
                         finish();
 
                     }else {

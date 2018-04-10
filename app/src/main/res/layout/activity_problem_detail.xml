@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ramsey.myCloud.ProblemDetail" >
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/problemDetail_tb"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/id_scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?attr/actionBarSize">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp">
+
+
+            <TextView
+                android:id="@id/problemDetail_text_CarType"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/problemDetail_text_DefectAssembly"
+                android:layout_alignStart="@+id/problemDetail_text_DefectAssembly"
+                android:gravity="center"
+                android:text="车型"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinner_CarType"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/spinner_DefectAssembly"
+                android:layout_alignRight="@+id/spinner_DefectAssembly" />
+
+            <TextView
+                android:id="@id/problemDetail_text_DefectAssembly"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/problemDetail_text_DefectType"
+                android:layout_alignStart="@+id/problemDetail_text_DefectType"
+                android:layout_below="@+id/problemDetail_text_CarType"
+                android:gravity="center"
+                android:text="缺陷总成"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinner_DefectAssembly"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/spinner_DefectType"
+                android:layout_alignRight="@+id/spinner_DefectType"
+                android:layout_below="@+id/spinner_CarType" />
+
+            <TextView
+                android:id="@id/problemDetail_text_DefectType"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/problemDetail_text_PositionNum"
+                android:layout_alignStart="@+id/problemDetail_text_PositionNum"
+                android:layout_below="@+id/problemDetail_text_DefectAssembly"
+                android:gravity="center"
+                android:text="缺陷类型"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinner_DefectType"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/spinner_PositionNum"
+                android:layout_alignRight="@+id/spinner_PositionNum"
+                android:layout_below="@+id/spinner_DefectAssembly" />
+
+            <TextView
+                android:id="@id/problemDetail_text_PositionNum"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_alignLeft="@+id/content_layout_created_at"
+                android:layout_alignStart="@+id/content_layout_created_at"
+                android:layout_below="@+id/problemDetail_text_DefectType"
+                android:gravity="center"
+                android:text="工位号"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/spinner_PositionNum"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_alignEnd="@+id/content_layout_created_at"
+                android:layout_alignRight="@+id/content_layout_created_at"
+                android:layout_below="@+id/spinner_DefectType" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/content_layout_created_at"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spinner_PositionNum"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <EditText
+                    android:id="@+id/problemDetail_edit_CreatedAt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/problemDetail_btn_sure"
+                    android:layout_alignLeft="@+id/problemDetail_edit_Title"
+                    android:layout_alignRight="@+id/problemDetail_btn_sure"
+                    android:layout_alignStart="@+id/problemDetail_edit_Title"
+                    android:singleLine="true"
+                    android:ems="10"
+                    android:hint="问题单的创立日期"
+                    android:inputType="date" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/content_layout_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_layout_created_at">
+
+                <EditText
+                    android:id="@+id/problemDetail_edit_Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/problemDetail_btn_sure"
+                    android:layout_alignLeft="@+id/problemDetail_edit_Finder"
+                    android:layout_alignRight="@+id/problemDetail_btn_sure"
+                    android:layout_alignStart="@+id/problemDetail_edit_Finder"
+                    android:singleLine="false"
+                    android:ems="10"
+                    android:hint="缺陷描述"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/content_layout_finder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_layout_title">
+
+                <EditText
+                    android:id="@+id/problemDetail_edit_Finder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/problemDetail_btn_sure"
+                    android:layout_alignLeft="@+id/problemDetail_edit_Section"
+                    android:layout_alignRight="@+id/problemDetail_btn_sure"
+                    android:layout_alignStart="@+id/problemDetail_edit_Section"
+                    android:singleLine="true"
+                    android:ems="10"
+                    android:hint="问题发现人"
+                    android:inputType="textPersonName" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/content_layout_temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_layout_finder">
+
+                <EditText
+                    android:id="@+id/problemDetail_edit_Temp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/problemDetail_btn_sure"
+                    android:layout_alignLeft="@+id/problemDetail_btn_sure"
+                    android:layout_alignRight="@+id/problemDetail_btn_sure"
+                    android:layout_alignStart="@+id/problemDetail_btn_sure"
+                    android:singleLine="true"
+                    android:ems="10"
+                    android:hint="请输入临时放行标准"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/problemDetail_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/content_layout_temp"/>
+
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_below="@+id/problemDetail_btn_sure"
+                android:paddingBottom="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/problemDetail_btn_reason"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="原因"
+                    android:textColor="#ffffff"
+                    android:textSize="7pt"
+                    android:background="@drawable/shape" />
+
+                <!--<Button-->
+                    <!--android:id="@+id/problemDetail_btn_improved"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="改进"-->
+                    <!--android:textColor="#ffffff"-->
+                    <!--android:textSize="7pt"-->
+                    <!--android:background="@drawable/red_shape"/>-->
+
+                <Button
+                    android:id="@+id/problemDetail_btn_temporary"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="临时"
+                    android:textColor="#ffffff"
+                    android:textSize="7pt"
+                    android:background="@drawable/shape"/>
+
+                <Button
+                    android:id="@+id/problemDetail_btn_expected"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="预期"
+                    android:textColor="#ffffff"
+                    android:textSize="7pt"
+                    android:background="@drawable/shape"/>
+
+                <Button
+                    android:id="@+id/problemDetail_btn_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="重置"
+                    android:textColor="#ffffff"
+                    android:textSize="7pt"
+                    android:background="@drawable/shape"/>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/problemDetail_btn_sure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/problemDetail_image"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/shape"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:text="确认生成问题单"
+                android:textColor="#ffffff"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:id="@+id/fab1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--android:layout_margin="@dimen/fab_margin"-->
+        <!--app:srcCompat="@android:drawable/ic_dialog_email" />-->
+
+</android.support.design.widget.CoordinatorLayout>

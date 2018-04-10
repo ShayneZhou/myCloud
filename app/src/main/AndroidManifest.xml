@@ -25,6 +25,8 @@
             android:name=".User"
             android:label="个人中心"
             android:launchMode="singleTop" />
+
+
         <activity
             android:name=".Register"
             android:label="用户注册"
@@ -36,15 +38,14 @@
         <activity
             android:name=".CreateActivity"
             android:label="新建问题单"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".QuestionActivity"
-            android:label="@string/title_activity_question"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".UploadActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity android:name=".CauseActivity" >
 
         </activity>
@@ -63,6 +64,12 @@
         <activity android:name=".CreateActionActivity">
 
         </activity>
+
+        <activity
+            android:name=".ProblemDetail"
+            android:label="@string/title_activity_problem_detail"
+            android:theme="@style/AppTheme"></activity>
+
     </application>
 
 </manifest>

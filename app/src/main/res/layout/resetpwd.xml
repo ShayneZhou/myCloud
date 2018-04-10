@@ -20,7 +20,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/resetpwd_tb"
-        android:layout_marginTop="23dp" />
+        android:layout_marginTop="23dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
 
     <EditText
         android:id="@+id/resetpwd_edit_email"
