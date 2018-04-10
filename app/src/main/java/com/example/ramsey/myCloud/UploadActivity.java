@@ -75,7 +75,7 @@ public class UploadActivity extends AppCompatActivity {
             previewMedia(isImage);
         } else {
             Toast.makeText(getApplicationContext(),
-                    "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
+                    "文件路径缺失！", Toast.LENGTH_LONG).show();
         }
 
 
@@ -88,7 +88,7 @@ public class UploadActivity extends AppCompatActivity {
                     imageUpload(filePath,fileUri);
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Image not selected!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
                 }
             }
         });
