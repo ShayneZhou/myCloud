@@ -359,11 +359,6 @@ public class ProblemDetail extends AppCompatActivity {
                         String finder = jObj.getString("finder");
                         Finder.setText(finder);
 
-                        String temp = jObj.getString("temp");
-                        if(!temp.isEmpty()){
-                            Temp.setText(temp);
-                        }
-
                         //取出了几个下拉框的值；如何设置到下拉框里请你自己完成；
                         String car_type = jObj.getString("car_type");
                         spSelected_CarType = car_type;

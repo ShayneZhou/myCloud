@@ -94,7 +94,7 @@ public class Login extends Activity {                 //登录界面活动
                 } else {
                     // Prompt user to enter credentials
                     Toast.makeText(getApplicationContext(),
-                            "请输入用户信息！", Toast.LENGTH_LONG)
+                            "Please enter the credentials!", Toast.LENGTH_LONG)
                             .show();
                 }
             }
