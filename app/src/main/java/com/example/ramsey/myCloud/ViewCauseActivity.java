@@ -35,6 +35,8 @@ public class ViewCauseActivity extends AppCompatActivity {
     private static final String TAG = "ViewCause";
     private FloatingActionButton fab;
     private String prob_uid;
+    private SessionManager session;
+    private SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,20 @@ public class ViewCauseActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                CreateCauseActivity.CreateCauseActivityStart(ViewCauseActivity.this,prob_uid);
+                session = new SessionManager(getApplicationContext());
+                // SQLite database handler
+                db = new SQLiteHandler(getApplicationContext());
+                final HashMap<String, String> user = db.getUserDetails();
+                String authority = user.get("authority");
+
+                if (authority.equals("1")) {
+                    CreateCauseActivity.CreateCauseActivityStart(ViewCauseActivity.this, prob_uid);
+                }
+                else
+                {
+                    Toast.makeText(ViewCauseActivity.this, "您不是技术员，无法新建原因！",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -127,11 +142,13 @@ public class ViewCauseActivity extends AppCompatActivity {
             }
         },tag_scause_request);
     }
+
     public static void ViewCauseActivityStart(Context context,String prob_uid)
     {
         Intent intent=new Intent(context,ViewCauseActivity.class);
         intent.putExtra("prob_uid",prob_uid);
     }
+
     @Override
     public void onRestart()
     {

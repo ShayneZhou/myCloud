@@ -155,6 +155,8 @@ public class ProblemDetail extends AppCompatActivity {
 
         //以上是刚进入界面请求的东西
 
+
+
         mProblemDetailButton = (Button) findViewById(R.id.problemDetail_btn_sure);
         mReasonButton = (Button) findViewById(R.id.problemDetail_btn_reason);
 //        mImprovedButton = (Button) findViewById(R.id.problemDetail_btn_improved);
@@ -266,6 +268,27 @@ public class ProblemDetail extends AppCompatActivity {
         final HashMap<String, String> user = db.getUserDetails();
 
         String authority = user.get("authority");
+
+        if (authority.equals("0")) {
+            CreatedAt.setFocusable(false);
+            CreatedAt.setFocusableInTouchMode(false);
+            Title.setFocusable(false);
+            Title.setFocusableInTouchMode(false);
+            Finder.setFocusable(false);
+            Finder.setFocusableInTouchMode(false);
+            Temp.setFocusable(false);
+            Temp.setFocusableInTouchMode(false);
+
+            CarTypeSpinner.setClickable(false);
+            DefectTypeSpinner.setClickable(false);
+            DefectAssemblySpinner.setClickable(false);
+            PositionNumSpinner.setClickable(false);
+
+            mCancelButton.setVisibility(View.INVISIBLE);
+            mExpectedButton.setVisibility(View.INVISIBLE);
+            mTemporaryButton.setVisibility(View.INVISIBLE);
+            mProblemDetailButton.setVisibility(View.INVISIBLE);
+        }
 
         mProblemDetailButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

@@ -51,6 +51,8 @@ public class ActionActivity extends AppCompatActivity {
     public String misdone;
     public Button deletebutton;
     private ImageView imageView;
+    private SessionManager session;
+    private SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +120,30 @@ public class ActionActivity extends AppCompatActivity {
 
         imageView=(ImageView)findViewById(R.id.feedback_image);
         getactiondetail();
+
+        session = new SessionManager(getApplicationContext());
+        // SQLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+        final HashMap<String, String> user = db.getUserDetails();
+        String authority = user.get("authority");
+
+        if (authority.equals("0")) {
+
+            locationspinner.setClickable(false);
+
+            button_action_edit.setVisibility(View.INVISIBLE);
+            deletebutton.setVisibility(View.INVISIBLE);
+
+
+            edittext_action_action.setFocusable(false);
+            edittext_action_action.setFocusableInTouchMode(false);
+
+            edittext_action_performence.setFocusable(false);
+            edittext_action_performence.setFocusableInTouchMode(false);
+
+            edittext_action_response.setFocusable(false);
+            edittext_action_response.setFocusableInTouchMode(false);
+        }
 
     }
 

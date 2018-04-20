@@ -35,6 +35,8 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
     private EditText edittext_analysis;
     private String prob_uid;
     private String cause_uid;
+    private SessionManager session;
+    private SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,26 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
         Intent intent=getIntent();
         prob_uid=intent.getStringExtra("prob_uid");
         cause_uid=intent.getStringExtra("cause_uid");
+
+        session = new SessionManager(getApplicationContext());
+        // SQLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+        final HashMap<String, String> user = db.getUserDetails();
+        String authority = user.get("authority");
+
+        if (authority.equals("0")) {
+            button1.setVisibility(View.INVISIBLE);
+            button2.setVisibility(View.INVISIBLE);
+            button3.setVisibility(View.INVISIBLE);
+
+            edittext_cause.setFocusable(false);
+            edittext_cause.setFocusableInTouchMode(false);
+
+            edittext_analysis.setFocusable(false);
+            edittext_analysis.setFocusableInTouchMode(false);
+        }
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -144,6 +165,8 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
             }
         }, tag_cause_upload);
     }
+
+
     private void getcausedetail() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);
         pDiaglog.setMessage("请稍等");
@@ -191,6 +214,7 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
             }
         }, tag_getcausedetail_request);
     }
+
 
     private void deletecause() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);

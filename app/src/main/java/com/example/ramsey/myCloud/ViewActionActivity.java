@@ -36,6 +36,8 @@ public class ViewActionActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private String prob_uid;
     private String cause_uid;
+    private SessionManager session;
+    private SQLiteHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,21 @@ public class ViewActionActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateActionActivity.CreateActionActivityStart(ViewActionActivity.this,cause_uid);
+                session = new SessionManager(getApplicationContext());
+                // SQLite database handler
+                db = new SQLiteHandler(getApplicationContext());
+                final HashMap<String, String> user = db.getUserDetails();
+                String authority = user.get("authority");
+
+                if (authority.equals("1")) {
+                    CreateActionActivity.CreateActionActivityStart(
+                            ViewActionActivity.this, cause_uid);
+                }
+                else
+                {
+                    Toast.makeText(ViewActionActivity.this, "您不是技术员，无法新建措施！",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

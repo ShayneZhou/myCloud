@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import static com.example.ramsey.myCloud.AppConfig.URL_CheckProblemList;
@@ -72,6 +73,32 @@ public class User extends AppCompatActivity {
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
         getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
+
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // session manager
+        session = new SessionManager(getApplicationContext());
+        if (!session.isLoggedIn()) {
+            logoutUser();
+        }
+
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        String name = user.get("name");
+        String email = user.get("email");
+        final String authority = user.get("authority");
+        String uid = user.get("uid");
+        String created_at = user.get("created_at");
+        String section = user.get("section");
+        Log.d(TAG, "onCreate: name "+name);
+        Log.d(TAG, "onCreate: email "+email);
+        Log.d(TAG, "onCreate: authority "+authority);
+        Log.d(TAG, "onCreate: uid "+uid);
+        Log.d(TAG, "onCreate: created_at "+created_at);
+        Log.d(TAG, "onCreate: section "+section);
+
         navView = (NavigationView) findViewById(R.id.nav_view);//导航栏
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,10 +106,18 @@ public class User extends AppCompatActivity {
                 switch (item.getItemId())
                 {
                     case R.id.nav_create:
-                        Intent intent_cr =new Intent(User.this,CreateActivity.class);
-                        startActivity(intent_cr);
-                        finish();
-                        mDrawerLayout.closeDrawers();
+                        if (authority.equals("0")) {
+                            Intent intent_cr =new Intent(User.this,CreateActivity.class);
+                            startActivity(intent_cr);
+                            finish();
+                            mDrawerLayout.closeDrawers();
+                        }
+                        else
+                        {
+                            Toast.makeText(User.this,
+                                    "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
+                            mDrawerLayout.closeDrawers();
+                        }
                         break;
                     case R.id.nav_search:
                         Toast.makeText(User.this,"查询界面",Toast.LENGTH_LONG).show();
@@ -102,30 +137,7 @@ public class User extends AppCompatActivity {
         });
 
 
-        // SqLite database handler
-        db = new SQLiteHandler(getApplicationContext());
 
-        // session manager
-        session = new SessionManager(getApplicationContext());
-        if (!session.isLoggedIn()) {
-            logoutUser();
-        }
-
-        // Fetching user details from sqlite
-        HashMap<String, String> user = db.getUserDetails();
-
-        String name = user.get("name");
-        String email = user.get("email");
-        String authority = user.get("authority");
-        String uid = user.get("uid");
-        String created_at = user.get("created_at");
-        String section = user.get("section");
-        Log.d(TAG, "onCreate: name "+name);
-        Log.d(TAG, "onCreate: email "+email);
-        Log.d(TAG, "onCreate: authority "+authority);
-        Log.d(TAG, "onCreate: uid "+uid);
-        Log.d(TAG, "onCreate: created_at "+created_at);
-        Log.d(TAG, "onCreate: section "+section);
 
         View headerLayout = navView.inflateHeaderView(R.layout.nav_header);
         TextView mEmail = (TextView) headerLayout.findViewById(R.id.email);
@@ -153,9 +165,16 @@ public class User extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent intent_cr =new Intent(User.this,CreateActivity.class);
-                startActivity(intent_cr);
-                finish();
+                if (authority.equals("0")) {
+                    Intent intent_cr =new Intent(User.this,CreateActivity.class);
+                    startActivity(intent_cr);
+                    finish();
+                }
+                else
+                {
+                    Toast.makeText(User.this,
+                            "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
