@@ -49,6 +49,12 @@
             android:layout_height="40dp"
             android:spinnerMode="dropdown"/>
 
+        <Spinner
+            android:id="@+id/spinner_mn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:spinnerMode="dropdown"/>
+
 
         //标题框
         <android.support.design.widget.TextInputLayout

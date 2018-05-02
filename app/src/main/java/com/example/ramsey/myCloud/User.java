@@ -79,11 +79,11 @@ public class User extends AppCompatActivity {
             case R.id.qrcode:
                 customScan();
                 break;
-            case R.id.logout:
-                logoutUser();
-                break;
-            case R.id.settings:
-                Toast.makeText(this, "Click Settings", Toast.LENGTH_SHORT).show();
+//            case R.id.logout:
+//                logoutUser();
+//                break;
+//            case R.id.settings:
+//                Toast.makeText(this, "Click Settings", Toast.LENGTH_SHORT).show();
         }
         return true;
     }
@@ -204,7 +204,6 @@ public class User extends AppCompatActivity {
                 {
                     Toast.makeText(User.this,
                             "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
-                    customScan();
                 }
             }
         });

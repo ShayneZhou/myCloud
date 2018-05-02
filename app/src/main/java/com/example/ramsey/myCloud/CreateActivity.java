@@ -51,12 +51,13 @@ public class CreateActivity extends AppCompatActivity {
     private Button b_photo;
     private SQLiteHandler db;
     private ProgressDialog pDialog;
-    private Spinner carTypeSpinner, defectTypeSpinner, defectAssemblySpinner, positionNumberSpinner;
+    private Spinner carTypeSpinner, defectTypeSpinner, defectAssemblySpinner, positionNumberSpinner, machineNumberSpinner;
     private String[] str_ct = {"LNF", "GNF", };
     private String[] str_dt = {"表面", "点焊", "匹配", };
     private String[] str_da = {"UBI", "SIH", "LTV", };
     private String[] str_pn = {"A1", "A2", "A3", };
-    private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn;
+    private String[] str_mn = {"B1", "B2", "B3", };
+    private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn, spSelected_mn;
     private List<String> image_uid_list = new ArrayList<String>();
 
     private static final String TAG = CreateActivity.class.getSimpleName();
@@ -86,6 +87,7 @@ public class CreateActivity extends AppCompatActivity {
         defectTypeSpinner = (Spinner) findViewById(R.id.spinner_dt);
         defectAssemblySpinner = (Spinner) findViewById(R.id.spinner_da);
         positionNumberSpinner = (Spinner) findViewById(R.id.spinner_pn);
+        machineNumberSpinner = (Spinner) findViewById(R.id.spinner_mn);
 
         List<String> array_ct = new ArrayList<String>();
         array_ct.addAll(Arrays.asList(str_ct));
@@ -132,11 +134,24 @@ public class CreateActivity extends AppCompatActivity {
         positionNumberSpinner.setAdapter(adapter_pn);
         positionNumberSpinner.setSelection(array_pn.size() - 1, true);
 
+        List<String> array_mn = new ArrayList<String>();
+        array_mn.addAll(Arrays.asList(str_mn));
+        // add hint as last item
+        array_mn.add("请选择机器号：");
+        //设置样式
+        simpleArrayAdapter adapter_mn = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_mn);
+        adapter_mn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        machineNumberSpinner.setAdapter(adapter_mn);
+        machineNumberSpinner.setSelection(array_mn.size() - 1, true);
+
+
 
         spSelected_dt = "null";
         spSelected_ct = "null";
         spSelected_pn = "null";
         spSelected_da = "null";
+        spSelected_mn = "null";
 
 
         carTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -185,6 +200,18 @@ public class CreateActivity extends AppCompatActivity {
             }
         });
 
+        machineNumberSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spSelected_mn = (String) machineNumberSpinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         inputLayoutTitle = (TextInputLayout) findViewById(R.id.create_layout_title);
 //        inputLayoutSource = (TextInputLayout) findViewById(R.id.create_layout_source);
 //        inputLayoutPosition = (TextInputLayout) findViewById(R.id.create_layout_position);
@@ -225,12 +252,13 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(spinnerValidate(spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn)){
+                if(spinnerValidate(spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn, spSelected_mn)){
                     String title = inputTitle.getText().toString().trim();
                     String carType = spSelected_ct.trim();
                     String defectType = spSelected_dt.trim();
                     String defectAssembly = spSelected_da.trim();
                     String positionNumber = spSelected_pn.trim();
+                    String machineNumber = spSelected_mn.trim();
 //                    String prob_describe = inputDescription.getText().toString().trim();
 //                    String prob_source = inputSource.getText().toString().trim();
 //                    String position = inputPosition.getText().toString().trim();
@@ -238,7 +266,7 @@ public class CreateActivity extends AppCompatActivity {
                         Log.d(TAG, "onClick: carType"+carType);
                         Log.d(TAG, "onClick: 发送"+image_uid);
                         Log.d(TAG, "onClick: title"+title);
-                        uploadProblem(title, carType, defectType, defectAssembly, positionNumber, section, finder, image_uid);
+                        uploadProblem(title, carType, defectType, defectAssembly, positionNumber, machineNumber, section, finder, image_uid);
                     }
                     else{
                         Toast.makeText(CreateActivity.this, "出现错误！", Toast.LENGTH_SHORT).show();
@@ -332,8 +360,8 @@ public class CreateActivity extends AppCompatActivity {
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
     }
 
-    private boolean spinnerValidate(String spSelected_ct,String spSelected_dt, String spSelected_da, String spSelected_pn){
-        if(!spSelected_pn.equals("null") && !spSelected_da.equals("null") && !spSelected_ct.equals("null") && !spSelected_dt.equals("null"))
+    private boolean spinnerValidate(String spSelected_ct,String spSelected_dt, String spSelected_da, String spSelected_pn, String spSelected_mn){
+        if(!spSelected_pn.equals("null") && !spSelected_da.equals("null") && !spSelected_ct.equals("null") && !spSelected_dt.equals("null") && !spSelected_mn.equals("null"))
         {
             return true;
         }else
@@ -383,7 +411,7 @@ public class CreateActivity extends AppCompatActivity {
     }
 
     private void uploadProblem(final String title, final String carType,
-                               final String defectType, final String defectAssembly, final String positionNumber, final String section,
+                               final String defectType, final String defectAssembly, final String positionNumber, final String machineNumber, final String section,
                                final String finder, final String image_uid){
         // Tag used to cancel the request
         String tag_string_req = "req_upload";
@@ -448,6 +476,8 @@ public class CreateActivity extends AppCompatActivity {
                 params.put("prob_image_uid", image_uid);
                 params.put("position_num", positionNumber);
                 params.put("defect_assembly", defectAssembly);
+                params.put("machine_num", machineNumber);
+                Log.d(TAG, "getParams: "+machineNumber+" "+ title);
                 return params;
             }
 

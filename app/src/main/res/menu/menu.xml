@@ -6,14 +6,14 @@
         android:icon="@drawable/ic_qrcode"
         android:title="Backup"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/logout"
-        android:icon="@drawable/ic_delete"
-        android:title="Logout"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings"
-        app:showAsAction="never" />
+    <!--<item-->
+        <!--android:id="@+id/logout"-->
+        <!--android:icon="@drawable/ic_delete"-->
+        <!--android:title="Logout"-->
+        <!--app:showAsAction="never" />-->
+    <!--<item-->
+        <!--android:id="@+id/settings"-->
+        <!--android:icon="@drawable/ic_settings"-->
+        <!--android:title="Settings"-->
+        <!--app:showAsAction="never" />-->
 </menu>

@@ -56,14 +56,17 @@ public class ProblemDetail extends AppCompatActivity {
     private Spinner DefectAssemblySpinner;
     private Spinner DefectTypeSpinner;
     private Spinner PositionNumSpinner;
+    private Spinner MachineNumSpinner;
     private String[] str_ct = {"LNF", "GNF", };
     private String[] str_dt = {"表面", "点焊", "匹配", };
     private String[] str_da = {"UBI", "SIH", "LTV", };
     private String[] str_pn = {"A1", "A2", "A3", };
+    private String[] str_mn = {"B1", "B2", "B3", };
     private String spSelected_CarType;
     private String spSelected_DefectAssembly;
     private String spSelected_DefectType;
     private String spSelected_PositionNum;
+    private String spSelected_MachineNum;
     private TextInputLayout inputLayoutCreatedAt, inputLayoutTitle, inputLayoutFinder, inputLayoutTemp;
     private ImageView problemImage;
     private ScrollView scrollView;
@@ -100,6 +103,7 @@ public class ProblemDetail extends AppCompatActivity {
         DefectAssemblySpinner = (Spinner) findViewById(R.id.spinner_DefectAssembly);
         DefectTypeSpinner = (Spinner) findViewById(R.id.spinner_DefectType);
         PositionNumSpinner = (Spinner) findViewById(R.id.spinner_PositionNum);
+        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_MachineNum);
 
 
 
@@ -144,6 +148,15 @@ public class ProblemDetail extends AppCompatActivity {
         //加载适配器
         PositionNumSpinner.setAdapter(adapter_pn);
 
+
+        List<String> array_mn = new ArrayList<String>();
+        array_mn.addAll(Arrays.asList(str_mn));
+
+        //设置样式
+        ArrayAdapter<String> adapter_mn = new ArrayAdapter(this, android.R.layout.simple_spinner_item, array_mn);
+        adapter_mn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        MachineNumSpinner.setAdapter(adapter_mn);
 
 
         Intent intent = getIntent();                     //通过getIntent获得prob_uid
@@ -253,6 +266,18 @@ public class ProblemDetail extends AppCompatActivity {
             }
         });
 
+        MachineNumSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spSelected_MachineNum = (String) MachineNumSpinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -283,6 +308,7 @@ public class ProblemDetail extends AppCompatActivity {
             DefectTypeSpinner.setClickable(false);
             DefectAssemblySpinner.setClickable(false);
             PositionNumSpinner.setClickable(false);
+            MachineNumSpinner.setClickable(false);
 
             mCancelButton.setVisibility(View.INVISIBLE);
             mExpectedButton.setVisibility(View.INVISIBLE);
@@ -301,6 +327,7 @@ public class ProblemDetail extends AppCompatActivity {
                     String defectAssembly = spSelected_DefectAssembly.trim();
                     String defectType = spSelected_DefectType.trim();
                     String positionNum = spSelected_PositionNum.trim();
+                    String machineNum = spSelected_MachineNum.trim();
                     String section = user.get("section");
                     String engineer = user.get("uid");
 //                    String prob_describe = inputDescription.getText().toString().trim();
@@ -311,7 +338,7 @@ public class ProblemDetail extends AppCompatActivity {
                         Log.d(TAG, "onClick: 发送" + prob_uid);
                         Log.d(TAG, "onClick: title" + title);
                         confirmProblem(date, title, finder, section, temp, carType, defectAssembly,
-                                defectType, positionNum, engineer,prob_uid);
+                                defectType, positionNum, machineNum, engineer, prob_uid);
                     } else {
                         Toast.makeText(ProblemDetail.this, "出现错误！", Toast.LENGTH_SHORT).show();
                     }
@@ -403,11 +430,15 @@ public class ProblemDetail extends AppCompatActivity {
                         String position_num = jObj.getString("position_num");
                         spSelected_PositionNum = position_num;
 
+                        String machine_num = jObj.getString("machine_num");
+                        spSelected_MachineNum = machine_num;
+
                         //在下面完成设置下拉框的代码
                         setSpinnerItemSelectedByValue(CarTypeSpinner, spSelected_CarType);
                         setSpinnerItemSelectedByValue(DefectAssemblySpinner, spSelected_DefectAssembly);
                         setSpinnerItemSelectedByValue(DefectTypeSpinner, spSelected_DefectType);
                         setSpinnerItemSelectedByValue(PositionNumSpinner, spSelected_PositionNum);
+                        setSpinnerItemSelectedByValue(MachineNumSpinner, spSelected_MachineNum);
 
                     } else {
 
@@ -495,6 +526,7 @@ public class ProblemDetail extends AppCompatActivity {
 
     private void confirmProblem(final String date,final String title,final String finder,final String section, final String temp,
                                 final String carType, final String defectAssembly, final String defectType, final String positionNum,
+                                final String machineNum,
                                 final String engineer, final String prob_uid
     ) {
         // Tag used to cancel the request
@@ -559,7 +591,7 @@ public class ProblemDetail extends AppCompatActivity {
                 params.put("temp", temp);
                 params.put("date", date);
                 params.put("defect_assembly", defectAssembly);
-
+                params.put("machine_num",machineNum);
                 return params;
             }
 
