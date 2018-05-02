@@ -191,6 +191,7 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
                                 edittext_analysis.setText(obj.getString("analysis").trim());
                             }
                         } catch (JSONException e) {
+
                             e.printStackTrace();
                         }
 

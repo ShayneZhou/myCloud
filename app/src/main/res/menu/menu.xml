@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/backup"
-        android:icon="@drawable/ic_backup"
+        android:id="@+id/qrcode"
+        android:icon="@drawable/ic_qrcode"
         android:title="Backup"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
     <item
         android:id="@+id/logout"
         android:icon="@drawable/ic_delete"

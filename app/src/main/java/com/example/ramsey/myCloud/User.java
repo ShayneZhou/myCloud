@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -30,6 +31,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.yzq.zxinglibrary.android.CaptureActivity;
+import com.yzq.zxinglibrary.bean.ZxingConfig;
+import com.yzq.zxinglibrary.common.Constant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +48,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.example.ramsey.myCloud.AppConfig.URL_CheckProblemList;
 
 public class User extends AppCompatActivity {
     private static final String TAG = "User";
@@ -61,7 +64,29 @@ public class User extends AppCompatActivity {
     private List<sQuestion> squestionList=new ArrayList<sQuestion>();
     private NavigationView navView;
     private sQuestionAdapter adapter;
+    private int REQUEST_CODE_SCAN = 111;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.qrcode:
+                customScan();
+                break;
+            case R.id.logout:
+                logoutUser();
+                break;
+            case R.id.settings:
+                Toast.makeText(this, "Click Settings", Toast.LENGTH_SHORT).show();
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +124,7 @@ public class User extends AppCompatActivity {
         Log.d(TAG, "onCreate: created_at "+created_at);
         Log.d(TAG, "onCreate: section "+section);
 
+
         navView = (NavigationView) findViewById(R.id.nav_view);//导航栏
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -123,6 +149,9 @@ public class User extends AppCompatActivity {
                         Toast.makeText(User.this,"查询界面",Toast.LENGTH_LONG).show();
                         mDrawerLayout.closeDrawers();
                         break;
+//                    case R.id.nav_scan:
+//                        customScan();
+//                        mDrawerLayout.closeDrawers();
                     case R.id.nav_close:
                         finish();
                         mDrawerLayout.closeDrawers();
@@ -169,11 +198,13 @@ public class User extends AppCompatActivity {
                     Intent intent_cr =new Intent(User.this,CreateActivity.class);
                     startActivity(intent_cr);
                     finish();
+
                 }
                 else
                 {
                     Toast.makeText(User.this,
                             "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
+                    customScan();
                 }
             }
         });
@@ -187,6 +218,23 @@ public class User extends AppCompatActivity {
         adapter = new sQuestionAdapter(squestionList);
         recyclerView.setAdapter(adapter);
 
+    }
+
+    public void customScan(){
+        Intent intent = new Intent(User.this, CaptureActivity.class);
+         /*ZxingConfig是配置类  可以设置是否显示底部布局，闪光灯，相册，是否播放提示音  震动等动能
+         * 也可以不传这个参数
+         * 不传的话  默认都为默认不震动  其他都为true
+         * */
+
+        ZxingConfig config = new ZxingConfig();
+        config.setShowbottomLayout(true);//底部布局（包括闪光灯和相册）
+        config.setPlayBeep(true);//是否播放提示音
+        config.setShake(true);//是否震动
+        config.setShowAlbum(true);//是否显示相册
+        config.setShowFlashLight(true);//是否显示闪光灯
+        intent.putExtra(Constant.INTENT_ZXING_CONFIG, config);
+        startActivityForResult(intent, REQUEST_CODE_SCAN);
     }
 
     private void initsQuestions() {
@@ -262,8 +310,30 @@ public class User extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 扫描二维码/条码回传
+        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+            if (data != null) {
+
+                String content = data.getStringExtra(Constant.CODED_CONTENT);
+                Log.d(TAG, "onActivityResult: "+content);
+                Toast.makeText(this, "扫描结果是"+content, Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(User.this,SelfCheck.class);
+                i.putExtra("machine_num",content);
+                startActivity(i);
+                finish();
+            }
+        }
+    }
+
     public void onBackPressed(){
         finish();
     }
+
 
 }

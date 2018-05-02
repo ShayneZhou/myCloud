@@ -24,9 +24,13 @@
         <activity
             android:name=".User"
             android:label="个人中心"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop">
+        <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--</intent-filter>-->
+        </activity>
         <activity
             android:name=".Register"
             android:label="用户注册"
@@ -45,31 +49,19 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-        <activity android:name=".CauseActivity" >
-
-        </activity>
-        <activity android:name=".ActionActivity" >
-
-        </activity>
-        <activity android:name=".ViewCauseActivity">
-
-        </activity>
-        <activity android:name=".ViewActionActivity">
-
-        </activity>
-        <activity android:name=".CreateCauseActivity">
-
-        </activity>
-        <activity android:name=".CreateActionActivity">
-
-        </activity>
-
+        <activity android:name=".CauseActivity" />
+        <activity android:name=".ActionActivity" />
+        <activity android:name=".ViewCauseActivity" />
+        <activity android:name=".ViewActionActivity" />
+        <activity android:name=".CreateCauseActivity" />
+        <activity android:name=".CreateActionActivity" />
         <activity
             android:name=".ProblemDetail"
             android:label="@string/title_activity_problem_detail"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
+        <activity android:name=".CustomScanActivity" >
+        </activity>
+        <activity android:name=".SelfCheck"></activity>
     </application>
 
 </manifest>

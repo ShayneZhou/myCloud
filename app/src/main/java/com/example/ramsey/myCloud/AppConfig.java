@@ -20,61 +20,64 @@ import java.io.InputStream;
 
 public class AppConfig {
     // Server user login url
-    public static String URL_LOGIN = "http://192.168.1.105/myCloud/Login.php";
+    public static String URL_LOGIN = "http://10.0.2.2/myCloud/Login.php";
 
     // Server user register url
-    public static String URL_REGISTER = "http://192.168.1.105/myCloud/Register.php";
+    public static String URL_REGISTER = "http://10.0.2.2/myCloud/Register.php";
 
     // Server user resetPwd url
-    public static String URL_RESET = "http://192.168.1.105/myCloud/ResetPwd.php";
+    public static String URL_RESET = "http://10.0.2.2/myCloud/ResetPwd.php";
 
     // File upload url (replace the ip with your server address)
-    public static final String FILE_UPLOAD_URL = "http://192.168.1.105/myCloud/FileUpload.php";
+    public static final String FILE_UPLOAD_URL = "http://10.0.2.2/myCloud/FileUpload.php";
 
     // Directory name to store captured images and videos
     public static final String IMAGE_DIRECTORY_NAME = "Android File Upload";
 
     // Server create url
-    public static final String URL_CREATE = "http://192.168.1.105/myCloud/CreateProblemList.php";
+    public static final String URL_CREATE = "http://10.0.2.2/myCloud/CreateProblemList.php";
     
     //Server Check ProblemList url
-    public static final String URL_CheckProblemList = "http://192.168.1.105/myCloud/CheckProblemList.php";
+    public static final String URL_CheckProblemList = "http://10.0.2.2/myCloud/CheckProblemList.php";
     
     //Server Upload Reason url
-    public static final String URL_ReportCause="http://192.168.1.105/myCloud/ReportCause.php";
+    public static final String URL_ReportCause="http://10.0.2.2/myCloud/ReportCause.php";
     
     //Server Upload Action url
-    public static  final String URL_ReportAction="http://192.168.1.105/myCloud/ReportSolution.php";
+    public static  final String URL_ReportAction="http://10.0.2.2/myCloud/ReportSolution.php";
     
     //Server Check CauseList url
-    public static final String URL_CheckCauseList="http://192.168.1.105/myCloud/CheckCause.php";
+    public static final String URL_CheckCauseList="http://10.0.2.2/myCloud/CheckCause.php";
     
     //Server Check ActionList url
-    public static final String URL_CheckSolutionList="http://192.168.1.105/myCloud/CheckSolution.php";
+    public static final String URL_CheckSolutionList="http://10.0.2.2/myCloud/CheckSolution.php";
     
     //Server Get Cause Detail url
-    public static final String URL_CauseDetail="http://192.168.1.105/myCloud/CauseDetail.php";
+    public static final String URL_CauseDetail="http://10.0.2.2/myCloud/CauseDetail.php";
     
     //Server Get Solution Detail url
-    public static final String URL_SolutionDetail="http://192.168.1.105/myCloud/SolutionDetail.php";
+    public static final String URL_SolutionDetail="http://10.0.2.2/myCloud/SolutionDetail.php";
     
     //Server Edit Cause Detail url
-    public static final String URL_EditCause="http://192.168.1.105/myCloud/EditCause.php";
+    public static final String URL_EditCause="http://10.0.2.2/myCloud/EditCause.php";
     
     //Server Edit Action Detail url
-    public static final String URL_EditAction="http://192.168.1.105/myCloud/EditSolution.php";
+    public static final String URL_EditAction="http://10.0.2.2/myCloud/EditSolution.php";
     
     //Server Delete Cause url
-    public static final String URL_DeleteCause="http://192.168.1.105/myCloud/DeleteCause.php";
+    public static final String URL_DeleteCause="http://10.0.2.2/myCloud/DeleteCause.php";
     
     //Server Delete Action url
-    public static final String URL_DeleteAction="http://192.168.1.105/myCloud/DeleteSolution.php";
+    public static final String URL_DeleteAction="http://10.0.2.2/myCloud/DeleteSolution.php";
 
     // Problem list detail create url
-    public static String URL_ProblemDetail = "http://192.168.1.105/myCloud/ProblemListDetail.php";
+    public static String URL_ProblemDetail = "http://10.0.2.2/myCloud/ProblemListDetail.php";
 
     // Problem list detail create url
-    public static String URL_EditProblemList = "http://192.168.1.105/myCloud/EditProblemList.php";
+    public static String URL_EditProblemList = "http://10.0.2.2/myCloud/EditProblemList.php";
+
+    // Problem list detail create url
+    public static String URL_SelfCheck = "http://10.0.2.2/myCloud/SelfCheck.php";
 
     /**
      * Turn drawable resource into byte array.
@@ -119,4 +122,4 @@ public class AppConfig {
 
 }
 
-//10.0.2.2 192.168.1.114
+//10.0.2.2 192.168.1.105
