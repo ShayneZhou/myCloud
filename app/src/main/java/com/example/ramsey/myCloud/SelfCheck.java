@@ -36,6 +36,8 @@ public class SelfCheck extends AppCompatActivity {
     private FloatingActionButton fab;
     private String machine_num;
 
+    private SQLiteHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +51,30 @@ public class SelfCheck extends AppCompatActivity {
         machine_num = intent.getStringExtra("machine_num");
         Log.d(TAG, "onCreate: "+machine_num);
 
-        fab=(FloatingActionButton)findViewById(R.id.fab_view_solution_create);
+        // SqLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        final String authority = user.get("authority");
+
+        fab = (FloatingActionButton)findViewById(R.id.fab_view_solution_create);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (authority.equals("0")) {
+                    Intent intent_cr =new Intent(SelfCheck.this,CreateActivity.class);
+                    startActivity(intent_cr);
+                    finish();
 
+                }
+                else
+                {
+                    Toast.makeText(SelfCheck.this,
+                            "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -82,11 +103,11 @@ public class SelfCheck extends AppCompatActivity {
                             boolean error = obj.getBoolean("error");
                             if (!error) {
                                 try {
-                                    JSONArray obj2 = obj.getJSONArray("solutionlist");
+                                    JSONArray obj2 = obj.getJSONArray("solution");
                                     for (int i = 0; i < obj2.length(); i++) {
-                                        JSONObject obj3 = obj2.getJSONObject(i);
-                                        sSolution solution = new sSolution(obj3.getString("solution"));
+                                        sSolution solution = new sSolution(obj2.getString(i));
                                         solutionList.add(solution);
+                                        Log.d(TAG, "onResponse: "+solutionList);
                                     }
                                     adapter.notifyDataSetChanged();
                                     Toast.makeText(SelfCheck.this,"已刷新",Toast.LENGTH_SHORT).show();
@@ -121,5 +142,12 @@ public class SelfCheck extends AppCompatActivity {
                 return params;
             }
         },tag_solution_request);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent self_to_user=new Intent(SelfCheck.this,User.class);
+        startActivity(self_to_user);
+        finish();
     }
 }

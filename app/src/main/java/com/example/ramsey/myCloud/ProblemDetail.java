@@ -45,7 +45,6 @@ public class ProblemDetail extends AppCompatActivity {
     private EditText Temp;                          //临时放行标准
     private Button mProblemDetailButton;                       //确定按钮
     private Button mReasonButton;                       //原因按钮
-//    private Button mImprovedButton;                       //改进按钮
     private Button mTemporaryButton;                       //临时按钮
     private Button mExpectedButton;                       //预期按钮
     private Button mCancelButton;                       //取消按钮
@@ -172,7 +171,6 @@ public class ProblemDetail extends AppCompatActivity {
 
         mProblemDetailButton = (Button) findViewById(R.id.problemDetail_btn_sure);
         mReasonButton = (Button) findViewById(R.id.problemDetail_btn_reason);
-//        mImprovedButton = (Button) findViewById(R.id.problemDetail_btn_improved);
         mTemporaryButton = (Button) findViewById(R.id.problemDetail_btn_temporary);
         mExpectedButton = (Button) findViewById(R.id.problemDetail_btn_expected);
         mCancelButton = (Button) findViewById(R.id.problemDetail_btn_cancel);
@@ -188,13 +186,6 @@ public class ProblemDetail extends AppCompatActivity {
             }
         });
 
-//        mImprovedButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//            }
-//        });
 
         mTemporaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,11 +295,11 @@ public class ProblemDetail extends AppCompatActivity {
             Temp.setFocusable(false);
             Temp.setFocusableInTouchMode(false);
 
-            CarTypeSpinner.setClickable(false);
-            DefectTypeSpinner.setClickable(false);
-            DefectAssemblySpinner.setClickable(false);
-            PositionNumSpinner.setClickable(false);
-            MachineNumSpinner.setClickable(false);
+            CarTypeSpinner.setEnabled(false);
+            DefectTypeSpinner.setEnabled(false);
+            DefectAssemblySpinner.setEnabled(false);
+            PositionNumSpinner.setEnabled(false);
+            MachineNumSpinner.setEnabled(false);
 
             mCancelButton.setVisibility(View.INVISIBLE);
             mExpectedButton.setVisibility(View.INVISIBLE);
