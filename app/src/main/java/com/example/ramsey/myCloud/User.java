@@ -1,7 +1,9 @@
 package com.example.ramsey.myCloud;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -72,7 +74,22 @@ public class User extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.qrcode:
-                customScanSolution();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(User.this);
+                dialog.setTitle("扫码提示");
+                dialog.setMessage("该扫描二维码的功能是通过扫描机器号获取与该机器号相关的问题单中所有措施进行一一确认，而右滑菜单中的二维码扫描是通过扫描机器号获取该机器号的历史问题单");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        customScanSolution();
+                    }
+                });
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
                 break;
 //            case R.id.logout:
 //                logoutUser();
@@ -210,7 +227,17 @@ public class User extends AppCompatActivity {
         fab_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initsQuestions();
+                AlertDialog.Builder dialog = new AlertDialog.Builder(User.this);
+                dialog.setTitle("提示");
+                dialog.setMessage("重新获取问题单");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        initsQuestions();
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -224,6 +251,7 @@ public class User extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
     }
+
 
     public void customScanSolution(){
         Intent intent = new Intent(User.this, CaptureActivity.class);

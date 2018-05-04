@@ -15,7 +15,8 @@
             <!--android:title="扫描二维码自检" />-->
         <item
             android:id="@+id/nav_scan_problem"
-            android:title="扫描机器号获取问题单" />
+            android:title="扫描机器号获取相关问题单"
+            android:icon="@drawable/ic_qrcode"/>
         <item
             android:id="@+id/nav_void2"
             android:title="      " />
