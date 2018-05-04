@@ -1,7 +1,7 @@
 package com.example.ramsey.myCloud;
 
 import android.app.ProgressDialog;
-import android.app.VoiceInteractor;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,17 +20,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.FloatingActionButton;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.ParseError;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonRequest;
+
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+
 import com.yzq.zxinglibrary.android.CaptureActivity;
 import com.yzq.zxinglibrary.bean.ZxingConfig;
 import com.yzq.zxinglibrary.common.Constant;
@@ -39,14 +36,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
 
 
 public class User extends AppCompatActivity {
@@ -64,7 +58,8 @@ public class User extends AppCompatActivity {
     private List<sQuestion> squestionList=new ArrayList<sQuestion>();
     private NavigationView navView;
     private sQuestionAdapter adapter;
-    private int REQUEST_CODE_SCAN = 111;
+    private int REQUEST_CODE_SCAN_SOLUTION = 111;
+    private int REQUEST_CODE_SCAN_PROBLEM = 222;
 
 
     @Override
@@ -77,7 +72,7 @@ public class User extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.qrcode:
-                customScan();
+                customScanSolution();
                 break;
 //            case R.id.logout:
 //                logoutUser();
@@ -149,9 +144,9 @@ public class User extends AppCompatActivity {
                         Toast.makeText(User.this,"查询界面",Toast.LENGTH_LONG).show();
                         mDrawerLayout.closeDrawers();
                         break;
-//                    case R.id.nav_scan:
-//                        customScan();
-//                        mDrawerLayout.closeDrawers();
+                    case R.id.nav_scan_problem:
+                        customScanProblem();
+                        mDrawerLayout.closeDrawers();
                     case R.id.nav_close:
                         finish();
                         mDrawerLayout.closeDrawers();
@@ -190,6 +185,8 @@ public class User extends AppCompatActivity {
             }
         };
         mDrawerToggle.syncState();
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,6 +206,15 @@ public class User extends AppCompatActivity {
         });
 
 
+        FloatingActionButton fab_refresh = (FloatingActionButton) findViewById(R.id.fab_refresh);
+        fab_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initsQuestions();
+            }
+        });
+
+
 
         initsQuestions();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -219,7 +225,7 @@ public class User extends AppCompatActivity {
 
     }
 
-    public void customScan(){
+    public void customScanSolution(){
         Intent intent = new Intent(User.this, CaptureActivity.class);
          /*ZxingConfig是配置类  可以设置是否显示底部布局，闪光灯，相册，是否播放提示音  震动等动能
          * 也可以不传这个参数
@@ -233,7 +239,24 @@ public class User extends AppCompatActivity {
         config.setShowAlbum(true);//是否显示相册
         config.setShowFlashLight(true);//是否显示闪光灯
         intent.putExtra(Constant.INTENT_ZXING_CONFIG, config);
-        startActivityForResult(intent, REQUEST_CODE_SCAN);
+        startActivityForResult(intent, REQUEST_CODE_SCAN_SOLUTION);
+    }
+
+    public void customScanProblem(){
+        Intent intent = new Intent(User.this, CaptureActivity.class);
+         /*ZxingConfig是配置类  可以设置是否显示底部布局，闪光灯，相册，是否播放提示音  震动等动能
+         * 也可以不传这个参数
+         * 不传的话  默认都为默认不震动  其他都为true
+         * */
+
+        ZxingConfig config = new ZxingConfig();
+        config.setShowbottomLayout(true);//底部布局（包括闪光灯和相册）
+        config.setPlayBeep(true);//是否播放提示音
+        config.setShake(true);//是否震动
+        config.setShowAlbum(true);//是否显示相册
+        config.setShowFlashLight(true);//是否显示闪光灯
+        intent.putExtra(Constant.INTENT_ZXING_CONFIG, config);
+        startActivityForResult(intent, REQUEST_CODE_SCAN_PROBLEM);
     }
 
     private void initsQuestions() {
@@ -316,7 +339,7 @@ public class User extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // 扫描二维码/条码回传
-        if (requestCode == REQUEST_CODE_SCAN && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE_SCAN_SOLUTION && resultCode == RESULT_OK) {
             if (data != null) {
 
                 String content = data.getStringExtra(Constant.CODED_CONTENT);
@@ -328,6 +351,74 @@ public class User extends AppCompatActivity {
                 finish();
             }
         }
+
+        if (requestCode == REQUEST_CODE_SCAN_PROBLEM && resultCode == RESULT_OK) {
+            if (data != null) {
+
+                String machine_num = data.getStringExtra(Constant.CODED_CONTENT);
+                Log.d(TAG, "onActivityResult: " + machine_num);
+                Toast.makeText(this, "扫描结果是" + machine_num, Toast.LENGTH_SHORT).show();
+                selfCheckProblem(machine_num);
+            }
+        }
+    }
+
+    private void selfCheckProblem(final String machine_num) {
+        final ProgressDialog pDiaglog=new ProgressDialog(this);
+        pDiaglog.setMessage("请稍等");
+        pDiaglog.show();
+        String tag_squestion_request = "req_squestion";
+        squestionList.clear();
+        AppController.getInstance().addToRequestQueue(new StringRequest(Request.Method.POST, AppConfig.URL_SelfCheckProblem,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "question Response: " + response.toString());
+                        pDiaglog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            boolean error = obj.getBoolean("error");
+                            if (!error) {
+                                try {
+                                    JSONArray obj2 = obj.getJSONArray("problemlist");
+                                    for (int i = 0; i < obj2.length(); i++) {
+                                        JSONObject obj3 = obj2.getJSONObject(i);
+                                        sQuestion squestion = new sQuestion(obj3.getString("title"), obj3.getString("position_num"),
+                                                obj3.getString("prob_level"), obj3.getString("created_at"), obj3.getString("example_image_url"), obj3.getString("prob_uid"));
+                                        squestionList.add(squestion);
+                                        Log.d(TAG, "onResponse: "+obj3.getString("example_image_url"));
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                String errorMsg = obj.getString("error_msg");
+                                Toast.makeText(getApplicationContext(),
+                                        errorMsg, Toast.LENGTH_LONG).show();
+                            }
+                        }catch(JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                pDiaglog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("machine_num", machine_num);
+                return params;
+            }
+        },tag_squestion_request);
     }
 
     public void onBackPressed(){

@@ -85,6 +85,10 @@ public class AppConfig {
     // Problem list detail create url
     public static String URL_Report_Feedback = "http://10.0.2.2/myCloud/ReportFeedback.php";
 
+    // Problem list detail create url
+    public static String URL_SelfCheckProblem= "http://10.0.2.2/myCloud/SelfCheckProblem.php";
+
+
     /**
      * Turn drawable resource into byte array.
      *
