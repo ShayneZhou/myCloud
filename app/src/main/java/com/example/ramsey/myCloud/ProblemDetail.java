@@ -301,10 +301,10 @@ public class ProblemDetail extends AppCompatActivity {
             PositionNumSpinner.setEnabled(false);
             MachineNumSpinner.setEnabled(false);
 
-            mCancelButton.setVisibility(View.INVISIBLE);
-            mExpectedButton.setVisibility(View.INVISIBLE);
-            mTemporaryButton.setVisibility(View.INVISIBLE);
-            mProblemDetailButton.setVisibility(View.INVISIBLE);
+//            mCancelButton.setVisibility(View.INVISIBLE);
+//            mExpectedButton.setVisibility(View.INVISIBLE);
+//            mTemporaryButton.setVisibility(View.INVISIBLE);
+//            mProblemDetailButton.setVisibility(View.INVISIBLE);
         }
 
         mProblemDetailButton.setOnClickListener(new View.OnClickListener() {

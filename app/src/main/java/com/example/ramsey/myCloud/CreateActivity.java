@@ -383,29 +383,6 @@ public class CreateActivity extends AppCompatActivity {
             inputLayoutTitle.setError(getString(R.string.err_msg_title));
             return false;
         } else {
-//            inputLayoutTitle.setErrorEnabled(false);
-//            if (inputSource.getText().toString().trim().isEmpty()) {
-//                inputLayoutSource.setError(getString(R.string.err_msg_source));
-//                return false;
-//            } else {
-//                inputLayoutSource.setErrorEnabled(false);
-//                if (inputDescription.getText().toString().trim().isEmpty()) {
-//                    inputLayoutDescription.setError(getString(R.string.err_msg_description));
-//                    return false;
-//                } else {
-//                    inputLayoutDescription.setErrorEnabled(false);
-//                    {
-//                        if (inputPosition.getText().toString().trim().isEmpty()) {
-//                            inputLayoutPosition.setError(getString(R.string.err_msg_position));
-//                            return false;
-//                        } else {
-//                            inputLayoutPosition.setErrorEnabled(false);
-//                            return true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
             return true;
         }
     }
@@ -551,13 +528,13 @@ public class CreateActivity extends AppCompatActivity {
 
                     // user cancelled Image capture
                     Toast.makeText(getApplicationContext(),
-                            "User cancelled image capture", Toast.LENGTH_SHORT)
+                            "您取消了拍照", Toast.LENGTH_SHORT)
                             .show();
 
                 } else {
                     // failed to capture image
                     Toast.makeText(getApplicationContext(),
-                            "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
+                            "未捕获到照片", Toast.LENGTH_SHORT)
                             .show();
                 }
 
@@ -611,8 +588,8 @@ public class CreateActivity extends AppCompatActivity {
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d(TAG, "Oops! Failed create "
-                        + AppConfig.IMAGE_DIRECTORY_NAME + " directory");
+                Log.d(TAG, "创建 "
+                        + AppConfig.IMAGE_DIRECTORY_NAME + " 地址失败");
                 return null;
             }
         }

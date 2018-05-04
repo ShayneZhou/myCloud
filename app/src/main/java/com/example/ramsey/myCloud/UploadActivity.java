@@ -60,6 +60,10 @@ public class UploadActivity extends AppCompatActivity {
         // Receiving the data from previous activity
         Intent i = getIntent();
 
+        if (i.getStringExtra("solution_uid") != null){
+            String solution_uid = i.getStringExtra("solution_uid");
+        }
+
         // image or video path that is captured in previous activity
         filePath = i.getStringExtra("filePath");
 
@@ -84,10 +88,15 @@ public class UploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                new UploadFileToServer().execute();
-                if (filePath != null) {
-                    imageUpload(filePath,fileUri);
+                Intent i = getIntent();
 
-                } else {
+                if (filePath != null && i.getStringExtra("solution_uid") == null) {
+                    imageUpload(filePath,fileUri);
+                }
+                else if (filePath != null && i.getStringExtra("solution_uid") != null){
+                    imageUpload_feedback(filePath,fileUri,i.getStringExtra("solution_uid"));
+                }
+                else {
                     Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
                 }
             }
@@ -189,6 +198,77 @@ public class UploadActivity extends AppCompatActivity {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
 
+                params.put("filePath",imagePath);
+                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+
+    private void imageUpload_feedback (final String imagePath,final Uri imageUri,final String solution_uid) {
+
+        // loading or check internet connection or something...
+        // ... then
+//        String prob_image_uid = null;
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_feedback";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_Feedback_Imgae, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "Create Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+                        Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+
+
+                        Intent j = new Intent(UploadActivity.this,ActionActivity.class);
+                        Log.d(TAG, "onClick: "+ solution_uid);
+                        j.putExtra("action_uid",solution_uid);
+                        startActivity(j);
+                        finish();
+
+                    }else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Feedback Image Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap();
+                params.put("solution_uid",solution_uid);
                 params.put("filePath",imagePath);
                 params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
                 return params;

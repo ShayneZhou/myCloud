@@ -43,7 +43,7 @@ public class SelfCheck extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_self_check);
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar_view_solution);
-        toolbar.setTitle("查看措施");//设置Toolbar标题
+        toolbar.setTitle("自检措施");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
 
