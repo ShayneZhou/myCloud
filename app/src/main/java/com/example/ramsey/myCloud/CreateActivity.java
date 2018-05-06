@@ -58,7 +58,7 @@ public class CreateActivity extends AppCompatActivity {
     private String[] str_pn = {"A1", "A2", "A3", };
     private String[] str_mn = {"B1", "B2", "B3", };
     private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn, spSelected_mn;
-    private List<String> image_uid_list = new ArrayList<String>();
+    String image_uid;
 
     private static final String TAG = CreateActivity.class.getSimpleName();
 
@@ -237,11 +237,9 @@ public class CreateActivity extends AppCompatActivity {
         // Fetching user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
 
-        Intent intent = getIntent();
-        final String image_uid=intent.getStringExtra("image_uid");
-        image_uid_list.add(image_uid);
-        Log.d(TAG, "onCreate: "+image_uid );
-        Log.d(TAG, "onCreate: "+image_uid_list);
+//        Intent intent = getIntent();
+//        final String image_uid=intent.getStringExtra("image_uid");
+//        Log.d(TAG, "onCreate: "+image_uid );
 
 
 
@@ -454,7 +452,7 @@ public class CreateActivity extends AppCompatActivity {
                 params.put("position_num", positionNumber);
                 params.put("defect_assembly", defectAssembly);
                 params.put("machine_num", machineNumber);
-                Log.d(TAG, "getParams: "+machineNumber+" "+ title);
+                Log.d(TAG, "getParams: "+machineNumber+" "+ title+" "+image_uid);
                 return params;
             }
 
@@ -494,7 +492,6 @@ public class CreateActivity extends AppCompatActivity {
         // save file url in bundle as it will be null on screen orientation
         // changes
         outState.putParcelable("file_uri", fileUri);
-        outState.putStringArrayList("image_uid_list", (ArrayList<String>) image_uid_list);
     }
 
     @Override
@@ -503,7 +500,6 @@ public class CreateActivity extends AppCompatActivity {
 
         // get the file url
         fileUri = savedInstanceState.getParcelable("file_uri");
-        image_uid_list = savedInstanceState.getStringArrayList("image_uid_list");
     }
 
 
@@ -539,11 +535,11 @@ public class CreateActivity extends AppCompatActivity {
                 }
 
 //            接收上传成功界面传过来的image_uid;
-//            case 10:
-//                if (resultCode ==200) {
-//                    String image_uid = data.getStringExtra("image_uid");
-//                    Log.d(TAG, "onActivityResult: "+image_uid);
-//                }
+            case 10:
+                if (resultCode ==200) {
+                    image_uid = data.getStringExtra("image_uid");
+                    Log.d(TAG, "onActivityResult: "+image_uid);
+                }
 
         }
     }
@@ -553,10 +549,10 @@ public class CreateActivity extends AppCompatActivity {
         i.putExtra("filePath", fileUri.getPath());
         i.setData(fileUri);
         i.putExtra("isImage", isImage);
-//        startActivityForResult(i,10);
-        startActivity(i);
+        startActivityForResult(i,10);
+//        startActivity(i);
         Log.d(TAG, "launchUploadActivity: "+fileUri.getPath());
-        finish();
+//        finish();
     }
 
 

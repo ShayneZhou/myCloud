@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
@@ -67,6 +69,28 @@ public class User extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
+        MenuItem  searchItem = (MenuItem) menu.findItem(R.id.search);
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setQueryHint("输入字段查找问题单");
+        searchView.setSubmitButtonEnabled(true);
+        searchView.setOnQueryTextListener(new android.support.v7.widget.SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //提交按钮的点击事件
+                Toast.makeText(User.this, "查找的字段是" + query, Toast.LENGTH_SHORT).show();
+                queryProblem(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //当输入框内容改变的时候回调
+                Log.i(TAG,"searchView content: " + newText);
+                return true;
+            }
+        });
+
         return true;
     }
 
@@ -110,6 +134,7 @@ public class User extends AppCompatActivity {
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//导航抽屉
         getSupportActionBar().setHomeButtonEnabled(true);//返回键可用
+
 
         // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
@@ -397,7 +422,7 @@ public class User extends AppCompatActivity {
         pDiaglog.show();
         String tag_squestion_request = "req_squestion";
         squestionList.clear();
-        AppController.getInstance().addToRequestQueue(new StringRequest(Request.Method.POST, AppConfig.URL_SelfCheckProblem,
+        AppController.getInstance().addToRequestQueue(new StringRequest(Request.Method.POST, AppConfig.URL_SelfCheck_Problem,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -444,6 +469,64 @@ public class User extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
 
                 params.put("machine_num", machine_num);
+                return params;
+            }
+        },tag_squestion_request);
+    }
+
+    private void queryProblem(final String query) {
+        final ProgressDialog pDiaglog=new ProgressDialog(this);
+        pDiaglog.setMessage("请稍等");
+        pDiaglog.show();
+        String tag_squestion_request = "req_squestion";
+        squestionList.clear();
+        AppController.getInstance().addToRequestQueue(new StringRequest(Request.Method.POST, AppConfig.URL_Query_Problem,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "query Response: " + response.toString());
+                        pDiaglog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            boolean error = obj.getBoolean("error");
+                            if (!error) {
+                                try {
+                                    JSONArray obj2 = obj.getJSONArray("problemlist");
+                                    for (int i = 0; i < obj2.length(); i++) {
+                                        JSONObject obj3 = obj2.getJSONObject(i);
+                                        sQuestion squestion = new sQuestion(obj3.getString("title"), obj3.getString("position_num"),
+                                                obj3.getString("prob_level"), obj3.getString("created_at"), obj3.getString("example_image_url"), obj3.getString("prob_uid"));
+                                        squestionList.add(squestion);
+                                        Log.d(TAG, "onResponse: "+obj3.getString("example_image_url"));
+                                    }
+                                    adapter.notifyDataSetChanged();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                String errorMsg = obj.getString("error_msg");
+                                Toast.makeText(getApplicationContext(),
+                                        errorMsg, Toast.LENGTH_LONG).show();
+                            }
+                        }catch(JSONException e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                pDiaglog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+
+                params.put("content", query);
                 return params;
             }
         },tag_squestion_request);

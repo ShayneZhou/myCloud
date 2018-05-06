@@ -47,10 +47,12 @@
         <activity
             android:name=".UploadActivity"
             android:launchMode="singleTop"
+
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".CauseActivity" />
-        <activity android:name=".ActionActivity" />
+        <activity android:name=".ActionActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".ViewCauseActivity" />
         <activity android:name=".ViewActionActivity" />
         <activity android:name=".CreateCauseActivity" />
@@ -59,8 +61,6 @@
             android:name=".ProblemDetail"
             android:label="@string/title_activity_problem_detail"
             android:theme="@style/AppTheme" />
-        <activity android:name=".CustomScanActivity" >
-        </activity>
         <activity android:name=".SelfCheck"></activity>
     </application>
 

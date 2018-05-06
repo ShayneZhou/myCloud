@@ -18,5 +18,5 @@
     <color name="btn_logut_bg">#ff6861</color>
     <color name="txt_font">#4e5572</color>
     <color name="view_background">#e8ecfa</color>
-    <color name="btn_bg">#277bec</color>
+    <color name="btn_bg">#428bca</color>
 </resources>

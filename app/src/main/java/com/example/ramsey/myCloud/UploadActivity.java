@@ -167,8 +167,8 @@ public class UploadActivity extends AppCompatActivity {
                         Intent j = new Intent(UploadActivity.this,CreateActivity.class);
                         Log.d(TAG, "onClick: "+ prob_image_uid);
                         j.putExtra("image_uid",prob_image_uid);
-                        startActivity(j);
-//                        setResult(200,j);
+//                        startActivity(j);
+                        setResult(200,j);
                         finish();
 
                     }else {
