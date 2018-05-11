@@ -406,7 +406,6 @@ public class CreateActivity extends AppCompatActivity {
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         Toast.makeText(getApplicationContext(), "成功提交", Toast.LENGTH_SHORT).show();
-
                         // Launch user activity
                         Intent intent = new Intent(
                                 CreateActivity.this,
@@ -533,17 +532,18 @@ public class CreateActivity extends AppCompatActivity {
                 }
 
 //            接收上传成功界面传过来的image_uid;
-            case 10:
-                if (resultCode ==200) {
-                    String image_uid = data.getStringExtra("image_uid");
-                    Log.d(TAG, "onActivityResult: "+image_uid);
-                }
+//            case 10:
+//                if (resultCode ==200) {
+//                    String image_uid = data.getStringExtra("image_uid");
+//                    Log.d(TAG, "onActivityResult: "+image_uid);
+//                }
 
         }
     }
 
     private void launchUploadActivity(boolean isImage){
         Intent i = new Intent(CreateActivity.this, UploadActivity.class);
+        i.putExtra("Mode","1");
         i.putExtra("filePath", fileUri.getPath());
         i.setData(fileUri);
         i.putExtra("isImage", isImage);
@@ -608,3 +608,4 @@ public class CreateActivity extends AppCompatActivity {
         finish();
     }
 }
+

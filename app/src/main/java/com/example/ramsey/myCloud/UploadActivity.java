@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class UploadActivity extends AppCompatActivity {
     private Uri fileUri;
     private ImageView imgPreview;
     private Button btnUpload;
+    private String prob_uid;
+    private String Mode;
+    private String temp_solution_uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +61,16 @@ public class UploadActivity extends AppCompatActivity {
         imgPreview = (ImageView) findViewById(R.id.imgPreview);
 
 
+
         // Receiving the data from previous activity
-        Intent i = getIntent();
+        final Intent i = getIntent();
 
         // image or video path that is captured in previous activity
         filePath = i.getStringExtra("filePath");
 
         fileUri = i.getData();
+
+        Mode=i.getStringExtra("Mode");
 
         Log.d(TAG, "onCreate: "+filePath);
 
@@ -85,7 +92,27 @@ public class UploadActivity extends AppCompatActivity {
             public void onClick(View view) {
 //                new UploadFileToServer().execute();
                 if (filePath != null) {
-                    imageUpload(filePath,fileUri);
+                    if(Mode.equals("1")) {
+                        imageUpload(filePath, fileUri);
+                    }
+                    if(Mode.equals("2"))
+                    {
+                        prob_uid=i.getStringExtra("prob_uid");
+                        theoreticstateimageUpload(filePath,fileUri,prob_uid);
+                        TheoreticState.TheoreticStateStart(UploadActivity.this,prob_uid);
+                    }
+                    if(Mode.equals("3"))
+                    {
+                        prob_uid=i.getStringExtra("prob_uid");
+                        improvestateimageUpload(filePath,fileUri,prob_uid);
+                        ImproveState.ImproveStateStart(UploadActivity.this,prob_uid);
+                    }
+                    if(Mode.equals("4"))
+                    {
+                        temp_solution_uid=i.getStringExtra("temp_solution_uid");
+                        tempsolutionimageUpload(filePath,fileUri,temp_solution_uid);
+                        TempActionActivity.TempActionStart(UploadActivity.this,temp_solution_uid);
+                    }
 
                 } else {
                     Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
@@ -98,10 +125,20 @@ public class UploadActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        if(Mode.equals("1")) {
+            Intent j = new Intent(UploadActivity.this, CreateActivity.class);
+            startActivity(j);
+            finish();
+        }
+        if(Mode.equals("2"))
+        {
+            finish();
+        }
+        if(Mode.equals("3"))
+        {
 
-        Intent j = new Intent(UploadActivity.this,CreateActivity.class);
-        startActivity(j);
-        finish();
+            finish();
+        }
     }
 
     /**
@@ -200,6 +237,201 @@ public class UploadActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
+    private void theoreticstateimageUpload(final String imagePath,final Uri imageUri, final String prob_uid) {
+
+        // loading or check internet connection or something...
+        // ... then
+//        String prob_image_uid = null;
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
 
 
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_TheoreticStateImage, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "TheoreticStateImage Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+                        Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+//                        setResult(200,j);
+                        finish();
+
+                    }else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "TheoreticStateImage Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap();
+
+                params.put("filePath",imagePath);
+                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
+                params.put("prob_uid",prob_uid);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+    private void improvestateimageUpload(final String imagePath,final Uri imageUri, final String prob_uid) {
+
+        // loading or check internet connection or something...
+        // ... then
+//        String prob_image_uid = null;
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_ImproveStateImage, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "ImproveStateImage Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+                        Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+//                        setResult(200,j);
+                        finish();
+
+                    }else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "ImproveStateImage Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap();
+
+                params.put("filePath",imagePath);
+                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
+                params.put("prob_uid",prob_uid);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
+    private void tempsolutionimageUpload(final String imagePath,final Uri imageUri, final String temp_solution_uid) {
+
+        // loading or check internet connection or something...
+        // ... then
+//        String prob_image_uid = null;
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_TempSolutionImage, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "TempSolutionImage Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+                        Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+//                        setResult(200,j);
+                        finish();
+
+                    }else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "TempSolutionImage Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap();
+
+                params.put("filePath",imagePath);
+                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
+                params.put("tempsolution_uid",temp_solution_uid);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+    }
 }
