@@ -213,14 +213,9 @@ public class CreateActivity extends AppCompatActivity {
         });
 
         inputLayoutTitle = (TextInputLayout) findViewById(R.id.create_layout_title);
-//        inputLayoutSource = (TextInputLayout) findViewById(R.id.create_layout_source);
-//        inputLayoutPosition = (TextInputLayout) findViewById(R.id.create_layout_position);
-//        inputLayoutDescription = (TextInputLayout) findViewById(R.id.create_layout_description);
-//
+
         inputTitle = (EditText) findViewById(R.id.create_title);
-//        inputSource = (EditText) findViewById(R.id.create_source);
-//        inputPosition = (EditText) findViewById(R.id.create_position);
-//        inputDescription = (EditText) findViewById(R.id.create_description);
+
 
         fab_delete = (FloatingActionButton) findViewById(R.id.btn_delete);
         fab_upload = (FloatingActionButton) findViewById(R.id.btn_upload);
@@ -237,11 +232,6 @@ public class CreateActivity extends AppCompatActivity {
         // Fetching user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
 
-//        Intent intent = getIntent();
-//        final String image_uid=intent.getStringExtra("image_uid");
-//        Log.d(TAG, "onCreate: "+image_uid );
-
-
 
         final String finder = user.get("uid");
         final String section = user.get("section");
@@ -257,9 +247,7 @@ public class CreateActivity extends AppCompatActivity {
                     String defectAssembly = spSelected_da.trim();
                     String positionNumber = spSelected_pn.trim();
                     String machineNumber = spSelected_mn.trim();
-//                    String prob_describe = inputDescription.getText().toString().trim();
-//                    String prob_source = inputSource.getText().toString().trim();
-//                    String position = inputPosition.getText().toString().trim();
+
                     if (submitForm()) {
                         Log.d(TAG, "onClick: carType"+carType);
                         Log.d(TAG, "onClick: 发送"+image_uid);
@@ -474,10 +462,7 @@ public class CreateActivity extends AppCompatActivity {
 
 
     private void delete() {
-//        inputDescription.setText(null);
-//        inputSource.setText(null);
         inputTitle.setText(null);
-//        inputPosition.setText(null);
     }
 
 

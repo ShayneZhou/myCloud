@@ -97,15 +97,15 @@ public class User extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.qrcode:
+            case R.id.qrcode_problem:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(User.this);
                 dialog.setTitle("扫码提示");
-                dialog.setMessage("该扫描二维码的功能是通过扫描机器号获取与该机器号相关的问题单中所有措施进行一一确认，而右滑菜单中的二维码扫描是通过扫描机器号获取该机器号的历史问题单");
+                dialog.setMessage("该扫描二维码的功能是通过扫描机器号获取该机器号的历史问题单，而右侧隐藏菜单中的二维码扫描是通过扫描机器号获取与该机器号相关的问题单中所有措施进行一一确认");
                 dialog.setCancelable(false);
                 dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        customScanSolution();
+                        customScanProblem();
                     }
                 });
                 dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -114,6 +114,24 @@ public class User extends AppCompatActivity {
                     }
                 });
                 dialog.show();
+                break;
+            case R.id.qrcode_solution:
+                AlertDialog.Builder dialog1 = new AlertDialog.Builder(User.this);
+                dialog1.setTitle("扫码提示");
+                dialog1.setMessage("该扫描二维码的功能是通过扫描机器号获取与该机器号相关的问题单中所有措施进行一一确认");
+                dialog1.setCancelable(false);
+                dialog1.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        customScanSolution();
+                    }
+                });
+                dialog1.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog1.show();
                 break;
 //            case R.id.logout:
 //                logoutUser();
@@ -182,13 +200,14 @@ public class User extends AppCompatActivity {
                             mDrawerLayout.closeDrawers();
                         }
                         break;
-                    case R.id.nav_search:
+                    case R.id.nav_chart:
                         Toast.makeText(User.this,"查询界面",Toast.LENGTH_LONG).show();
+                        Intent intent_ch = new Intent(User.this,Chart.class);
+                        startActivity(intent_ch);
+                        finish();
+
                         mDrawerLayout.closeDrawers();
                         break;
-                    case R.id.nav_scan_problem:
-                        customScanProblem();
-                        mDrawerLayout.closeDrawers();
                     case R.id.nav_close:
                         finish();
                         mDrawerLayout.closeDrawers();

@@ -7,17 +7,17 @@
             android:icon="@drawable/ic_add"
             android:title="新建问题单" />
         <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/ic_search"
-            android:title="搜索问题单" />
+            android:id="@+id/nav_chart"
+            android:icon="@drawable/ic_comment"
+            android:title="交互图表" />
         <!--<item-->
             <!--android:id="@+id/nav_scan"-->
             <!--android:icon="@drawable/ic_comment"-->
             <!--android:title="扫描二维码自检" />-->
-        <item
-            android:id="@+id/nav_scan_problem"
-            android:title="扫描机器号获取相关问题单"
-            android:icon="@drawable/ic_qrcode"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_scan_solution"-->
+            <!--android:title="扫描机器号获取相关措施"-->
+            <!--android:icon="@drawable/ic_qrcode"/>-->
         <item
             android:id="@+id/nav_void2"
             android:title="      " />

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/qrcode"
+        android:id="@+id/qrcode_problem"
         android:icon="@drawable/ic_qrcode"
         android:orderInCategory="81"
         android:title="Backup"
@@ -14,6 +14,12 @@
         android:title="搜索问题单"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/qrcode_solution"
+        android:icon="@drawable/ic_qrcode"
+        android:orderInCategory="81"
+        android:title="扫描机器码获取相应措施"
+        app:showAsAction="never" />
 
     <!--<item-->
         <!--android:id="@+id/logout"-->
