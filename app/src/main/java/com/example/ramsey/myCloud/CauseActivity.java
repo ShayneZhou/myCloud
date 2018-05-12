@@ -68,7 +68,7 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
 
         if (authority.equals("0")) {
             button1.setVisibility(View.INVISIBLE);
-            button2.setVisibility(View.INVISIBLE);
+//            button2.setVisibility(View.INVISIBLE);
             button3.setVisibility(View.INVISIBLE);
 
             edittext_cause.setFocusable(false);
@@ -191,6 +191,7 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
                                 edittext_analysis.setText(obj.getString("analysis").trim());
                             }
                         } catch (JSONException e) {
+
                             e.printStackTrace();
                         }
 

@@ -125,4 +125,5 @@
     <string name="hint_photo">上传照片：</string>
     <string name="btnUploadToServer">上传服务器</string>
     <string name="title_activity_problem_detail">ProblemDetail</string>
+    <string name="flash">闪光灯</string>
 </resources>

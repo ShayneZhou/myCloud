@@ -24,7 +24,18 @@
         <activity
             android:name=".User"
             android:label="个人中心"
-            android:launchMode="singleTask" />
+
+
+            android:launchMode="singleTask">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+
         <activity
             android:name=".Register"
             android:label="用户注册"
@@ -44,7 +55,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity android:name=".CauseActivity" />
-        <activity android:name=".ActionActivity" />
+
+
+        <activity
+            android:name=".ActionActivity"
+            android:launchMode="singleTop" />
+
         <activity android:name=".ViewCauseActivity" />
         <activity android:name=".ViewActionActivity" />
         <activity android:name=".CreateCauseActivity" />
@@ -53,6 +69,7 @@
             android:name=".ProblemDetail"
             android:label="@string/title_activity_problem_detail"
             android:theme="@style/AppTheme" />
+
         <activity android:name=".TheoreticState" />
         <activity android:name=".ImproveState" />
         <activity android:name=".ViewTempActionActivity">
@@ -60,6 +77,10 @@
         <activity android:name=".TempActionActivity" >
         </activity>
         <activity android:name=".CreateTempAction"></activity>
+
+        <activity android:name=".SelfCheck" />
+        <activity android:name=".Chart"></activity>
+
     </application>
 
 </manifest>

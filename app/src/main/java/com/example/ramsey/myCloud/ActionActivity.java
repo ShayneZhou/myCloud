@@ -1,12 +1,22 @@
 package com.example.ramsey.myCloud;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,9 +44,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -50,10 +64,21 @@ public class ActionActivity extends AppCompatActivity {
     private Button button_action_edit;
     public String misdone;
     public Button deletebutton;
+    public Button button_action_upload;
+    public Button button_action_capture;
     private ImageView imageView;
     private SessionManager session;
     private SQLiteHandler db;
+    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
 
+    public static final int MEDIA_TYPE_IMAGE = 1;
+
+    private String solution_uid;
+
+
+    private Uri fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // file url to store image
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +87,14 @@ public class ActionActivity extends AppCompatActivity {
         toolbar.setTitle("编辑措施");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
+
+        Intent intent1=getIntent();
+        final String solution_uid=intent1.getStringExtra("action_uid");
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
+
 
         locationspinner=(Spinner)findViewById(R.id.action_location_spinner);
         //定义Spinner
@@ -78,7 +111,7 @@ public class ActionActivity extends AppCompatActivity {
         locationspinner.setSelection(location.size()-1,true);
         //实例化EditText
         edittext_action_action=(EditText)findViewById(R.id.action_action_1);
-        edittext_action_performence=(EditText)findViewById(R.id.action_performence_1);
+        edittext_action_performence=(EditText)findViewById(R.id.action_performance_1);
         edittext_action_response=(EditText)findViewById(R.id.action_response_1);
 
         //实例化Button
@@ -118,6 +151,40 @@ public class ActionActivity extends AppCompatActivity {
             }
         });
 
+        button_action_capture = (Button)findViewById(R.id.action_btn_capture);
+
+        button_action_capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(ActionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ActionActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    // capture picture
+                    captureImage();
+                }
+            }
+        });
+
+        // Checking camera availability
+        if (!isDeviceSupportCamera()) {
+            Toast.makeText(getApplicationContext(),
+                    "设备不支持相机！",
+                    Toast.LENGTH_LONG).show();
+            // will close the app if the device does't have camera
+            finish();
+        }
+
+
+        button_action_upload = (Button)findViewById(R.id.action_btn_upload);
+
+        button_action_upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                reportFeedback();
+            }
+        });
+
         imageView=(ImageView)findViewById(R.id.feedback_image);
         getactiondetail();
 
@@ -129,7 +196,7 @@ public class ActionActivity extends AppCompatActivity {
 
         if (authority.equals("0")) {
 
-            locationspinner.setClickable(false);
+            locationspinner.setEnabled(false);
 
             button_action_edit.setVisibility(View.INVISIBLE);
             deletebutton.setVisibility(View.INVISIBLE);
@@ -141,11 +208,86 @@ public class ActionActivity extends AppCompatActivity {
             edittext_action_performence.setFocusable(false);
             edittext_action_performence.setFocusableInTouchMode(false);
 
+        }
+        else{
+            button_action_upload.setVisibility(View.INVISIBLE);
+            button_action_capture.setVisibility(View.INVISIBLE);
+
             edittext_action_response.setFocusable(false);
             edittext_action_response.setFocusableInTouchMode(false);
         }
 
     }
+
+    private boolean isDeviceSupportCamera() {
+        if (getApplicationContext().getPackageManager().hasSystemFeature(
+                PackageManager.FEATURE_CAMERA)) {
+            // this device has a camera
+            return true;
+        } else {
+            // no camera on this device
+            return false;
+        }
+    }
+
+    private void captureImage() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
+    }
+
+    private void reportFeedback(){
+        final ProgressDialog pDiaglog = new ProgressDialog(this);
+        pDiaglog.setMessage("请稍等");
+        pDiaglog.show();
+        String tag_action_upload = "action_report_feedback";
+        AppController.getInstance().addToRequestQueue(new StringRequest(Request.Method.POST, AppConfig.URL_Report_Feedback,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "Report Response: " + response.toString());
+                        pDiaglog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            boolean error = obj.getBoolean("error");
+                            if (!error) {
+                                Toast.makeText(ActionActivity.this,"上传反馈成功",Toast.LENGTH_SHORT).show();
+                            } else {
+                                String errorMsg = obj.getString("error_msg");
+                                Toast.makeText(getApplicationContext(),
+                                        errorMsg, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                pDiaglog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<String, String>();
+
+                Intent intent1=getIntent();
+                String solutionuid=intent1.getStringExtra("action_uid");
+                String response=edittext_action_response.getText().toString().trim();
+                params.put("solution_uid",solutionuid);
+                params.put("feedback",response);
+                return params;
+            }
+        }, tag_action_upload);
+    }
+
 
     private void editaction() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);
@@ -200,6 +342,8 @@ public class ActionActivity extends AppCompatActivity {
             }
         }, tag_action_upload);
     }
+
+
     private void getactiondetail() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);
         pDiaglog.setMessage("请稍等");
@@ -255,6 +399,7 @@ public class ActionActivity extends AppCompatActivity {
             }
         }, tag_getactiondetail_request);
     }
+
     private void deleteaction() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);
         pDiaglog.setMessage("请稍等");
@@ -299,6 +444,7 @@ public class ActionActivity extends AppCompatActivity {
             }
         }, tag_action_delete);
     }
+
     public  void setSpinnerItemSelectedByValue(Spinner spinner,String value){
         SpinnerAdapter apsAdapter= spinner.getAdapter(); //得到SpinnerAdapter对象
         int k= apsAdapter.getCount();
@@ -309,10 +455,138 @@ public class ActionActivity extends AppCompatActivity {
             }
         }
     }
+
     public static void ActionActivityStart(Context context,String action_uid)
     {
         Intent intent=new Intent(context,ActionActivity.class);
         intent.putExtra("action_uid",action_uid);
         context.startActivity(intent);
+    }
+
+
+    /**
+     * Here we store the file uri as it will be null after returning from camera
+     * app
+     */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // save file url in bundle as it will be null on screen orientation
+        // changes
+        outState.putParcelable("file_uri", fileUri);
+        Intent intent=getIntent();
+        String solution_uid=intent.getStringExtra("action_uid");
+        Log.d(TAG, "onSaveInstanceState: "+solution_uid);
+        outState.putString("solution_uid",solution_uid);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // get the file url
+        fileUri = savedInstanceState.getParcelable("file_uri");
+        solution_uid = savedInstanceState.getString("solution_uid");
+        Log.d(TAG, "onRestoreInstanceState: "+solution_uid);
+    }
+
+
+
+    /**
+     * Receiving activity result method will be called after closing the camera
+     * */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+
+            // if the result is capturing Image
+            case CAMERA_CAPTURE_IMAGE_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+
+                    // successfully captured the image
+                    // launching upload activity
+                    launchUploadActivity(true);
+
+
+                } else if (resultCode == RESULT_CANCELED) {
+
+                    // user cancelled Image capture
+                    Toast.makeText(getApplicationContext(),
+                            "您取消了拍照", Toast.LENGTH_SHORT)
+                            .show();
+
+                } else {
+                    // failed to capture image
+                    Toast.makeText(getApplicationContext(),
+                            "未捕获到照片", Toast.LENGTH_SHORT)
+                            .show();
+                }
+
+        }
+    }
+
+    private void launchUploadActivity(boolean isImage){
+        Intent intent1=getIntent();
+        final String solution_uid=intent1.getStringExtra("action_uid");
+        Intent i = new Intent(ActionActivity.this, UploadActivity.class);
+        i.putExtra("filePath", fileUri.getPath());
+        i.putExtra("solution_uid",solution_uid);
+        Log.d(TAG, "launchUploadActivity: "+solution_uid);
+        i.setData(fileUri);
+        i.putExtra("isImage", isImage);
+//        startActivityForResult(i,10);
+        startActivity(i);
+        Log.d(TAG, "launchUploadActivity: "+fileUri.getPath());
+        finish();
+    }
+
+
+    /**
+     * ------------ Helper Methods ----------------------
+     * */
+
+
+
+    /**
+     * Creating file uri to store image/video
+     */
+    public Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+
+    /**
+     * returning image / video
+     */
+    private static File getOutputMediaFile(int type) {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                AppConfig.IMAGE_DIRECTORY_NAME);
+
+        Log.d(TAG, "getOutputMediaFile: "+ mediaStorageDir);
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(TAG, "创建 "
+                        + AppConfig.IMAGE_DIRECTORY_NAME + " 地址失败");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                    + "IMG_" + timeStamp + ".jpg");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
     }
 }

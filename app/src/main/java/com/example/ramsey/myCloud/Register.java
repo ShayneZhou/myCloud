@@ -80,8 +80,8 @@ public class Register extends AppCompatActivity {
 
         authoritySpinner = (Spinner) findViewById(R.id.spinner1);
         List<String> objects = new ArrayList<>();
-        objects.add("操作员");
-        objects.add("技术工");
+        objects.add("操作工");
+        objects.add("技术员");
         // add hint as last item
         objects.add("请选择您的身份：");
         //设置样式
@@ -163,6 +163,11 @@ public class Register extends AppCompatActivity {
                     String passwordCheck = inputPasswordCheck.getText().toString().trim();
                     String authority = spSelected_authority.trim();
                     String section = spSelected_section.trim();
+                    if (spSelected_authority.trim().equals("操作工")){
+                        authority = "0";
+                    } else{
+                        authority = "1";
+                    }
 
                     Log.d(TAG, "onClick: " + name + email + password);
 

@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/backup"
-        android:icon="@drawable/ic_backup"
+        android:id="@+id/qrcode_problem"
+        android:icon="@drawable/ic_qrcode"
+        android:orderInCategory="81"
         android:title="Backup"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
     <item
-        android:id="@+id/logout"
-        android:icon="@drawable/ic_delete"
-        android:title="Logout"
-        app:showAsAction="never" />
+        android:id="@+id/search"
+        android:orderInCategory="80"
+        android:title="搜索问题单"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings"
+        android:id="@+id/qrcode_solution"
+        android:icon="@drawable/ic_qrcode"
+        android:orderInCategory="81"
+        android:title="扫描机器码获取相应措施"
         app:showAsAction="never" />
+
+    <!--<item-->
+        <!--android:id="@+id/logout"-->
+        <!--android:icon="@drawable/ic_delete"-->
+        <!--android:title="Logout"-->
+        <!--app:showAsAction="never" />-->
+    <!--<item-->
+        <!--android:id="@+id/settings"-->
+        <!--android:icon="@drawable/ic_settings"-->
+        <!--android:title="Settings"-->
+        <!--app:showAsAction="never" />-->
 </menu>
