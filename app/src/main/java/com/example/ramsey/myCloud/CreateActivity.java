@@ -526,11 +526,13 @@ public class CreateActivity extends AppCompatActivity {
                     Log.d(TAG, "onActivityResult: "+image_uid);
                 }
 
+
         }
     }
 
     private void launchUploadActivity(boolean isImage){
         Intent i = new Intent(CreateActivity.this, UploadActivity.class);
+        i.putExtra("Mode","1");
         i.putExtra("filePath", fileUri.getPath());
         i.setData(fileUri);
         i.putExtra("isImage", isImage);
@@ -595,3 +597,4 @@ public class CreateActivity extends AppCompatActivity {
         finish();
     }
 }
+

@@ -20,6 +20,8 @@ import java.io.InputStream;
 
 public class AppConfig {
     // Server user login url
+
+
     public static String URL_LOGIN = "http://10.0.2.2/myCloud/Login.php";
 
     // Server user register url
@@ -90,6 +92,43 @@ public class AppConfig {
 
     // Problem list detail create url
     public static String URL_Query_Problem= "http://10.0.2.2/myCloud/SearchForProblemList.php";
+  
+   // Check Theoretic State URL
+    public static String URL_CheckTheoreticState = "http://192.168.1.108/myCloud/CheckTheoreticState.php";
+
+    // Edit Theoretic State URL
+    public static String URL_EditTheoreticState = "http://192.168.1.108/myCloud/EditTheoreticState.php";
+
+    //Upload Theoretic State Image
+    public static String URL_TheoreticStateImage="http://192.168.1.108/myCloud/TheoreticStateImage.php";
+
+    // Edit Improve State URL
+    public static String URL_EditImproveState = "http://192.168.1.108/myCloud/EditImproveState.php";
+
+    // Check Improve State URL
+    public static String URL_CheckImproveState = "http://192.168.1.108/myCloud/CheckImproveState.php";
+
+    //Upload Theoretic State Image
+    public static String URL_ImproveStateImage="http://192.168.1.108/myCloud/ImproveStateImage.php";
+
+    //Check Temp Solutions
+    public static String URL_CheckTempSolutionList="http://192.168.1.108/myCloud/CheckTempSolution.php";
+
+    //Get Temp Solutions Details
+    public static String URL_TempSolutionDetail="http://192.168.1.108/myCloud/TempSolutionDetail.php";
+
+    //Report Temp Solution
+    public static String URL_ReportTempAction="http://192.168.1.108/myCloud/ReportTempSolution.php";
+
+    //Upload TempSolution Image
+    public static String URL_TempSolutionImage="http://192.168.1.108/myCloud/TempSolutionImage.php";
+
+    //Edit Temp Solution
+    public static String URL_EditTempSolution="http://192.168.1.108/myCloud/EditTempSolution.php";
+
+    //Upload TempSolution Image
+    public static String URL_DeleteTempSolution="http://192.168.1.108/myCloud/DeleteTempSolution.php";
+
 
 
     /**
