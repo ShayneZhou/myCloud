@@ -1,3 +1,4 @@
+
 package com.example.ramsey.myCloud;
 
 import android.content.Intent;
@@ -61,11 +62,10 @@ public class UploadActivity extends AppCompatActivity {
         imgPreview = (ImageView) findViewById(R.id.imgPreview);
 
 
-
         // Receiving the data from previous activity
         final Intent i = getIntent();
 
-        if (i.getStringExtra("solution_uid") != null){
+        if (i.getStringExtra("solution_uid") != null) {
             String solution_uid = i.getStringExtra("solution_uid");
         }
 
@@ -74,9 +74,9 @@ public class UploadActivity extends AppCompatActivity {
 
         fileUri = i.getData();
 
-        Mode=i.getStringExtra("Mode");
+        Mode = i.getStringExtra("Mode");
 
-        Log.d(TAG, "onCreate: "+filePath);
+        Log.d(TAG, "onCreate: " + filePath);
 
         // boolean flag to identify the media type, image or video
         boolean isImage = i.getBooleanExtra("isImage", true);
@@ -90,65 +90,57 @@ public class UploadActivity extends AppCompatActivity {
         }
 
 
-
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                new UploadFileToServer().execute();
 
                 if (filePath != null) {
-                    if(Mode.equals("1")) {
+                    if (Mode.equals("1")) {
                         imageUpload(filePath, fileUri);
                     }
-                    if(Mode.equals("2"))
-                    {
-                        prob_uid=i.getStringExtra("prob_uid");
-                        theoreticstateimageUpload(filePath,fileUri,prob_uid);
-                        TheoreticState.TheoreticStateStart(UploadActivity.this,prob_uid);
+                    if (Mode.equals("2")) {
+                        prob_uid = i.getStringExtra("prob_uid");
+                        theoreticstateimageUpload(filePath, fileUri, prob_uid);
+                        TheoreticState.TheoreticStateStart(UploadActivity.this, prob_uid);
                     }
-                    if(Mode.equals("3"))
-                    {
-                        prob_uid=i.getStringExtra("prob_uid");
-                        improvestateimageUpload(filePath,fileUri,prob_uid);
-                        ImproveState.ImproveStateStart(UploadActivity.this,prob_uid);
+                    if (Mode.equals("3")) {
+                        prob_uid = i.getStringExtra("prob_uid");
+                        improvestateimageUpload(filePath, fileUri, prob_uid);
+                        ImproveState.ImproveStateStart(UploadActivity.this, prob_uid);
                     }
-                    if(Mode.equals("4"))
-                    {
-                        temp_solution_uid=i.getStringExtra("temp_solution_uid");
-                        tempsolutionimageUpload(filePath,fileUri,temp_solution_uid);
-                        TempActionActivity.TempActionStart(UploadActivity.this,temp_solution_uid);
+                    if (Mode.equals("4")) {
+                        temp_solution_uid = i.getStringExtra("temp_solution_uid");
+                        tempsolutionimageUpload(filePath, fileUri, temp_solution_uid);
+                        TempActionActivity.TempActionStart(UploadActivity.this, temp_solution_uid);
                     }
 
-                Intent i = getIntent();
+                    Intent i = getIntent();
 
-                if (filePath != null && i.getStringExtra("solution_uid") == null) {
-                    imageUpload(filePath,fileUri);
-                }
-                else if (filePath != null && i.getStringExtra("solution_uid") != null){
-                    imageUpload_feedback(filePath,fileUri,i.getStringExtra("solution_uid"));
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
+                    if (filePath != null && i.getStringExtra("solution_uid") == null) {
+                        imageUpload(filePath, fileUri);
+                    } else if (filePath != null && i.getStringExtra("solution_uid") != null) {
+                        imageUpload_feedback(filePath, fileUri, i.getStringExtra("solution_uid"));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
-
     }
 
 
     @Override
-    public void onBackPressed(){
-        if(Mode.equals("1")) {
+    public void onBackPressed() {
+        if (Mode.equals("1")) {
             Intent j = new Intent(UploadActivity.this, CreateActivity.class);
             startActivity(j);
             finish();
         }
-        if(Mode.equals("2"))
-        {
+        if (Mode.equals("2")) {
             finish();
         }
-        if(Mode.equals("3"))
-        {
+        if (Mode.equals("3")) {
 
             finish();
         }
@@ -156,7 +148,7 @@ public class UploadActivity extends AppCompatActivity {
 
     /**
      * Displaying captured image/video on the screen
-     * */
+     */
     private void previewMedia(boolean isImage) {
         // Checking whether captured media is image or video
         if (isImage) {
@@ -175,9 +167,7 @@ public class UploadActivity extends AppCompatActivity {
     }
 
 
-
-
-    private void imageUpload(final String imagePath,final Uri imageUri) {
+    private void imageUpload(final String imagePath, final Uri imageUri) {
 
         // loading or check internet connection or something...
         // ... then
@@ -202,17 +192,17 @@ public class UploadActivity extends AppCompatActivity {
                         // Now store the user in sqlite
                         String prob_image_uid = jObj.getString("prob_image_uid");
                         Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onResponse: "+prob_image_uid);
+                        Log.d(TAG, "onResponse: " + prob_image_uid);
 
 
-                        Intent j = new Intent(UploadActivity.this,CreateActivity.class);
-                        Log.d(TAG, "onClick: "+ prob_image_uid);
-                        j.putExtra("image_uid",prob_image_uid);
+                        Intent j = new Intent(UploadActivity.this, CreateActivity.class);
+                        Log.d(TAG, "onClick: " + prob_image_uid);
+                        j.putExtra("image_uid", prob_image_uid);
 //                        startActivity(j);
-                        setResult(200,j);
+                        setResult(200, j);
                         finish();
 
-                    }else {
+                    } else {
 
                         // Error occurred in registration. Get the error
                         // message
@@ -239,8 +229,8 @@ public class UploadActivity extends AppCompatActivity {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
 
-                params.put("filePath",imagePath);
-                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
+                params.put("filePath", imagePath);
+                params.put("imageBase64", AppConfig.getFileDataFromUri(getApplicationContext(), imageUri));
                 return params;
             }
 
@@ -250,37 +240,8 @@ public class UploadActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
-    private void theoreticstateimageUpload(final String imagePath,final Uri imageUri, final String prob_uid) {
 
-        // loading or check internet connection or something...
-        // ... then
-//        String prob_image_uid = null;
-
-        // Tag used to cancel the request
-        String tag_string_req = "req_register";
-
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_TheoreticStateImage, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "TheoreticStateImage Response: " + response.toString());
-
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    boolean error = jObj.getBoolean("error");
-                    if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-                        Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
-//                        setResult(200,j);
-                        finish();
-
-                    }else {
-
-
-    private void imageUpload_feedback (final String imagePath,final Uri imageUri,final String solution_uid) {
+    private void imageUpload_feedback(final String imagePath, final Uri imageUri, final String solution_uid) {
 
         // loading or check internet connection or something...
         // ... then
@@ -306,13 +267,13 @@ public class UploadActivity extends AppCompatActivity {
                         Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 
 
-                        Intent j = new Intent(UploadActivity.this,ActionActivity.class);
-                        Log.d(TAG, "onClick: "+ solution_uid);
-                        j.putExtra("action_uid",solution_uid);
+                        Intent j = new Intent(UploadActivity.this, ActionActivity.class);
+                        Log.d(TAG, "onClick: " + solution_uid);
+                        j.putExtra("action_uid", solution_uid);
                         startActivity(j);
                         finish();
 
-                    }else {
+                    } else {
 
 
                         // Error occurred in registration. Get the error
@@ -321,7 +282,7 @@ public class UploadActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
                     }
-                } catch (JSONException ) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -339,9 +300,9 @@ public class UploadActivity extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
-                params.put("solution_uid",solution_uid);
-                params.put("filePath",imagePath);
-                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
+                params.put("solution_uid", solution_uid);
+                params.put("filePath", imagePath);
+                params.put("imageBase64", AppConfig.getFileDataFromUri(getApplicationContext(), imageUri));
                 return params;
             }
 
@@ -352,32 +313,7 @@ public class UploadActivity extends AppCompatActivity {
 
     }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "TheoreticStateImage Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting params to register url
-                Map<String, String> params = new HashMap();
-
-                params.put("filePath",imagePath);
-                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
-                params.put("prob_uid",prob_uid);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-
-    }
-    private void improvestateimageUpload(final String imagePath,final Uri imageUri, final String prob_uid) {
+    private void improvestateimageUpload(final String imagePath, final Uri imageUri, final String prob_uid) {
 
         // loading or check internet connection or something...
         // ... then
@@ -404,7 +340,7 @@ public class UploadActivity extends AppCompatActivity {
 //                        setResult(200,j);
                         finish();
 
-                    }else {
+                    } else {
 
                         // Error occurred in registration. Get the error
                         // message
@@ -431,9 +367,9 @@ public class UploadActivity extends AppCompatActivity {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
 
-                params.put("filePath",imagePath);
-                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
-                params.put("prob_uid",prob_uid);
+                params.put("filePath", imagePath);
+                params.put("imageBase64", AppConfig.getFileDataFromUri(getApplicationContext(), imageUri));
+                params.put("prob_uid", prob_uid);
                 return params;
             }
 
@@ -443,7 +379,8 @@ public class UploadActivity extends AppCompatActivity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
 
     }
-    private void tempsolutionimageUpload(final String imagePath,final Uri imageUri, final String temp_solution_uid) {
+
+    private void tempsolutionimageUpload(final String imagePath, final Uri imageUri, final String temp_solution_uid) {
 
         // loading or check internet connection or something...
         // ... then
@@ -470,7 +407,7 @@ public class UploadActivity extends AppCompatActivity {
 //                        setResult(200,j);
                         finish();
 
-                    }else {
+                    } else {
 
                         // Error occurred in registration. Get the error
                         // message
@@ -497,9 +434,9 @@ public class UploadActivity extends AppCompatActivity {
                 // Posting params to register url
                 Map<String, String> params = new HashMap();
 
-                params.put("filePath",imagePath);
-                params.put("imageBase64",AppConfig.getFileDataFromUri(getApplicationContext(),imageUri));
-                params.put("tempsolution_uid",temp_solution_uid);
+                params.put("filePath", imagePath);
+                params.put("imageBase64", AppConfig.getFileDataFromUri(getApplicationContext(), imageUri));
+                params.put("tempsolution_uid", temp_solution_uid);
                 return params;
             }
 
@@ -508,4 +445,77 @@ public class UploadActivity extends AppCompatActivity {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
+
+
+    private void theoreticstateimageUpload(final String imagePath, final Uri imageUri, final String prob_uid) {
+
+        // loading or check internet connection or something...
+        // ... then
+//        String prob_image_uid = null;
+
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_TheoreticStateImage, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "TheoreticStateImage Response: " + response.toString());
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        // User successfully stored in MySQL
+                        // Now store the user in sqlite
+                        Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+//                        setResult(200,j);
+                        finish();
+
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "TheoreticStateImage Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap();
+
+                params.put("filePath", imagePath);
+                params.put("imageBase64", AppConfig.getFileDataFromUri(getApplicationContext(), imageUri));
+                params.put("prob_uid", prob_uid);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
+    }
 }
+
+
+
+
+
+

@@ -239,7 +239,7 @@
                     android:text="原因"
                     android:textColor="#ffffff"
                     android:textSize="7pt"
-                    android:background="@drawable/shape" />
+                    android:background="@drawable/red_shape" />
 
                 <Button
                     android:id="@+id/problemDetail_btn_improved"
@@ -249,7 +249,7 @@
                     android:text="改进"
                     android:textColor="#ffffff"
                     android:textSize="7pt"
-                    android:background="@drawable/red_shape"/>
+                    android:background="@drawable/shape"/>
 
                 <Button
                     android:id="@+id/problemDetail_btn_temporary"
