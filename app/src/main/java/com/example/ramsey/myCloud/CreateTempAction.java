@@ -52,9 +52,13 @@ public class CreateTempAction extends AppCompatActivity {
         locationspinner=(Spinner)findViewById(R.id.temp_action_create_location_spinner);
 
         List<String> location=new ArrayList<>();
-        location.add("车身");
-        location.add("车头");
-        location.add("车尾");
+        location.add("底板分拼");
+        location.add("底板Ⅰ");
+        location.add("底板Ⅱ");
+        location.add("侧围");
+        location.add("总拼");
+        location.add("装配");
+        location.add("报交");
         //add hint as last item
         location.add("请填写");
         simpleArrayAdapter adapter=new simpleArrayAdapter(this,android.R.layout.simple_spinner_item,location);

@@ -53,8 +53,8 @@ public class CreateActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private Spinner carTypeSpinner, defectTypeSpinner, defectAssemblySpinner, positionNumberSpinner, machineNumberSpinner;
     private String[] str_ct = {"LNF", "GNF", };
-    private String[] str_dt = {"表面", "点焊", "匹配", };
-    private String[] str_da = {"UBI", "SIH", "LTV", };
+    private String[] str_dt = {"表面", "点焊", "匹配", "尺寸", "涂胶", "折边", "弧焊", "激光焊"};
+    private String[] str_da = {"UBI", "UBII","SIH","SIV","LTV","LTH","STR","STL","PSAD","SAD","AUFBAU","ZP5" };
     private String[] str_pn = {"A1", "A2", "A3", };
     private String[] str_mn = {"B1", "B2", "B3", };
     private String spSelected_ct, spSelected_dt, spSelected_da, spSelected_pn, spSelected_mn;
@@ -126,7 +126,7 @@ public class CreateActivity extends AppCompatActivity {
         List<String> array_pn = new ArrayList<String>();
         array_pn.addAll(Arrays.asList(str_pn));
         // add hint as last item
-        array_pn.add("请选择工号：");
+        array_pn.add("请选择工位号：");
         //设置样式
         simpleArrayAdapter adapter_pn = new simpleArrayAdapter(this, android.R.layout.simple_spinner_item,array_pn);
         adapter_pn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

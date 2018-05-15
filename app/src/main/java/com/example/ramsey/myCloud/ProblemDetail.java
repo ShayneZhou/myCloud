@@ -59,8 +59,8 @@ public class ProblemDetail extends AppCompatActivity {
     private Spinner PositionNumSpinner;
     private Spinner MachineNumSpinner;
     private String[] str_ct = {"LNF", "GNF", };
-    private String[] str_dt = {"表面", "点焊", "匹配", };
-    private String[] str_da = {"UBI", "SIH", "LTV", };
+    private String[] str_dt = {"表面", "点焊", "匹配", "尺寸", "涂胶", "折边", "弧焊", "激光焊"};
+    private String[] str_da = {"UBI", "UBII","SIH","SIV","LTV","LTH","STR","STL","PSAD","SAD","AUFBAU","ZP5" };
     private String[] str_pn = {"A1", "A2", "A3", };
     private String[] str_mn = {"B1", "B2", "B3", };
     private String spSelected_CarType;

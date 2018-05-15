@@ -93,9 +93,13 @@ public class Register extends AppCompatActivity {
 
         sectionSpinner = (Spinner) findViewById(R.id.spinner2);
         List<String> objects2 = new ArrayList<>();
-        objects2.add("车头");
-        objects2.add("车身");
-        objects2.add("车尾");
+        objects2.add("底板分拼");
+        objects2.add("底板Ⅰ");
+        objects2.add("底板Ⅱ");
+        objects2.add("侧围");
+        objects2.add("总拼");
+        objects2.add("装配");
+        objects2.add("报交");
         // add hint as last item
         objects2.add("请选择您的工段：");
         //设置样式
