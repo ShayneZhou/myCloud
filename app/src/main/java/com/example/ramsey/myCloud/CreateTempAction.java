@@ -53,8 +53,8 @@ public class CreateTempAction extends AppCompatActivity {
 
         List<String> location=new ArrayList<>();
         location.add("底板分拼");
-        location.add("底板Ⅰ");
-        location.add("底板Ⅱ");
+        location.add("底板I");
+        location.add("底板II");
         location.add("侧围");
         location.add("总拼");
         location.add("装配");

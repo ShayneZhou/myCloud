@@ -129,6 +129,13 @@ public class AppConfig {
     //Upload TempSolution Image
     public static String URL_DeleteTempSolution="http://10.0.2.2/myCloud/DeleteTempSolution.php";
 
+    //Upload TempSolution Image
+    public static String URL_PIECHART="http://10.0.2.2/myCloud/PieChart.php";
+
+    //Upload TempSolution Image
+    public static String URL_LINECHART="http://10.0.2.2/myCloud/LineChart.php";
+
+
 
 
     /**
