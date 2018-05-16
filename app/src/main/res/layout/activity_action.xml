@@ -87,19 +87,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left|center_vertical"
                         android:text="反馈图片:"
-                        android:textSize="18dp"/>
+                        android:textSize="18dp" />
                     <View
                         android:layout_width="30dp"
                         android:layout_height="75dp"/>
+
                     <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="75dp"
                         android:id="@+id/feedback_image"
+                        android:layout_width="214dp"
+                        android:layout_height="220dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
 

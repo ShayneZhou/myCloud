@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,7 +28,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateCauseActivity extends AppCompatActivity {
@@ -36,6 +42,12 @@ public class CreateCauseActivity extends AppCompatActivity {
     private static final String TAG = "CreateCause";
     private TextInputLayout textInputLayout1;
     private TextInputLayout textInputLayout2;
+    private Spinner MachineNumSpinner;
+    private String[] str_mn={"IR1","IR2","IR3","IR03","IR04","IR07","IR08","IR01","IR02",
+            "IR05","IR06","IR09","IR10","R01","R02","IR11","IR12","R03","R04","R05","R06","R09",
+            "R10","R11","R12","R13","R14","R07","R08","IR7","IR8","IR4","IR5","IR6"};
+    private String spSelected_MachineNum;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +68,31 @@ public class CreateCauseActivity extends AppCompatActivity {
         textInputLayout1=(TextInputLayout)findViewById(R.id.cause_create_text_1);
         textInputLayout2=(TextInputLayout)findViewById(R.id.cause_create_text_2);
 
+        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_mn);
+
+        List<String> array_mn = new ArrayList<String>();
+        array_mn.addAll(Arrays.asList(str_mn));
+
+        //设置样式
+        ArrayAdapter<String> adapter_mn = new ArrayAdapter(this, android.R.layout.simple_spinner_item, array_mn);
+        adapter_mn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        MachineNumSpinner.setAdapter(adapter_mn);
+
+        MachineNumSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spSelected_MachineNum = (String) MachineNumSpinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
         createcausebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -69,8 +106,7 @@ public class CreateCauseActivity extends AppCompatActivity {
         });
     }
 
-    private void createcause(final String prob_uid)
-    {
+    private void createcause(final String prob_uid) {
         final ProgressDialog pDiaglog=new ProgressDialog(this);
         pDiaglog.setMessage("正在上传");
         pDiaglog.show();
@@ -112,6 +148,8 @@ public class CreateCauseActivity extends AppCompatActivity {
                 params.put("prob_uid", prob_uid);
                 params.put("cause",createcausecause.getText().toString().trim());
                 params.put("analysis",createcauseanalysis.getText().toString().trim());
+                String machineNum = spSelected_MachineNum.trim();
+                params.put("machine_num",machineNum);
                 return params;
             }
         },tag_createcause_request);

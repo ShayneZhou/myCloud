@@ -11,8 +11,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -25,7 +29,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,6 +44,11 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
     private String cause_uid;
     private SessionManager session;
     private SQLiteHandler db;
+    private Spinner MachineNumSpinner;
+    private String[] str_mn={"IR1","IR2","IR3","IR03","IR04","IR07","IR08","IR01","IR02","IR05","IR06",
+            "IR09","IR10","R01","R02","IR11","IR12","R03","R04","R05","R06","R09","R10","R11","R12","R13",
+            "R14","R07","R08","IR7","IR8","IR4","IR5","IR6"};
+    private String spSelected_MachineNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +58,29 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setTitle("编辑原因");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
+
+        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_MachineNum);
+
+        List<String> array_mn = new ArrayList<String>();
+        array_mn.addAll(Arrays.asList(str_mn));
+
+        //设置样式
+        ArrayAdapter<String> adapter_mn = new ArrayAdapter(this, android.R.layout.simple_spinner_item, array_mn);
+        adapter_mn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //加载适配器
+        MachineNumSpinner.setAdapter(adapter_mn);
+
+        MachineNumSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spSelected_MachineNum = (String) MachineNumSpinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         Button button1 = (Button) findViewById(R.id.cause_button_1);
         button1.setOnClickListener(this);
@@ -70,6 +105,8 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
             button1.setVisibility(View.INVISIBLE);
 //            button2.setVisibility(View.INVISIBLE);
             button3.setVisibility(View.INVISIBLE);
+
+            MachineNumSpinner.setEnabled(false);
 
             edittext_cause.setFocusable(false);
             edittext_cause.setFocusableInTouchMode(false);
@@ -161,11 +198,25 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
                 params.put("cause_uid",cause_uid);
                 params.put("cause",cause);
                 params.put("analysis",analysis);
+                String machineNum = spSelected_MachineNum.trim();
+                params.put("machine_num",machineNum);
                 return params;
             }
         }, tag_cause_upload);
     }
 
+    public  void setSpinnerItemSelectedByValue(Spinner spinner,String value){
+        SpinnerAdapter apsAdapter= spinner.getAdapter(); //得到SpinnerAdapter对象
+        int k= apsAdapter.getCount();
+        for(int i=0;i<k;i++){
+            if(value.equals(apsAdapter.getItem(i).toString())){
+//                spinner.setSelection(i,true);// 默认选中项
+                spinner.setSelection(i);// 默认选中项
+
+                break;
+            }
+        }
+    }
 
     private void getcausedetail() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);
@@ -189,6 +240,10 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
                             {
                                 edittext_cause.setText(obj.getString("cause").trim());
                                 edittext_analysis.setText(obj.getString("analysis").trim());
+                                String machine_num = obj.getString("machine_num");
+                                spSelected_MachineNum = machine_num;
+                                setSpinnerItemSelectedByValue(MachineNumSpinner, spSelected_MachineNum);
+
                             }
                         } catch (JSONException e) {
 

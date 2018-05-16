@@ -112,31 +112,21 @@
                 android:layout_alignRight="@+id/content_layout_created_at"
                 android:layout_below="@+id/spinner_DefectType" />
 
-            <TextView
-                android:id="@+id/problemDetail_text_MachineNum"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:layout_alignLeft="@+id/content_layout_created_at"
-                android:layout_alignStart="@+id/content_layout_created_at"
-                android:layout_below="@+id/problemDetail_text_PositionNum"
-                android:gravity="center"
-                android:text="机器号"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
 
-            <Spinner
-                android:id="@+id/spinner_MachineNum"
-                android:layout_width="200dp"
-                android:layout_height="40dp"
-                android:layout_alignEnd="@+id/content_layout_created_at"
-                android:layout_alignRight="@+id/content_layout_created_at"
-                android:layout_below="@+id/spinner_PositionNum" />
+
+            <!--<Spinner-->
+                <!--android:id="@+id/spinner_MachineNum"-->
+                <!--android:layout_width="200dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_alignEnd="@+id/content_layout_created_at"-->
+                <!--android:layout_alignRight="@+id/content_layout_created_at"-->
+                <!--android:layout_below="@+id/spinner_PositionNum" />-->
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/content_layout_created_at"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spinner_MachineNum"
+                android:layout_below="@+id/spinner_PositionNum"
                 android:focusable="true"
                 android:focusableInTouchMode="true">
 
