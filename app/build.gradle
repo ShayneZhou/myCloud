@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'key0'
+            keyPassword '123456'
+            storeFile file('D:/Android/AndroidStudioProjects/myCloud/mycloud.jks')
+            storePassword '123456'
+        }
+    }
     compileSdkVersion 27
     buildToolsVersion '26.0.2'
-
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES.txt'
         exclude 'META-INF/DEPENDENCIES'
@@ -13,9 +20,7 @@ android {
         exclude 'META-INF/LICENSE.txt'
 
     }
-
 //    useLibrary 'org.apache.http.legacy'
-
     defaultConfig {
         applicationId "com.example.ramsey.myCloud"
         minSdkVersion 16
@@ -53,6 +58,13 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     compile 'com.android.support:design:27.1.1'
     implementation 'com.github.yuzhiqiang1993:zxing:2.1.4'
+}
+
+configurations {
+    all {
+        exclude module: 'httpclient'
+        exclude module: 'commons-logging'
+    }
 }
 
 repositories {
