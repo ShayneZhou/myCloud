@@ -45,9 +45,10 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
     private SessionManager session;
     private SQLiteHandler db;
     private Spinner MachineNumSpinner;
-    private String[] str_mn={"IR1","IR2","IR3","IR03","IR04","IR07","IR08","IR01","IR02","IR05","IR06",
-            "IR09","IR10","R01","R02","IR11","IR12","R03","R04","R05","R06","R09","R10","R11","R12","R13",
-            "R14","R07","R08","IR7","IR8","IR4","IR5","IR6"};
+    private String[] str_mn={"IR01","IR02","IR03","IR04","IR05","IR06","IR07","IR08","IR09","IR1",
+            "IR10","IR11","IR12","IR2","IR3","IR4","IR5","IR6","IR7","IR8","R01","R02","R03","R04",
+            "R05","R06","R07","R08","R09","R10","R11","R12","R13","R14"};
+
     private String spSelected_MachineNum;
 
     @Override
@@ -59,7 +60,7 @@ public class CauseActivity extends AppCompatActivity implements View.OnClickList
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
         setSupportActionBar(toolbar);//使toolbar支持ActionBar的特性
 
-        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_MachineNum);
+        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_mn);
 
         List<String> array_mn = new ArrayList<String>();
         array_mn.addAll(Arrays.asList(str_mn));

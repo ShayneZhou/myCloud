@@ -47,6 +47,8 @@ public class ViewTempActionActivity extends AppCompatActivity {
         Intent i=getIntent();
         prob_uid=i.getStringExtra("prob_uid");
 
+        Log.d(TAG, "onCreate: "+prob_uid);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_view_temp_action);
         toolbar.setTitle("查看临时措施");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色
@@ -70,7 +72,7 @@ public class ViewTempActionActivity extends AppCompatActivity {
                 String authority = user.get("authority");
 
                 if (authority.equals("1")) {
-                    CreateTempAction.CreateTempActionActivityStart(ViewTempActionActivity.this,"1");
+                    CreateTempAction.CreateTempActionActivityStart(ViewTempActionActivity.this, prob_uid);
                 }
                 else
                 {
@@ -137,6 +139,7 @@ public class ViewTempActionActivity extends AppCompatActivity {
             }
         },tag_section_request);
     }
+
     public static void ViewTempActionActivityStart(Context context, String prob_uid)
     {
         Intent intent=new Intent(context,ViewTempActionActivity.class);

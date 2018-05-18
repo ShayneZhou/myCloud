@@ -43,9 +43,10 @@ public class CreateCauseActivity extends AppCompatActivity {
     private TextInputLayout textInputLayout1;
     private TextInputLayout textInputLayout2;
     private Spinner MachineNumSpinner;
-    private String[] str_mn={"IR1","IR2","IR3","IR03","IR04","IR07","IR08","IR01","IR02",
-            "IR05","IR06","IR09","IR10","R01","R02","IR11","IR12","R03","R04","R05","R06","R09",
-            "R10","R11","R12","R13","R14","R07","R08","IR7","IR8","IR4","IR5","IR6"};
+    private String[] str_mn={"IR01","IR02","IR03","IR04","IR05","IR06","IR07","IR08","IR09","IR1",
+            "IR10","IR11","IR12","IR2","IR3","IR4","IR5","IR6","IR7","IR8","R01","R02","R03","R04","R05",
+            "R06","R07","R08","R09","R10","R11","R12","R13","R14"};
+
     private String spSelected_MachineNum;
 
 
@@ -68,7 +69,7 @@ public class CreateCauseActivity extends AppCompatActivity {
         textInputLayout1=(TextInputLayout)findViewById(R.id.cause_create_text_1);
         textInputLayout2=(TextInputLayout)findViewById(R.id.cause_create_text_2);
 
-        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_mn);
+        MachineNumSpinner = (Spinner) findViewById(R.id.spinner_MachineNum);
 
         List<String> array_mn = new ArrayList<String>();
         array_mn.addAll(Arrays.asList(str_mn));

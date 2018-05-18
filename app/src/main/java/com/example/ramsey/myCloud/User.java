@@ -145,7 +145,7 @@ public class User extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.user);
+        this.setContentView(R.layout.user);
         Toolbar toolbar=(Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("主界面");//设置Toolbar标题
         toolbar.setTitleTextColor(Color.parseColor("#ffffff")); //设置标题颜色

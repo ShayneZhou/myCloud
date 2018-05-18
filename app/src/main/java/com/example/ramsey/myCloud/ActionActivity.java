@@ -539,6 +539,7 @@ public class ActionActivity extends AppCompatActivity {
         Log.d(TAG, "launchUploadActivity: "+solution_uid);
         i.setData(fileUri);
         i.putExtra("isImage", isImage);
+        i.putExtra("Mode","5");
 //        startActivityForResult(i,10);
         startActivity(i);
         Log.d(TAG, "launchUploadActivity: "+fileUri.getPath());

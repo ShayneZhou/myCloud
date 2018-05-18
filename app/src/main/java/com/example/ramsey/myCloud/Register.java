@@ -95,7 +95,7 @@ public class Register extends AppCompatActivity {
         List<String> objects2 = new ArrayList<>();
         objects2.add("底板分拼");
         objects2.add("底板I");
-        objects2.add("底II");
+        objects2.add("底板II");
         objects2.add("侧围");
         objects2.add("总拼");
         objects2.add("装配");

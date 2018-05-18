@@ -455,92 +455,93 @@ public class Chart extends AppCompatActivity {
 
                         Log.d(TAG, "onResponse: "+dbfp+bj);
 
-                        dbfp = dbfp*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
-                        db1 = db1*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
-                        db2 = db2*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
-                        cw = cw*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
-                        zongp = zongp*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
-                        zhuangp = zhuangp*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
-                        bj = bj*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                        if(dbfp+db1+db2+cw+zongp+zhuangp+bj!=0){
+                            dbfp = dbfp*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                            db1 = db1*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                            db2 = db2*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                            cw = cw*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                            zongp = zongp*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                            zhuangp = zhuangp*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
+                            bj = bj*100/(dbfp+db1+db2+cw+zongp+zhuangp+bj);
 
 
-                        entries.add(new PieEntry( (float) dbfp, "底板分拼"));
-                        entries.add(new PieEntry( (float) db1, "底板I"));
-                        entries.add(new PieEntry( (float) db2, "底板II"));
-                        entries.add(new PieEntry( (float) cw, "侧围"));
-                        entries.add(new PieEntry( (float) zongp, "总拼"));
-                        entries.add(new PieEntry( (float) zhuangp, "装配"));
-                        entries.add(new PieEntry( (float) bj, "报交"));
+                            entries.add(new PieEntry( (float) dbfp, "底板分拼"));
+                            entries.add(new PieEntry( (float) db1, "底板I"));
+                            entries.add(new PieEntry( (float) db2, "底板II"));
+                            entries.add(new PieEntry( (float) cw, "侧围"));
+                            entries.add(new PieEntry( (float) zongp, "总拼"));
+                            entries.add(new PieEntry( (float) zhuangp, "装配"));
+                            entries.add(new PieEntry( (float) bj, "报交"));
 
-                        Log.d(TAG, "onResponse: "+entries);
+                            Log.d(TAG, "onResponse: "+entries);
 
-                        pieChart.setUsePercentValues(false);
+                            pieChart.setUsePercentValues(false);
 
-                        pieChart.getDescription().setEnabled(false);
-                        pieChart.setExtraOffsets(5, 10, 5, 5);
+                            pieChart.getDescription().setEnabled(false);
+                            pieChart.setExtraOffsets(5, 10, 5, 5);
 
-                        pieChart.setDragDecelerationFrictionCoef(0.95f);
-
-
-                        //设置piecahrt图表点击Item高亮是否可用
-                        pieChart.setHighlightPerTapEnabled(true);
-
-                        pieChart.setDrawEntryLabels(true);
-                        //设置pieChart是否只显示饼图上百分比不显示文字（true：下面属性才有效果）
-                        //设置pieChart图表文本字体颜色
-                        pieChart.setEntryLabelColor(Color.GRAY);
-                        pieChart.setEntryLabelTextSize(10f);
-
-                        //绘制中间文字
-                        pieChart.setCenterText(generateCenterSpannableText());
-                        pieChart.setExtraOffsets(20.f, 0.f, 20.f, 0.f);
-
-                        //旋转
-                        pieChart.setRotationEnabled(true);
-                        pieChart.setHighlightPerTapEnabled(true);
-
-                        pieChart.setDrawHoleEnabled(false);
-                        pieChart.setHoleColor(Color.WHITE);
-
-                        pieChart.setTransparentCircleColor(Color.WHITE);
-                        pieChart.setTransparentCircleAlpha(110);
-
-                        pieChart.setHoleRadius(58f);
-                        pieChart.setTransparentCircleRadius(61f);
-
-                        pieChart.setDrawCenterText(true);
+                            pieChart.setDragDecelerationFrictionCoef(0.95f);
 
 
-                        //默认动画
-                        pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+                            //设置piecahrt图表点击Item高亮是否可用
+                            pieChart.setHighlightPerTapEnabled(true);
 
-                        Legend l = pieChart.getLegend();
-                        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-                        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-                        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-                        l.setDrawInside(false);
-                        l.setEnabled(false);
+                            pieChart.setDrawEntryLabels(true);
+                            //设置pieChart是否只显示饼图上百分比不显示文字（true：下面属性才有效果）
+                            //设置pieChart图表文本字体颜色
+                            pieChart.setEntryLabelColor(Color.GRAY);
+                            pieChart.setEntryLabelTextSize(10f);
 
-                        PieDataSet set = new PieDataSet(entries, "Election Results");
-                        set.setColors(ColorTemplate.VORDIPLOM_COLORS );
+                            //绘制中间文字
+                            pieChart.setCenterText(generateCenterSpannableText());
+                            pieChart.setExtraOffsets(20.f, 0.f, 20.f, 0.f);
 
-                        //引线位置
-                        set.setValueLinePart1OffsetPercentage(80.f);
-                        set.setValueLinePart1Length(0.2f);
-                        set.setValueLinePart2Length(0.4f);
-                        set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+                            //旋转
+                            pieChart.setRotationEnabled(true);
+                            pieChart.setHighlightPerTapEnabled(true);
+
+                            pieChart.setDrawHoleEnabled(false);
+                            pieChart.setHoleColor(Color.WHITE);
+
+                            pieChart.setTransparentCircleColor(Color.WHITE);
+                            pieChart.setTransparentCircleAlpha(110);
+
+                            pieChart.setHoleRadius(58f);
+                            pieChart.setTransparentCircleRadius(61f);
+
+                            pieChart.setDrawCenterText(true);
 
 
-                        PieData data = new PieData(set);
+                            //默认动画
+                            pieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
 
-                        //值使用百分比格式
-                        data.setValueFormatter(new PercentFormatter());
+                            Legend l = pieChart.getLegend();
+                            l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+                            l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+                            l.setOrientation(Legend.LegendOrientation.VERTICAL);
+                            l.setDrawInside(false);
+                            l.setEnabled(false);
 
-                        //值的字体大小
-                        data.setValueTextSize(11f);
-                        pieChart.setData(data);
+                            PieDataSet set = new PieDataSet(entries, "Election Results");
+                            set.setColors(ColorTemplate.VORDIPLOM_COLORS );
 
-                        pieChart.invalidate(); // refresh
+                            //引线位置
+                            set.setValueLinePart1OffsetPercentage(80.f);
+                            set.setValueLinePart1Length(0.2f);
+                            set.setValueLinePart2Length(0.4f);
+                            set.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+
+                            PieData data = new PieData(set);
+
+                            //值使用百分比格式
+                            data.setValueFormatter(new PercentFormatter());
+
+                            //值的字体大小
+                            data.setValueTextSize(11f);
+                            pieChart.setData(data);
+
+                            pieChart.invalidate(); // refresh
 //                        int count = 10;
 //
 //                        ArrayList<PieEntry> entries1 = new ArrayList<PieEntry>();
@@ -548,8 +549,7 @@ public class Chart extends AppCompatActivity {
 //                        for(int i = 0; i < count; i++) {
 //                            entries1.add(new PieEntry( (float) salary[i], months[i]));
 //                        }
-
-
+                        }
 
 
 

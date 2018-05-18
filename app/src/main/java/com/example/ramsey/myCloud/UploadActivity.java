@@ -25,7 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
+import com.github.mikephil.charting.data.LineDataSet;
 
 
 import org.json.JSONException;
@@ -76,7 +76,7 @@ public class UploadActivity extends AppCompatActivity {
 
         Mode = i.getStringExtra("Mode");
 
-        Log.d(TAG, "onCreate: " + filePath);
+        Log.d(TAG, "onCreate: " + filePath + Mode);
 
         // boolean flag to identify the media type, image or video
         boolean isImage = i.getBooleanExtra("isImage", true);
@@ -114,16 +114,12 @@ public class UploadActivity extends AppCompatActivity {
                         tempsolutionimageUpload(filePath, fileUri, temp_solution_uid);
                         TempActionActivity.TempActionStart(UploadActivity.this, temp_solution_uid);
                     }
-
-                    Intent i = getIntent();
-
-                    if (filePath != null && i.getStringExtra("solution_uid") == null) {
-                        imageUpload(filePath, fileUri);
-                    } else if (filePath != null && i.getStringExtra("solution_uid") != null) {
+                    if (Mode.equals("5")) {
                         imageUpload_feedback(filePath, fileUri, i.getStringExtra("solution_uid"));
-                    } else {
-                        Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
                     }
+                }
+                else {
+                        Toast.makeText(getApplicationContext(), "未选择照片！", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -142,6 +138,9 @@ public class UploadActivity extends AppCompatActivity {
         }
         if (Mode.equals("3")) {
 
+            finish();
+        }
+        else {
             finish();
         }
     }
