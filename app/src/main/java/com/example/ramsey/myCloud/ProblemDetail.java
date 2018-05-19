@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -57,6 +58,7 @@ public class ProblemDetail extends AppCompatActivity {
     private Spinner DefectAssemblySpinner;
     private Spinner DefectTypeSpinner;
     private Spinner PositionNumSpinner;
+    private TextView text_prob_uid;
 
     private String[] str_ct = {"LNF", "GNF", };
     private String[] str_dt = {"表面", "点焊", "匹配", "尺寸", "涂胶", "折边", "弧焊", "激光焊"};
@@ -115,6 +117,7 @@ public class ProblemDetail extends AppCompatActivity {
         scrollView = (ScrollView) findViewById(R.id.id_scrollView);
 
         problemImage = (ImageView) findViewById(R.id.problemDetail_image);
+        text_prob_uid =  (TextView) findViewById(R.id.text_prob_uid);
 
 
         inputLayoutTitle = (TextInputLayout) findViewById(R.id.content_layout_created_at);
@@ -187,6 +190,9 @@ public class ProblemDetail extends AppCompatActivity {
 
         Intent intent = getIntent();                     //通过getIntent获得prob_uid
         final String prob_uid = intent.getStringExtra("prob_uid");
+
+        text_prob_uid.setText("问题单uid是："+prob_uid);
+
         Log.d("ProblemDetail", prob_uid);
         if (!prob_uid.isEmpty()) {
             problemDetailContent(prob_uid);             //将prob_uid传入请求函数
