@@ -135,6 +135,9 @@ public class AppConfig {
     //Upload TempSolution Image
     public static String URL_LINECHART="http://192.168.1.103/myCloud/LineChart.php";
 
+    //Upload TempSolution Image
+    public static String URL_Export="http://192.168.1.103/myCloud/Export.php";
+
 
 
 

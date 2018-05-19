@@ -51,6 +51,9 @@ public class ProblemDetail extends AppCompatActivity {
     private Button mTemporaryButton;                       //临时按钮
     private Button mExpectedButton;                       //预期按钮
     private Button mCancelButton;                       //取消按钮
+
+    private Button mExportButton;
+
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
@@ -58,7 +61,7 @@ public class ProblemDetail extends AppCompatActivity {
     private Spinner DefectAssemblySpinner;
     private Spinner DefectTypeSpinner;
     private Spinner PositionNumSpinner;
-    private TextView text_prob_uid;
+    private TextView url_prob_uid;
 
     private String[] str_ct = {"LNF", "GNF", };
     private String[] str_dt = {"表面", "点焊", "匹配", "尺寸", "涂胶", "折边", "弧焊", "激光焊"};
@@ -117,7 +120,7 @@ public class ProblemDetail extends AppCompatActivity {
         scrollView = (ScrollView) findViewById(R.id.id_scrollView);
 
         problemImage = (ImageView) findViewById(R.id.problemDetail_image);
-        text_prob_uid =  (TextView) findViewById(R.id.text_prob_uid);
+
 
 
         inputLayoutTitle = (TextInputLayout) findViewById(R.id.content_layout_created_at);
@@ -191,7 +194,7 @@ public class ProblemDetail extends AppCompatActivity {
         Intent intent = getIntent();                     //通过getIntent获得prob_uid
         final String prob_uid = intent.getStringExtra("prob_uid");
 
-        text_prob_uid.setText("问题单uid是："+prob_uid);
+
 
         Log.d("ProblemDetail", prob_uid);
         if (!prob_uid.isEmpty()) {
@@ -199,6 +202,17 @@ public class ProblemDetail extends AppCompatActivity {
         }
 
         //以上是刚进入界面请求的东西
+
+        url_prob_uid =  (TextView) findViewById(R.id.text_prob_uid);
+
+        mExportButton = (Button) findViewById(R.id.problemDetail_btn_export);
+
+        mExportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                export();
+            }
+        });
 
 
 
@@ -403,6 +417,65 @@ public class ProblemDetail extends AppCompatActivity {
 //                        }).show();
 //            }
 //        });
+    }
+
+    private void export(){
+        String tag_string_req = "export_request";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_Export, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "export Response: " + response.toString());
+                hideDialog();
+
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        String text_prob_uid = jObj.getString("url");
+                        url_prob_uid.setText(text_prob_uid);
+
+                    } else {
+
+                        // Error occurred in request. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Request Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+                hideDialog();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap();
+                Intent intent = getIntent();                     //通过getIntent获得prob_uid
+                final String prob_uid = intent.getStringExtra("prob_uid");
+                params.put("prob_uid", prob_uid);
+
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private void problemDetailContent(final String prob_uid){

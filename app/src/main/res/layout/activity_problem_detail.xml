@@ -283,6 +283,16 @@
                     android:textColor="#ffffff"
                     android:textSize="7pt" />
 
+                <Button
+                    android:id="@+id/problemDetail_btn_export"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape"
+                    android:text="导出"
+                    android:textColor="#ffffff"
+                    android:textSize="7pt" />
+
             </LinearLayout>
 
 
