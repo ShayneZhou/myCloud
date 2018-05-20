@@ -215,7 +215,8 @@
                     android:layout_below="@+id/content_layout_temp"
                     android:layout_weight="1"
                     android:textIsSelectable="true"
-                    android:textSize="7pt"/>
+                    android:textSize="7pt"
+                    android:autoLink="web"/>
             </android.support.design.widget.TextInputLayout>
 
             <ImageView

@@ -189,6 +189,22 @@ public class ProblemDetail extends AppCompatActivity {
 
 
 
+        // Progress dialog
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(false);
+
+        // Session manager
+        session = new SessionManager(getApplicationContext());
+
+        // SQLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+        // Check if user is already logged in or not
+
+        final HashMap<String, String> user = db.getUserDetails();
+
+        String authority = user.get("authority");
+
+
 
 
         Intent intent = getIntent();                     //通过getIntent获得prob_uid
@@ -210,7 +226,12 @@ public class ProblemDetail extends AppCompatActivity {
         mExportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                export();
+                if (authority.equals("0")) {
+                    Toast.makeText(ProblemDetail.this, "您不是技术员，无法导出问题单", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    export();
+                }
             }
         });
 
@@ -314,20 +335,6 @@ public class ProblemDetail extends AppCompatActivity {
 
 
 
-        // Progress dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setCancelable(false);
-
-        // Session manager
-        session = new SessionManager(getApplicationContext());
-
-        // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
-        // Check if user is already logged in or not
-
-        final HashMap<String, String> user = db.getUserDetails();
-
-        String authority = user.get("authority");
 
         if (authority.equals("0")) {
             CreatedAt.setFocusable(false);
@@ -343,6 +350,7 @@ public class ProblemDetail extends AppCompatActivity {
             DefectTypeSpinner.setEnabled(false);
             DefectAssemblySpinner.setEnabled(false);
             PositionNumSpinner.setEnabled(false);
+
 
 
 
@@ -384,39 +392,6 @@ public class ProblemDetail extends AppCompatActivity {
             }
         });
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab1);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "确认生成问题单", Snackbar.LENGTH_LONG)
-//                        .setAction("发送", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//                                {
-//                                    String date = CreatedAt.getText().toString().trim();
-//                                    String title = Title.getText().toString().trim();
-//                                    String finder = Finder.getText().toString().trim();
-//                                    String temp = Temp.getText().toString().trim();
-//                                    String carType = spSelected_CarType.trim();
-//                                    String defectAssembly = spSelected_DefectAssembly.trim();
-//                                    String defectType = spSelected_DefectType.trim();
-//                                    String positionNum = spSelected_PositionNum.trim();
-//                                    String section = user.get("section");
-//                                    String engineer = user.get("uid");
-//                                    if (submitForm()) {
-//                                        Log.d(TAG, "onClick: carType" + carType);
-//                                        Log.d(TAG, "onCick: 发送" + prob_uid);
-//                                        Log.d(TAG, "onClick: title" + title);
-//                                        confirmProblem(date, title, finder, section, temp, carType, defectAssembly,
-//                                                defectType, positionNum, engineer);
-//                                    } else {
-//                                        Toast.makeText(ProblemDetail.this, "出现错误！", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            }
-//                        }).show();
-//            }
-//        });
     }
 
     private void export(){
@@ -436,6 +411,7 @@ public class ProblemDetail extends AppCompatActivity {
                     if (!error) {
                         String text_prob_uid = jObj.getString("url");
                         url_prob_uid.setText(text_prob_uid);
+
 
                     } else {
 
