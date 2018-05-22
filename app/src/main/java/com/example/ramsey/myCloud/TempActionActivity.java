@@ -2,15 +2,19 @@ package com.example.ramsey.myCloud;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
@@ -60,9 +64,11 @@ public class TempActionActivity extends AppCompatActivity {
     private SessionManager session;
     private SQLiteHandler db;
     private String temp_solution_uid;
+    private Button button_tempsolution_select;
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
+    private static final int CHOOSE_PHOTO = 300;
     private Uri fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // file url to store image
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 
@@ -101,8 +107,8 @@ public class TempActionActivity extends AppCompatActivity {
 
         isdonespinner=(Spinner)findViewById(R.id.temp_action_isdone_spinner);
         List<String> isdone=new ArrayList<>();
-        isdone.add("0");
-        isdone.add("1");
+        isdone.add("是");
+        isdone.add("否");
         isdone.add("请选择");
         simpleArrayAdapter adapter2=new simpleArrayAdapter(this,android.R.layout.simple_spinner_item,isdone);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -112,6 +118,7 @@ public class TempActionActivity extends AppCompatActivity {
         button_tempsolution_delete=(Button)findViewById(R.id.temp_action_delete_button_1);
         button_tempsolution_edit=(Button)findViewById(R.id.temp_action_button_all);
         button_tempsolution_image=(Button)findViewById(R.id.temp_action_image_button_1);
+        button_tempsolution_select=(Button)findViewById(R.id.temp_action_select);
 
         temp_solution_imageView=(ImageView)findViewById(R.id.temp_feedback_image);
 
@@ -123,8 +130,7 @@ public class TempActionActivity extends AppCompatActivity {
         db = new SQLiteHandler(getApplicationContext());
         final HashMap<String, String> user = db.getUserDetails();
         String authority = user.get("authority");
-        if(authority.equals("0"))
-        {
+        if(authority.equals("0")) {
             editText_tempsolution_solution.setKeyListener(null);
             editText_tempsolution_solution.setEnabled(false);
             locationspinner.setClickable(false);
@@ -134,25 +140,47 @@ public class TempActionActivity extends AppCompatActivity {
             button_tempsolution_delete.setEnabled(false);
             button_tempsolution_delete.setVisibility(View.INVISIBLE);
         }
-            button_tempsolution_edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    edittempaction();
-                }
-            });
-            button_tempsolution_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ContextCompat.checkSelfPermission(TempActionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(TempActionActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        button_tempsolution_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(authority.equals("1")) {
+                    if (ContextCompat.checkSelfPermission(TempActionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(TempActionActivity.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
                     } else {
-                        // capture picture
-                        captureImage();
-//                Toast.makeText(CreateActivity.this,"拍照",Toast.LENGTH_SHORT).show();
+                        openAlbum();
                     }
                 }
-            });
+                else{
+                    Toast.makeText(TempActionActivity.this, "您不是技术员，没有权限上传照片！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        button_tempsolution_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    edittempaction();
+                }
+        });
+
+
+        button_tempsolution_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(TempActionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(TempActionActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                } else {
+                    // capture picture
+                    captureImage();
+//                Toast.makeText(CreateActivity.this,"拍照",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
         if (!isDeviceSupportCamera()) {
             Toast.makeText(getApplicationContext(),
                     "设备不支持相机！",
@@ -160,32 +188,48 @@ public class TempActionActivity extends AppCompatActivity {
             // will close the app if the device does't have camera
             finish();
         }
-            button_tempsolution_delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final AlertDialog.Builder normalDialog = new AlertDialog.Builder(TempActionActivity.this);
-                        normalDialog.setIcon(R.drawable.logo);
-                        normalDialog.setTitle("确认删除？");
-                        normalDialog.setMessage("是否确认删除该条临时措施?");
-                        normalDialog.setPositiveButton("确定",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deletetempaction();
-                                        finish();
-                                    }
-                                });
-                        normalDialog.setNegativeButton("关闭",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                    }
-                                });
-                        // 显示
-                        normalDialog.show();
-                    }
-                });
 
+        button_tempsolution_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder normalDialog = new AlertDialog.Builder(TempActionActivity.this);
+                normalDialog.setIcon(R.drawable.logo);
+                normalDialog.setTitle("确认删除？");
+                normalDialog.setMessage("是否确认删除该条临时措施?");
+                normalDialog.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                deletetempaction();
+                                finish();
+                            }
+                        });
+                normalDialog.setNegativeButton("关闭",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+                // 显示
+                normalDialog.show();
+            }
+        });
+
+    }
+
+    private void openAlbum() {
+        Intent intent;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        }else{
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        }
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/*");
+        startActivityForResult(intent,CHOOSE_PHOTO);
     }
 
     private void gettempactiondetail() {
@@ -284,6 +328,8 @@ public class TempActionActivity extends AppCompatActivity {
             }
         }, tag_delete_temp_action_detail_request);
     }
+
+
     private void edittempaction() {
         final ProgressDialog pDiaglog = new ProgressDialog(this);
         pDiaglog.setMessage("请稍等");
@@ -326,7 +372,14 @@ public class TempActionActivity extends AppCompatActivity {
                 params.put("tempsolution",editText_tempsolution_solution.getText().toString().trim());
                 params.put("feedback",editText_tempsolution_feedback.getText().toString().trim());
                 params.put("section",locationspinner.getSelectedItem().toString().trim());
-                params.put("isdone",isdonespinner.getSelectedItem().toString().trim());
+                String isdone = isdonespinner.getSelectedItem().toString().trim();
+                if (isdone.equals("是")) {
+                    isdone = "1";
+                }
+                else{
+                    isdone = "0";
+                }
+                params.put("isdone", isdone);
                 return params;
             }
         }, tag_edit_temp_action_detail_request);
@@ -421,6 +474,7 @@ public class TempActionActivity extends AppCompatActivity {
                             "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
                             .show();
                 }
+                break;
 
 //            接收上传成功界面传过来的image_uid;
             case 10:
@@ -428,9 +482,62 @@ public class TempActionActivity extends AppCompatActivity {
                     String image_uid = data.getStringExtra("image_uid");
                     Log.d(TAG, "onActivityResult: "+image_uid);
                 }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        String imagePath = null;
+                        final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        ContentResolver resolver = getApplicationContext().getContentResolver();
+                        Uri uri = data.getData();
+                        if (DocumentsContract.isDocumentUri(this, uri)) {
+                            // 如果是document类型的Uri，则通过document id处理
+                            String docId = DocumentsContract.getDocumentId(uri);
+                            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                                String id = docId.split(":")[1]; // 解析出数字格式的id
+                                String selection = MediaStore.Images.Media._ID + "=" + id;
+                                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+                            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                                imagePath = getImagePath(contentUri, null);
+                            }
+                        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                            // 如果是content类型的Uri，则使用普通方式处理
+                            imagePath = getImagePath(uri, null);
+                        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                            // 如果是file类型的Uri，直接获取图片路径即可
+                            imagePath = uri.getPath();
+                        }
+                        resolver.takePersistableUriPermission(uri, takeFlags);
+                        Intent i = new Intent(TempActionActivity.this, UploadActivity.class);
+                        i.putExtra("Mode","4");
+                        i.putExtra("filePath", imagePath);
+                        i.setData(uri);
+                        i.putExtra("isImage", true);
+                        i.putExtra("temp_solution_uid",temp_solution_uid);
+                        startActivity(i);
+                        Log.d(TAG, "launchUploadActivity: "+imagePath);
+                        finish();
+                    }
+                }
+                break;
 
         }
     }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
     private void launchUploadActivity(boolean isImage){
         Intent i = new Intent(TempActionActivity.this, UploadActivity.class);
         i.putExtra("Mode","4");

@@ -2,14 +2,20 @@ package com.example.ramsey.myCloud;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputLayout;
@@ -48,16 +54,18 @@ public class ImproveState extends AppCompatActivity {
 
     private Button improve_state_description_button;
     private Button improve_state_image_button;
+    private Button improve_state_select_image;
     private EditText improve_state_description;
     private ImageView improve_state_image;
     private final static String TAG = "Improve State";
     private TextInputLayout improve_state_description_layout;
-    private List<String> image_uid_list = new ArrayList<String>();
     private String prob_uid;
+    private SQLiteHandler db;
 
     //图片相关
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     public static final int MEDIA_TYPE_IMAGE = 1;
+    private static final int CHOOSE_PHOTO = 300;
     private Uri fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // file url to store image
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     //图片相关
@@ -79,27 +87,64 @@ public class ImproveState extends AppCompatActivity {
         builder.detectFileUriExposure();
         //图片相关
 
+        // SQLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        final String authority = user.get("authority");
+
+
         improve_state_description_button=(Button)findViewById(R.id.improve_state_description_button);
         improve_state_image_button=(Button)findViewById(R.id.improve_state_image_button);
+        improve_state_select_image = (Button) findViewById(R.id.improve_state_select_image);
 
         improve_state_description=(EditText)findViewById(R.id.improve_state_description);
         improve_state_image=(ImageView) findViewById(R.id.improve_state_image);
 
         improve_state_description_layout=(TextInputLayout)findViewById(R.id.improve_state_description_Layout);
 
+        if (authority.equals("0")){
+            improve_state_description.setFocusable(false);
+            improve_state_description.setFocusableInTouchMode(false);
+        }
+
+
         Intent i=getIntent();
         prob_uid=i.getStringExtra("prob_uid");
 
         getImproveState();
 
+        improve_state_select_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (authority.equals("1")){
+                    if (ContextCompat.checkSelfPermission(ImproveState.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ImproveState.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
+                    } else {
+                        openAlbum();
+                    }
+                }
+                else{
+                    Toast.makeText(ImproveState.this, "您不是技术员，没有权限上传照片！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         improve_state_description_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Validate())
-                {
-                    EditImproveState();
+                if (authority.equals("1")) {
+                    if (Validate()) {
+                        EditImproveState();
+                    }
+                }
+                else{
+                    Toast.makeText(ImproveState.this, "您不是技术员，没有权限！", Toast.LENGTH_SHORT).show();
                 }
             }
+
             public boolean Validate()
             {
                 if(improve_state_description.getText().toString().trim().isEmpty()) {
@@ -115,16 +160,22 @@ public class ImproveState extends AppCompatActivity {
         improve_state_image_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(ImproveState.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ImproveState.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                } else {
-                    // capture picture
-                    captureImage();
+                if (authority.equals("1")){
+                    if (ContextCompat.checkSelfPermission(ImproveState.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ImproveState.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    } else {
+                        // capture picture
+                        captureImage();
 //                Toast.makeText(CreateActivity.this,"拍照",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(ImproveState.this, "您不是技术员，没有权限上传照片！", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         if (!isDeviceSupportCamera()) {
             Toast.makeText(getApplicationContext(),
                     "设备不支持相机！",
@@ -132,11 +183,21 @@ public class ImproveState extends AppCompatActivity {
             // will close the app if the device does't have camera
             finish();
         }
-        Intent intent = getIntent();
-        final String image_uid=intent.getStringExtra("image_uid");
-        image_uid_list.add(image_uid);
-        Log.d(TAG, "onCreate: "+image_uid );
-        Log.d(TAG, "onCreate: "+image_uid_list);
+    }
+
+    private void openAlbum() {
+        Intent intent;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        }else{
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        }
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/*");
+        startActivityForResult(intent,CHOOSE_PHOTO);
     }
 
     private void getImproveState() {
@@ -287,7 +348,6 @@ public class ImproveState extends AppCompatActivity {
         // save file url in bundle as it will be null on screen orientation
         // changes
         outState.putParcelable("file_uri", fileUri);
-        outState.putStringArrayList("image_uid_list", (ArrayList<String>) image_uid_list);
     }
 
     @Override
@@ -296,7 +356,6 @@ public class ImproveState extends AppCompatActivity {
 
         // get the file url
         fileUri = savedInstanceState.getParcelable("file_uri");
-        image_uid_list = savedInstanceState.getStringArrayList("image_uid_list");
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -324,6 +383,7 @@ public class ImproveState extends AppCompatActivity {
                             "Sorry! Failed to capture image", Toast.LENGTH_SHORT)
                             .show();
                 }
+                break;
 
 //            接收上传成功界面传过来的image_uid;
             case 10:
@@ -331,9 +391,65 @@ public class ImproveState extends AppCompatActivity {
                     String image_uid = data.getStringExtra("image_uid");
                     Log.d(TAG, "onActivityResult: "+image_uid);
                 }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        String imagePath = null;
+                        final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        ContentResolver resolver = getApplicationContext().getContentResolver();
+                        Uri uri = data.getData();
+                        if (DocumentsContract.isDocumentUri(this, uri)) {
+                            // 如果是document类型的Uri，则通过document id处理
+                            String docId = DocumentsContract.getDocumentId(uri);
+                            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                                String id = docId.split(":")[1]; // 解析出数字格式的id
+                                String selection = MediaStore.Images.Media._ID + "=" + id;
+                                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+                            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                                imagePath = getImagePath(contentUri, null);
+                            }
+                        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                            // 如果是content类型的Uri，则使用普通方式处理
+                            imagePath = getImagePath(uri, null);
+                        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                            // 如果是file类型的Uri，直接获取图片路径即可
+                            imagePath = uri.getPath();
+                        }
+                        resolver.takePersistableUriPermission(uri, takeFlags);
+                        Intent i = new Intent(ImproveState.this, UploadActivity.class);
+                        i.putExtra("Mode","3");
+                        i.putExtra("filePath", imagePath);
+                        i.setData(uri);
+                        i.putExtra("isImage", true);
+                        i.putExtra("prob_uid",prob_uid);
+                        startActivity(i);
+                        Log.d(TAG, "launchUploadActivity: "+imagePath);
+                        finish();
+                    }
+                }
+                break;
 
         }
     }
+
+
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+
     private void launchUploadActivity(boolean isImage){
         Intent i = new Intent(ImproveState.this, UploadActivity.class);
         i.putExtra("Mode","3");
@@ -346,6 +462,8 @@ public class ImproveState extends AppCompatActivity {
         Log.d(TAG, "launchUploadActivity: "+fileUri.getPath());
         finish();
     }
+
+
 
 
     /**

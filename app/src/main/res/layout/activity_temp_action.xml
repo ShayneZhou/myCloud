@@ -142,6 +142,25 @@
                         android:gravity="center"
                         android:textSize="25dp"
                         android:layout_gravity="center"/>
+
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="match_parent"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="相册选取"
+                        android:id="@+id/temp_action_select"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:backgroundTint="#93d1a1"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textSize="25dp"
+                        android:layout_gravity="center"/>
+
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="wrap_content"

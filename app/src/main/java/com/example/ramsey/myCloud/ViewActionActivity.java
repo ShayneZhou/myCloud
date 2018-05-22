@@ -106,7 +106,7 @@ public class ViewActionActivity extends AppCompatActivity {
                                         JSONObject obj3 = obj2.getJSONObject(i);
                                         sAction saction = new sAction(obj3.getString("solution_uid"),
                                                 obj3.getString("solution"),obj3.getString("section"),
-                                                "1","1",obj3.getString("feedback_image_url"),"1");
+                                                obj3.getString("isdone"),"1",obj3.getString("feedback_image_url"),"1");
                                         sactionList.add(saction);
                                     }
                                     adapter.notifyDataSetChanged();

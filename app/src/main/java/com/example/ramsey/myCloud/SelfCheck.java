@@ -64,17 +64,9 @@ public class SelfCheck extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (authority.equals("0")) {
-                    Intent intent_cr =new Intent(SelfCheck.this,CreateActivity.class);
-                    startActivity(intent_cr);
-                    finish();
-
-                }
-                else
-                {
-                    Toast.makeText(SelfCheck.this,
-                            "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent_cr =new Intent(SelfCheck.this,CreateActivity.class);
+                startActivity(intent_cr);
+                finish();
             }
         });
 

@@ -2,15 +2,19 @@ package com.example.ramsey.myCloud;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
@@ -57,11 +61,13 @@ import java.util.Map;
 public class ActionActivity extends AppCompatActivity {
 
     private Spinner locationspinner;
+    private Spinner isdonespinner;
     private final static String TAG = "ActionActivity";
     private EditText edittext_action_action;
     private EditText edittext_action_performence;
     private EditText edittext_action_response;
     private Button button_action_edit;
+    private Button button_action_select;
     public String misdone;
     public Button deletebutton;
     public Button button_action_upload;
@@ -70,6 +76,7 @@ public class ActionActivity extends AppCompatActivity {
     private SessionManager session;
     private SQLiteHandler db;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
+    private static final int CHOOSE_PHOTO = 300;
 
     public static final int MEDIA_TYPE_IMAGE = 1;
 
@@ -95,6 +102,14 @@ public class ActionActivity extends AppCompatActivity {
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
 
+        // SQLite database handler
+        db = new SQLiteHandler(getApplicationContext());
+
+        // Fetching user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        final String authority = user.get("authority");
+
 
         locationspinner=(Spinner)findViewById(R.id.action_location_spinner);
         //定义Spinner
@@ -113,6 +128,17 @@ public class ActionActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationspinner.setAdapter(adapter);
         locationspinner.setSelection(location.size()-1,true);
+
+        isdonespinner=(Spinner)findViewById(R.id.action_isdone_spinner);
+        List<String>isdone=new ArrayList<>();
+        isdone.add("否");
+        isdone.add("是");
+        isdone.add("请填写");
+        simpleArrayAdapter adapter2=new simpleArrayAdapter(this,android.R.layout.simple_spinner_item,isdone);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        isdonespinner.setAdapter(adapter2);
+        isdonespinner.setSelection(isdone.size()-1,true);
+
         //实例化EditText
         edittext_action_action=(EditText)findViewById(R.id.action_action_1);
         edittext_action_performence=(EditText)findViewById(R.id.action_performance_1);
@@ -179,6 +205,24 @@ public class ActionActivity extends AppCompatActivity {
             finish();
         }
 
+        button_action_select = (Button) findViewById(R.id.action_btn_select);
+
+        button_action_select.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (authority.equals("1")){
+                    if (ContextCompat.checkSelfPermission(ActionActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ActionActivity.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
+                    } else {
+                        openAlbum();
+                    }
+                }
+                else{
+                    Toast.makeText(ActionActivity.this, "您不是技术员，没有权限上传照片！", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 
         button_action_upload = (Button)findViewById(R.id.action_btn_upload);
 
@@ -192,11 +236,6 @@ public class ActionActivity extends AppCompatActivity {
         imageView=(ImageView)findViewById(R.id.feedback_image);
         getactiondetail();
 
-        session = new SessionManager(getApplicationContext());
-        // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
-        final HashMap<String, String> user = db.getUserDetails();
-        String authority = user.get("authority");
 
         if (authority.equals("0")) {
 
@@ -214,14 +253,28 @@ public class ActionActivity extends AppCompatActivity {
 
         }
         else{
-            button_action_upload.setVisibility(View.INVISIBLE);
-            button_action_capture.setVisibility(View.INVISIBLE);
 
             edittext_action_response.setFocusable(false);
             edittext_action_response.setFocusableInTouchMode(false);
         }
 
     }
+
+    private void openAlbum() {
+        Intent intent;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        }else{
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
+        }
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("image/*");
+        startActivityForResult(intent,CHOOSE_PHOTO);
+    }
+
 
     private boolean isDeviceSupportCamera() {
         if (getApplicationContext().getPackageManager().hasSystemFeature(
@@ -285,8 +338,16 @@ public class ActionActivity extends AppCompatActivity {
                 Intent intent1=getIntent();
                 String solutionuid=intent1.getStringExtra("action_uid");
                 String response=edittext_action_response.getText().toString().trim();
+                String isdone=isdonespinner.getSelectedItem().toString().trim();
+                if (isdone.equals("是")) {
+                    isdone = "1";
+                }
+                else{
+                    isdone = "0";
+                }
                 params.put("solution_uid",solutionuid);
                 params.put("feedback",response);
+                params.put("isdone",isdone);
                 return params;
             }
         }, tag_action_upload);
@@ -336,12 +397,19 @@ public class ActionActivity extends AppCompatActivity {
                 String performence = edittext_action_performence.getText().toString().trim();
                 String response=edittext_action_response.getText().toString().trim();
                 String location=locationspinner.getSelectedItem().toString().trim();
+                String isdone=isdonespinner.getSelectedItem().toString().trim();
+                if (isdone.equals("是")) {
+                    isdone = "1";
+                }
+                else{
+                    isdone = "0";
+                }
                 params.put("solution_uid",solutionuid);
                 params.put("solution",action);
                 params.put("performance",performence);
                 params.put("feedback",response);
                 params.put("section",location);
-                params.put("isdone",misdone);
+                params.put("isdone",isdone);
                 return params;
             }
         }, tag_action_upload);
@@ -378,7 +446,7 @@ public class ActionActivity extends AppCompatActivity {
                                         .error(R.drawable.ic_error_black_24dp)
                                         .override(100,75)
                                         .into(imageView);
-                                misdone=obj.getString("isdone").trim();
+                                setSpinnerItemSelectedByValue(isdonespinner,obj.getString("isdone").trim());
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -526,8 +594,63 @@ public class ActionActivity extends AppCompatActivity {
                             "未捕获到照片", Toast.LENGTH_SHORT)
                             .show();
                 }
+                break;
+
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        String imagePath = null;
+                        final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        ContentResolver resolver = getApplicationContext().getContentResolver();
+                        Uri uri = data.getData();
+                        if (DocumentsContract.isDocumentUri(this, uri)) {
+                            // 如果是document类型的Uri，则通过document id处理
+                            String docId = DocumentsContract.getDocumentId(uri);
+                            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                                String id = docId.split(":")[1]; // 解析出数字格式的id
+                                String selection = MediaStore.Images.Media._ID + "=" + id;
+                                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+                            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                                imagePath = getImagePath(contentUri, null);
+                            }
+                        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                            // 如果是content类型的Uri，则使用普通方式处理
+                            imagePath = getImagePath(uri, null);
+                        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                            // 如果是file类型的Uri，直接获取图片路径即可
+                            imagePath = uri.getPath();
+                        }
+                        resolver.takePersistableUriPermission(uri, takeFlags);
+                        Intent i = new Intent(ActionActivity.this, UploadActivity.class);
+                        i.putExtra("Mode","5");
+                        i.putExtra("filePath", imagePath);
+                        i.setData(uri);
+                        i.putExtra("isImage", true);
+                        Intent intent1=getIntent();
+                        final String solution_uid=intent1.getStringExtra("action_uid");
+                        i.putExtra("solution_uid",solution_uid);
+                        startActivity(i);
+                        Log.d(TAG, "launchUploadActivity: "+imagePath);
+                        finish();
+                    }
+                }
+                break;
 
         }
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
     }
 
     private void launchUploadActivity(boolean isImage){

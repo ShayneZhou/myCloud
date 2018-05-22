@@ -187,18 +187,10 @@ public class User extends AppCompatActivity {
                 switch (item.getItemId())
                 {
                     case R.id.nav_create:
-                        if (authority.equals("0")) {
-                            Intent intent_cr =new Intent(User.this,CreateActivity.class);
-                            startActivity(intent_cr);
-                            finish();
-                            mDrawerLayout.closeDrawers();
-                        }
-                        else
-                        {
-                            Toast.makeText(User.this,
-                                    "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
-                            mDrawerLayout.closeDrawers();
-                        }
+                        Intent intent_cr =new Intent(User.this,CreateActivity.class);
+                        startActivity(intent_cr);
+                        finish();
+                        mDrawerLayout.closeDrawers();
                         break;
                     case R.id.nav_chart:
                         Toast.makeText(User.this,"查询界面",Toast.LENGTH_LONG).show();
@@ -252,17 +244,9 @@ public class User extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (authority.equals("0")) {
-                    Intent intent_cr =new Intent(User.this,CreateActivity.class);
-                    startActivity(intent_cr);
-                    finish();
-
-                }
-                else
-                {
-                    Toast.makeText(User.this,
-                            "您不是操作工！无法新建问题单", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent_cr =new Intent(User.this,CreateActivity.class);
+                startActivity(intent_cr);
+                finish();
             }
         });
 

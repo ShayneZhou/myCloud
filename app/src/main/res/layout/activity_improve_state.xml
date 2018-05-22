@@ -41,8 +41,8 @@
 
                 <ImageView
                     android:id="@+id/improve_state_image"
-                    android:layout_width="300dp"
-                    android:layout_height="300dp" />
+                    android:layout_width="257dp"
+                    android:layout_height="217dp" />
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -67,6 +67,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保存修改"
+                android:id="@+id/improve_state_description_button"
+                android:theme="@style/ThemeOverlay.AppCompat.Light"
+                android:backgroundTint="#93d1a1"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="25dp"
+                android:layout_gravity="center"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,8 +89,8 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="保存修改"
-                    android:id="@+id/improve_state_description_button"
+                    android:text="拍照上传"
+                    android:id="@+id/improve_state_image_button"
                     android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:backgroundTint="#93d1a1"
                     android:textColor="#FFFFFF"
@@ -87,8 +101,8 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="上传图片"
-                    android:id="@+id/improve_state_image_button"
+                    android:text="相册选取"
+                    android:id="@+id/improve_state_select_image"
                     android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:backgroundTint="#93d1a1"
                     android:textColor="#FFFFFF"

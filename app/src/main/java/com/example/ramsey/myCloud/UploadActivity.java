@@ -161,6 +161,8 @@ public class UploadActivity extends AppCompatActivity {
 
             final Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
 
+            Log.d(TAG, "previewMedia: "+ bitmap);
+
             imgPreview.setImageBitmap(bitmap);
         }
     }
@@ -368,6 +370,8 @@ public class UploadActivity extends AppCompatActivity {
 
                 params.put("filePath", imagePath);
                 params.put("imageBase64", AppConfig.getFileDataFromUri(getApplicationContext(), imageUri));
+
+
                 params.put("prob_uid", prob_uid);
                 return params;
             }

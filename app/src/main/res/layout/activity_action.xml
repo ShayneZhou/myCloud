@@ -104,6 +104,24 @@
                         android:layout_height="220dp"
                         android:layout_gravity="center" />
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|center_vertical"
+                        android:text="是否有效:"
+                        android:textSize="18dp" />
+                    <Spinner
+                        android:id="@+id/action_isdone_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:theme="@style/ThemeOverlay.AppCompat.Light"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"/>
+                </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/action_text_3"
@@ -162,7 +180,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="拍照"
+                        android:text="拍照上传"
                         android:id="@+id/action_btn_capture"
                         android:theme="@style/ThemeOverlay.AppCompat.Light"
                         android:backgroundTint="#93d1a1"
@@ -171,22 +189,32 @@
                         android:gravity="center"
                         android:textSize="25dp"
                         android:layout_gravity="center"/>
-                    <View
-                        android:layout_width="10dp"
-                        android:layout_height="match_parent"/>
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="上传反馈"
-                        android:id="@+id/action_btn_upload"
-                        android:backgroundTint="#d6008b"
+                        android:text="相册选取"
+                        android:id="@+id/action_btn_select"
+                        android:backgroundTint="#93d1a1"
                         android:textStyle="bold"
                         android:textColor="#FFFFFF"
                         android:gravity="center"
                         android:textSize="25dp"
                         android:layout_gravity="center"/>
+
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/action_btn_upload"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:backgroundTint="#d6008b"
+                    android:gravity="center"
+                    android:text="上传反馈"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

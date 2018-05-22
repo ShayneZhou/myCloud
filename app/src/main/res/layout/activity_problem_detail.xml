@@ -206,18 +206,8 @@
                     android:inputType="text"
                     android:singleLine="true" />
 
-                <TextView
-                    android:id="@+id/text_prob_uid"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/problemDetail_btn_sure"
-                    android:layout_alignRight="@+id/problemDetail_btn_sure"
-                    android:layout_below="@+id/content_layout_temp"
-                    android:layout_weight="1"
-                    android:textIsSelectable="true"
-                    android:textSize="7pt"
-                    android:autoLink="web"/>
             </android.support.design.widget.TextInputLayout>
+
 
             <ImageView
                 android:id="@+id/problemDetail_image"
@@ -225,6 +215,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/content_layout_temp" />
 
+            <TextView
+                android:id="@+id/text_prob_uid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/problemDetail_btn_sure"
+                android:layout_alignRight="@+id/problemDetail_btn_sure"
+                android:layout_below="@id/problemDetail_image"
+                android:layout_weight="1"
+                android:autoLink="web"
+                android:textIsSelectable="true"
+                android:textSize="7pt" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"

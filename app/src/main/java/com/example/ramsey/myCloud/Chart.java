@@ -553,7 +553,6 @@ public class Chart extends AppCompatActivity {
 
 
 
-
                     }else {
 
                         // Error occurred in registration. Get the error
@@ -603,6 +602,7 @@ public class Chart extends AppCompatActivity {
         //s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
         //s.setSpan(new RelativeSizeSpan(.65f), 14, s.length() - 15, 0);
         //s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
+
         //s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length()-17, s.length(), 0);
         return s;
     }
